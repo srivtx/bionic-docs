@@ -1,0 +1,28 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+      - run: bun install --frozen-lockfile
+      - name: Typecheck
+        run: bunx tsc --noEmit
+      - name: Tests
+        run: bun test
+      - name: Fixtures and icons
+        run: |
+          bun run make-fixtures
+          bun run icons
+      - name: Build both targets
+        run: bun run build
+      - name: Verify build output
+        run: node scripts/verify-build.mjs

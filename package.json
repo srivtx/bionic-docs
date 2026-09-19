@@ -1,0 +1,32 @@
+{
+  "name": "bionic-docs",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Read PDFs and EPUBs with bionic fixation emphasis, entirely on-device. Chrome + Firefox MV3.",
+  "scripts": {
+    "build": "node build.mjs",
+    "build:chrome": "node build.mjs chrome",
+    "build:firefox": "node build.mjs firefox",
+    "build:watch": "node build.mjs --watch",
+    "typecheck": "tsc --noEmit",
+    "test": "bun test",
+    "icons": "node scripts/make-icons.mjs",
+    "verify": "node scripts/verify-build.mjs",
+    "e2e": "bun scripts/e2e.mjs",
+    "make-fixtures": "bun scripts/make-fixtures.ts",
+    "package": "node scripts/package.mjs",
+    "lint:firefox": "web-ext lint --source-dir dist/firefox"
+  },
+  "dependencies": {
+    "fflate": "^0.8.2",
+    "pdfjs-dist": "^4.8.69"
+  },
+  "devDependencies": {
+    "@types/bun": "^1.1.14",
+    "@types/chrome": "^0.0.302",
+    "esbuild": "^0.25.0",
+    "linkedom": "^0.18.5",
+    "typescript": "^5.7.2"
+  }
+}

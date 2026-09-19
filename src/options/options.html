@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Bionic Docs — Settings</title>
+    <link rel="stylesheet" href="options.css" />
+  </head>
+  <body>
+    <main class="wrap">
+      <header class="masthead">
+        <h1 class="wordmark"><b>Bi</b>onic <b>Do</b>cs</h1>
+        <p class="tagline">Reading preferences for PDF and EPUB documents.</p>
+      </header>
+
+      <section class="panel" aria-labelledby="reading-heading">
+        <h2 class="panel-title" id="reading-heading">Reading</h2>
+
+        <div class="field">
+          <div class="field-text">
+            <label class="field-label" for="enabled">Enable bionic reading</label>
+            <span class="field-hint">Turn emphasis on or off everywhere.</span>
+          </div>
+          <input type="checkbox" id="enabled" class="switch" role="switch" />
+        </div>
+
+        <div class="field">
+          <div class="field-text">
+            <label class="field-label" for="mode">Mode</label>
+            <span class="field-hint">How the emphasized prefix of each word is chosen.</span>
+          </div>
+          <select id="mode"></select>
+        </div>
+
+        <div class="field">
+          <div class="field-text">
+            <label class="field-label" for="intensity">Intensity</label>
+            <span class="field-hint">Share of each word emphasized in the classic and low distraction modes.</span>
+          </div>
+          <div class="control">
+            <input type="range" id="intensity" min="0.2" max="0.9" step="0.05" />
+            <output id="intensityValue" for="intensity">50%</output>
+          </div>
+        </div>
+
+        <div class="field">
+          <div class="field-text">
+            <label class="field-label" for="minWordLength">Minimum word length</label>
+            <span class="field-hint">Shorter words are left untouched. Between 2 and 8.</span>
+          </div>
+          <input type="number" id="minWordLength" min="2" max="8" step="1" inputmode="numeric" />
+        </div>
+
+        <div class="field">
+          <div class="field-text">
+            <label class="field-label" for="skipCommonWords">Skip common words</label>
+            <span class="field-hint">Leave a small list of very common short words unemphasized.</span>
+          </div>
+          <input type="checkbox" id="skipCommonWords" class="switch" role="switch" />
+        </div>
+
+        <div class="field">
+          <div class="field-text">
+            <label class="field-label" for="respectExistingBold">Respect existing bold</label>
+            <span class="field-hint">Do not change words already inside bold or strong text.</span>
+          </div>
+          <input type="checkbox" id="respectExistingBold" class="switch" role="switch" />
+        </div>
+      </section>
+
+      <section class="panel" aria-labelledby="style-heading">
+        <h2 class="panel-title" id="style-heading">Style</h2>
+
+        <div class="field">
+          <div class="field-text">
+            <label class="field-label" for="boldWeight">Emphasis weight</label>
+            <span class="field-hint">Font weight of the emphasized prefix. Between 500 and 900.</span>
+          </div>
+          <div class="control">
+            <input type="range" id="boldWeight" min="500" max="900" step="50" />
+            <output id="boldWeightValue" for="boldWeight">700</output>
+          </div>
+        </div>
+
+        <div class="field">
+          <div class="field-text">
+            <label class="field-label" for="restOpacity">Rest opacity</label>
+            <span class="field-hint">Fade applied to the rest of a word in low distraction mode.</span>
+          </div>
+          <div class="control">
+            <input type="range" id="restOpacity" min="0.4" max="1" step="0.02" />
+            <output id="restOpacityValue" for="restOpacity">72%</output>
+          </div>
+        </div>
+
+        <div class="field">
+          <div class="field-text">
+            <label class="field-label" for="letterSpacing">Add letter spacing</label>
+            <span class="field-hint">A touch of space after the emphasized prefix.</span>
+          </div>
+          <input type="checkbox" id="letterSpacing" class="switch" role="switch" />
+        </div>
+      </section>
+
+      <section class="panel" aria-labelledby="advanced-heading">
+        <h2 class="panel-title" id="advanced-heading">Advanced</h2>
+
+        <div class="field field-vertical">
+          <div class="field-text">
+            <label class="field-label" for="rule">Custom rule</label>
+            <span class="field-hint">Per-length counts plus a fraction for longer words, used by the custom rule mode.</span>
+          </div>
+          <input type="text" id="rule" spellcheck="false" autocomplete="off" />
+        </div>
+
+        <div class="field field-vertical">
+          <div class="field-text">
+            <label class="field-label" for="customVowels">Custom vowels</label>
+            <span class="field-hint">Extra vowel characters for the vowel anchor mode. Leave empty for the default set.</span>
+          </div>
+          <input type="text" id="customVowels" spellcheck="false" autocomplete="off" />
+        </div>
+      </section>
+
+      <section class="panel" aria-labelledby="preview-heading">
+        <h2 class="panel-title" id="preview-heading">Preview</h2>
+        <p id="preview" class="preview"></p>
+      </section>
+
+      <section class="panel" aria-labelledby="data-heading">
+        <h2 class="panel-title" id="data-heading">Data</h2>
+        <div class="toolbar">
+          <button type="button" id="reset" class="btn">Reset to defaults</button>
+          <button type="button" id="export" class="btn">Export JSON</button>
+          <label class="btn" for="importFile">Import JSON</label>
+          <input type="file" id="importFile" accept="application/json,.json" class="visually-hidden" />
+        </div>
+        <p id="note" class="note" role="status" aria-live="polite"></p>
+      </section>
+    </main>
+    <script src="options.js" defer></script>
+  </body>
+</html>

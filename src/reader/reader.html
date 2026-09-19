@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bionic Docs</title>
+  <link rel="stylesheet" href="reader.css">
+</head>
+<body>
+  <a class="skip-link" href="#doc">Skip to document</a>
+
+  <header class="topbar">
+    <a class="wordmark" href="reader.html" aria-label="Bionic Docs"><b>Bi</b>onic <b>Do</b>cs</a>
+
+    <div class="controls">
+      <button id="openFile" class="btn" type="button">Open file</button>
+
+      <button id="prev" class="btn icon" type="button" aria-label="Previous page or chapter">‹</button>
+      <span id="position" class="position" aria-live="polite">No document</span>
+      <button id="next" class="btn icon" type="button" aria-label="Next page or chapter">›</button>
+
+      <label class="field">
+        <span class="field-label">Mode</span>
+        <select id="mode"></select>
+      </label>
+
+      <label class="field">
+        <span class="field-label">Intensity</span>
+        <input id="intensity" type="range" min="0.2" max="0.9" step="0.05" value="0.5">
+        <output id="intensityValue" for="intensity">50%</output>
+      </label>
+
+      <span class="privacy" title="No upload, no account, no tracking">On-device</span>
+    </div>
+  </header>
+
+  <main id="doc" class="doc" aria-live="polite"></main>
+
+  <section id="dropzone" class="dropzone">
+    <div class="dropzone-inner">
+      <h1>Read PDF and EPUB with bionic fixation.</h1>
+      <p>
+        Open a document to get started. Everything is processed on this device —
+        nothing is uploaded, and there is no account.
+      </p>
+      <div class="dropzone-actions">
+        <button id="pickFile" class="btn primary" type="button">Choose a file…</button>
+        <a class="btn" href="options.html">Settings</a>
+      </div>
+      <p id="status" class="status" role="status">You can also drop a PDF or EPUB anywhere on this page.</p>
+    </div>
+  </section>
+
+  <input id="file" type="file" accept=".pdf,.epub,application/pdf,application/epub+zip" aria-label="Choose a PDF or EPUB file" hidden>
+  <script src="reader.js"></script>
+</body>
+</html>

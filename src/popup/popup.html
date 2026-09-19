@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Bionic Docs</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <main class="popup" aria-labelledby="wordmark">
+      <header class="head">
+        <h1 class="wordmark" id="wordmark"><b>Bi</b>onic <b>Do</b>cs</h1>
+      </header>
+
+      <section class="card" aria-label="Reading preferences">
+        <div class="row">
+          <label class="row-label" for="enabled">Enabled</label>
+          <input type="checkbox" id="enabled" class="switch" role="switch" aria-label="Enable bionic reading" />
+        </div>
+
+        <div class="row">
+          <label class="row-label" for="mode">Mode</label>
+          <select id="mode"></select>
+        </div>
+
+        <div class="row">
+          <label class="row-label" for="intensity">Intensity</label>
+          <div class="control">
+            <input type="range" id="intensity" min="0.2" max="0.9" step="0.05" />
+            <output id="intensityValue" for="intensity">50%</output>
+          </div>
+        </div>
+
+        <div class="row">
+          <label class="row-label" for="minWordLength">Min word length</label>
+          <input type="number" id="minWordLength" min="2" max="8" step="1" inputmode="numeric" />
+        </div>
+      </section>
+
+      <p id="status" class="status" role="status" aria-live="polite">Open a PDF or EPUB to begin.</p>
+
+      <section class="actions" aria-label="Document actions">
+        <button type="button" id="openCurrent" class="btn btn-primary">Open current document</button>
+        <button type="button" id="openFile" class="btn">Open a file…</button>
+        <button type="button" id="openOptions" class="btn btn-quiet">Settings</button>
+      </section>
+    </main>
+    <script src="popup.js" defer></script>
+  </body>
+</html>
