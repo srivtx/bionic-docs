@@ -819,3 +819,119 @@ span.bp-tail {
     transition: none;
   }
 }
+
+/* ── FAQ ──────────────────────────────────────────────────────────────────
+   An answer written as a plain <p> inside <details> had no inset at all —
+   only the .faq__body class carried the padding, and the markup does not use
+   it — so the text sat flush against the card edge. And the toggle was a bare
+   glyph; it is a control, so it gets a ring and a hover. */
+.faq details > p,
+.faq details > ul {
+  padding: 0 var(--s-5) var(--s-4);
+  color: var(--mute);
+  font-size: 0.9375rem;
+}
+
+.faq details > ul {
+  padding-left: calc(var(--s-5) + 1.1em);
+}
+
+.faq summary {
+  transition: background var(--dur) var(--ease);
+}
+
+.faq summary:hover {
+  background: var(--surface);
+}
+
+.faq summary::after {
+  content: "";
+  float: right;
+  width: 18px;
+  height: 18px;
+  margin-top: 1px;
+  border: 1px solid var(--hairline-strong);
+  border-radius: 999px;
+  background-image: linear-gradient(var(--mute), var(--mute)),
+    linear-gradient(var(--mute), var(--mute));
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 8px 1.5px, 1.5px 8px;
+  transition: background-size var(--dur) var(--ease),
+    border-color var(--dur) var(--ease);
+}
+
+.faq details[open] summary::after {
+  content: "";
+  border-color: var(--accent);
+  background-image: linear-gradient(var(--accent), var(--accent)),
+    linear-gradient(var(--accent), var(--accent));
+  background-size: 8px 1.5px, 1.5px 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .faq summary,
+  .faq summary::after {
+    transition: none;
+  }
+}
+
+/* ── Hero meta bar ────────────────────────────────────────────────────────
+   The line above the headline is product facts, not a caption. Loose
+   uppercase text undersells it; a pill with a glyph and hairline dividers
+   between the facts reads as a designed element. */
+.metabar {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s-3);
+  margin: 0;
+  padding: 6px 14px 6px 12px;
+  border: 1px solid var(--hairline);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--mute);
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+.metabar__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  white-space: nowrap;
+}
+
+.metabar__item--accent {
+  color: var(--accent);
+}
+
+.metabar__sep {
+  width: 1px;
+  height: 13px;
+  background: var(--hairline-strong);
+}
+
+.metabar .icon {
+  width: 14px;
+  height: 14px;
+  stroke-width: 1.8;
+}
+
+.hero__inner .metabar + h1 {
+  margin-top: var(--s-4);
+}
+
+@media (max-width: 600px) {
+  .metabar {
+    gap: var(--s-2);
+    border-radius: var(--r-md);
+  }
+
+  .metabar__sep {
+    display: none;
+  }
+}
