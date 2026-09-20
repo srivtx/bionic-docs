@@ -201,6 +201,13 @@ pre {
   font-family: var(--font-mono);
 }
 
+/* Inline code carries identifiers like data_collection_permissions, which are
+   longer than a narrow column. Let them break rather than widen the page.
+   Scoped away from pre, where scrolling is the right behaviour. */
+:not(pre) > code {
+  overflow-wrap: anywhere;
+}
+
 ::selection {
   background: color-mix(in srgb, var(--accent) 24%, transparent);
   color: var(--ink);
@@ -266,11 +273,11 @@ svg {
 .grid {
   display: grid;
   gap: var(--s-4);
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
 }
 
 .grid--2 {
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
 }
 
 .grid--3 {

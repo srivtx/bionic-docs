@@ -24,6 +24,21 @@
   }
 }
 
+/* Contrast: the shared --mute (#71717a) only reaches 4.40:1 on --surface-2
+   (#f4f4f5), under the 4.5:1 floor for body text. Darken the light value so
+   the demo foot, slider label and compare tags clear it; the dark token is
+   left as-is (it is already 5.2:1 on the dark surface). Scoped to light so
+   it never leaks into dark, whichever way dark is selected. */
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    --mute: #6b6b73;
+  }
+}
+
+:root[data-theme="light"] {
+  --mute: #6b6b73;
+}
+
 /* ── Brand mark ─────────────────────────────────────────────────────────── */
 .brand__mark {
   width: 26px;
@@ -45,7 +60,10 @@
 b.bp-head {
   font-weight: var(--fx-weight);
   color: var(--ink);
-  font-synthesis-weight: none;
+  /* Deliberately NOT font-synthesis-weight: none. The webfont is a variable
+     face so 700 is real when it loads, but if it ever fails the browser must
+     be allowed to synthesise the weight — otherwise every fixation head
+     renders at normal weight and the whole effect disappears. */
 }
 
 .bionic i,
@@ -989,4 +1007,61 @@ span.bp-tail {
   text-decoration-color: var(--accent);
   text-decoration-thickness: 2px;
   text-underline-offset: 6px;
+}
+
+/* ── Theme picker ─────────────────────────────────────────────────────────
+   Three states rather than two: follow the system, or force light or dark.
+   Icon-only, because at this size the glyphs are unambiguous and the header
+   already carries enough words. The glyphs are drawn in the same hand as the
+   rest of the set — 1.6px stroke, round caps and joins, with the sun's rays
+   left slightly uneven so they read as drawn rather than generated. */
+.theme-pick {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 2px;
+  border: 1px solid var(--hairline);
+  border-radius: 999px;
+  background: var(--surface);
+}
+
+.theme-pick__btn {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 30px;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--mute);
+  cursor: pointer;
+  transition: background var(--dur) var(--ease), color var(--dur) var(--ease);
+}
+
+.theme-pick__btn:hover {
+  color: var(--ink);
+}
+
+.theme-pick__btn[aria-checked="true"] {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+.theme-pick .icon {
+  width: 15px;
+  height: 15px;
+}
+
+@media (max-width: 600px) {
+  .theme-pick__btn {
+    width: 36px;
+    height: 32px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .theme-pick__btn {
+    transition: none;
+  }
 }

@@ -432,3 +432,16 @@
     animation: none;
   }
 }
+
+/* ── The hero, once the transition is over ────────────────────────────────
+   During the read the headline exists twice, so both copies have to lay out
+   identically — that is why the fixation head is drawn with a stroke and an
+   inherited weight. Afterwards only the fixation layer is left, so it can use
+   the real thing: the same weight the extension applies to a page. Measured
+   identical in height at every width from 390px to 1920px, so nothing
+   re-wraps when this takes effect. */
+.hero__title.is-read b,
+.hero__title.is-read .bp-head {
+  font-weight: var(--fx-weight);
+  -webkit-text-stroke: 0;
+}

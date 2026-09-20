@@ -70,13 +70,25 @@
           <path d="M4 7h16M4 12h16M4 17h16"></path>
         </svg>
       </button>
-      <button type="button" class="btn btn--ghost btn--sm" id="theme-toggle" aria-pressed="false" aria-label="Switch to dark theme">
-        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-          <circle cx="12" cy="12" r="4"></circle>
-          <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path>
-        </svg>
-        <span id="theme-toggle-text">Theme</span>
-      </button>
+      <div class="theme-pick" role="radiogroup" aria-label="Colour theme">
+        <button type="button" class="theme-pick__btn" role="radio" aria-checked="false" data-theme-choice="system" aria-label="Match the system theme">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <rect x="2.8" y="4.4" width="18.4" height="12.2" rx="2.2"></rect>
+            <path d="M9.2 20.2h5.6M12 16.6v3.6"></path>
+          </svg>
+        </button>
+        <button type="button" class="theme-pick__btn" role="radio" aria-checked="false" data-theme-choice="light" aria-label="Light theme">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <circle cx="12" cy="11.9" r="4.1"></circle>
+            <path d="M12 2.6v1.9M12 19.3v1.9M4.4 11.9h1.9M17.7 11.9h1.9M6.6 6.5l1.3 1.4M16.1 16.1l1.3 1.4M17.4 6.6l-1.3 1.3M7.9 16.1l-1.3 1.3"></path>
+          </svg>
+        </button>
+        <button type="button" class="theme-pick__btn" role="radio" aria-checked="false" data-theme-choice="dark" aria-label="Dark theme">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path d="M20.1 13.6A8.3 8.3 0 0 1 10.4 3.9a8.5 8.5 0 1 0 9.7 9.7Z"></path>
+          </svg>
+        </button>
+      </div>
     </div>
   </div>
 </header>
@@ -256,13 +268,8 @@ export function bionicText(text: string, options: BionicOptions): string;</code>
         <span class="spread__line spread__line--short"></span>
         <span class="spread__line"></span>
       </span>
-        <span class="spread__line spread__line--short"></span>
-        <span class="spread__line"></span>
-        <span class="spread__line"></span>
-        <span class="spread__line spread__line--short"></span>
       </span>
       <span class="spread__ribbon"></span>
-    </span>
   </div>
   <div class="container">
     <div class="footer__inner">
@@ -302,7 +309,7 @@ export function bionicText(text: string, options: BionicOptions): string;</code>
         <h2>Build</h2>
         <ul>
           <li>v0.1.0 · MIT</li>
-          <li>92 tests · 11/11 e2e</li>
+          <li>129 tests · 11/11 e2e</li>
           <li>Chrome 116+</li>
           <li>Firefox 140+</li>
           <li>Nothing leaves the device</li>
