@@ -37,6 +37,7 @@ const requiredAssets = [
   join(assetsDir, "theme.css"),
   join(assetsDir, "identity.css"),
   join(assetsDir, "core.js"),
+  join(assetsDir, "nav.js"),
 ];
 
 const problems = [];

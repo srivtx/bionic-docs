@@ -935,3 +935,55 @@ span.bp-tail {
     display: none;
   }
 }
+
+/* ── Page transitions ─────────────────────────────────────────────────────
+   A multi-page site cuts hard between pages: the old document vanishes and
+   the new one appears with no relationship between them. Two halves soften
+   it — the arriving page fades up, and the page you leave fades out as it
+   navigates — so moving around the site reads as one surface.
+
+   The arriving half is driven by a class the inline bootstrap adds before
+   first paint, so nothing flashes, and a page with scripts off is simply
+   visible rather than stuck at zero opacity. */
+/* `backwards`, not `both`: the from-state has to apply before the first
+   frame so nothing flashes, but the animation must not keep pinning opacity
+   once it ends or the exit fade below can never take effect. */
+html.nav body {
+  animation: page-in 200ms var(--ease) backwards;
+}
+
+html.is-leaving body {
+  opacity: 0;
+  transition: opacity 160ms var(--ease);
+}
+
+@keyframes page-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Anchors glide rather than jump. */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.nav body {
+    animation: none;
+  }
+
+  html.is-leaving body {
+    opacity: 1;
+    transition: none;
+  }
+
+  html {
+    scroll-behavior: auto;
+  }
+}
