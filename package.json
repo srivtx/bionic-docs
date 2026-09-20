@@ -16,7 +16,11 @@
     "e2e": "bun scripts/e2e.mjs",
     "make-fixtures": "bun scripts/make-fixtures.ts",
     "package": "node scripts/package.mjs",
-    "lint:firefox": "web-ext lint --source-dir dist/firefox"
+    "lint:firefox": "web-ext lint --source-dir dist/firefox",
+    "demo": "node scripts/build-demo.mjs",
+    "og": "node scripts/make-og.mjs",
+    "check-site": "node scripts/check-site.mjs",
+    "site": "node scripts/build-demo.mjs && node scripts/make-og.mjs && node scripts/check-site.mjs"
   },
   "dependencies": {
     "fflate": "^0.8.2",

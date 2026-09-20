@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How-to — bionic-docs</title>
+<meta name="description" content="Install bionic-docs unpacked in Chrome, Edge, and Firefox, open a document from the popup or by keyboard, and use the reader toolbar, mode control, and page or chapter navigation.">
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0a0a0a" media="(prefers-color-scheme: dark)">
+<meta name="color-scheme" content="light dark">
+<meta property="og:title" content="How-to — bionic-docs">
+<meta property="og:description" content="Load the unpacked extension, open a document, and use the reader toolbar and keyboard shortcut.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://srivtx.github.io/bionic-docs/how-to.html">
+<meta property="og:image" content="https://srivtx.github.io/bionic-docs/assets/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="bionic-docs — read PDF and EPUB with bionic fixation">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="How-to — bionic-docs">
+<meta name="twitter:description" content="Install bionic-docs, open a document, and use the reader toolbar and keyboard shortcut.">
+<meta name="twitter:image" content="https://srivtx.github.io/bionic-docs/assets/og.png">
+<link rel="canonical" href="https://srivtx.github.io/bionic-docs/how-to.html">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2032%2032%27%3E%3Crect%20width%3D%2732%27%20height%3D%2732%27%20rx%3D%277%27%20fill%3D%27%234f46e5%27%2F%3E%3Cg%20transform%3D%27translate(4%204)%27%20fill%3D%27none%27%20stroke%3D%27%23ffffff%27%20stroke-width%3D%272.4%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%22M6.1%203.2h7.1l4.7%204.7v12.9H6.1z%22%3E%3C%2Fpath%3E%20%3Cpath%20d%3D%22M13.2%203.2v4.7h4.7%22%3E%3C%2Fpath%3E%20%3Cpath%20d%3D%22M8.6%2013.4h3.1%22%3E%3C%2Fpath%3E%20%3Cpath%20d%3D%22M11.7%2013.4h3.1%22%20stroke-opacity%3D%22.4%22%3E%3C%2Fpath%3E%3C%2Fg%3E%3C%2Fsvg%3E">
+<link rel="stylesheet" href="assets/lens.css">
+<link rel="stylesheet" href="assets/theme.css">
+<script>
+(function () {
+  try {
+    var stored = window.localStorage.getItem("bionic-docs-theme");
+    if (stored === "dark" || stored === "light") {
+      document.documentElement.setAttribute("data-theme", stored);
+    }
+  } catch (err) {}
+  if (
+    "IntersectionObserver" in window &&
+    !(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches)
+  ) {
+    document.documentElement.classList.add("js");
+  }
+})();
+</script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="nav" id="top">
+  <div class="container nav__inner">
+    <a class="brand" href="index.html" aria-label="bionic-docs home">
+      <span class="brand__mark" aria-hidden="true">
+        <svg class="icon" viewBox="0 0 24 24" focusable="false"><path d="M6.1 3.2h7.1l4.7 4.7v12.9H6.1z"></path> <path d="M13.2 3.2v4.7h4.7"></path> <path d="M8.6 13.4h3.1"></path> <path d="M11.7 13.4h3.1" stroke-opacity=".4"></path></svg>
+      </span>
+      <span class="brand__name">bionic-docs</span>
+      <span class="brand__tag">by svx</span>
+    </a>
+
+    <nav class="nav__links" id="site-nav" aria-label="Sections">
+      <a href="formats.html">Formats</a>
+      <a href="how-to.html">How-to</a>
+      <a href="privacy.html">Privacy</a>
+      <a href="faq.html">FAQ</a>
+      <a href="architecture.html">Architecture</a>
+      <a href="https://github.com/srivtx/bionic-docs">GitHub</a>
+    </nav>
+
+    <div class="nav__actions">
+      <button type="button" class="nav__toggle btn btn--ghost btn--sm" id="nav-toggle" aria-expanded="false" aria-controls="site-nav" aria-label="Open navigation">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path d="M4 7h16M4 12h16M4 17h16"></path>
+        </svg>
+      </button>
+      <button type="button" class="btn btn--ghost btn--sm" id="theme-toggle" aria-pressed="false" aria-label="Switch to dark theme">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <circle cx="12" cy="12" r="4"></circle>
+          <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path>
+        </svg>
+        <span id="theme-toggle-text">Theme</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+  <div class="container">
+    <div class="docs">
+      <nav class="docs__nav" aria-label="Docs">
+        <h2>bionic-docs</h2>
+        <ul>
+          <li><a href="index.html">Overview</a></li>
+          <li><a href="formats.html">Formats</a></li>
+          <li><a href="how-to.html" aria-current="page">How-to</a></li>
+          <li><a href="privacy.html">Privacy</a></li>
+          <li><a href="faq.html">FAQ</a></li>
+          <li><a href="architecture.html">Architecture</a></li>
+        </ul>
+      </nav>
+
+      <article class="docs__body">
+        <div class="docs__head">
+          <p class="eyebrow">Guide</p>
+          <h1>How to install and use</h1>
+          <p>Store listings are pending, so the extension is built from source and loaded unpacked. It is a Manifest V3 extension; both targets are produced by one build.</p>
+        </div>
+
+        <h2>Build the extension</h2>
+        <p>You need <a href="https://bun.sh">Bun</a> and the repository.</p>
+        <pre class="code code--wrap"><code>git clone https://github.com/srivtx/bionic-docs
+cd bionic-docs
+bun install
+bun run build</code></pre>
+        <p>The build writes <code>dist/chrome</code> and <code>dist/firefox</code>. It bundles PDF.js, its worker, cmaps, and standard fonts locally, so the extension loads no remote code.</p>
+
+        <h2>Load it in Chrome or Edge</h2>
+        <ol class="steps">
+          <li class="step">
+            <h3>Open the extensions page</h3>
+            <p>Go to <code>chrome://extensions</code> in Chrome (or <code>edge://extensions</code> in Edge).</p>
+          </li>
+          <li class="step">
+            <h3>Turn on Developer mode</h3>
+            <p>The toggle is in the top corner of the page.</p>
+          </li>
+          <li class="step">
+            <h3>Load unpacked</h3>
+            <p>Choose <strong>Load unpacked</strong> and select the <code>dist/chrome</code> directory. The extension appears in the toolbar.</p>
+          </li>
+        </ol>
+
+        <h2>Load it in Firefox</h2>
+        <ol class="steps">
+          <li class="step">
+            <h3>Open about:debugging</h3>
+            <p>Enter <code>about:debugging#/runtime/this-firefox</code> in the address bar.</p>
+          </li>
+          <li class="step">
+            <h3>Load a temporary add-on</h3>
+            <p>Choose <strong>Load Temporary Add-on…</strong> and select <code>dist/firefox/manifest.json</code>.</p>
+          </li>
+          <li class="step">
+            <h3>Note the floor</h3>
+            <p>Firefox 140 or newer, because the manifest uses <code>data_collection_permissions</code>, which earlier versions do not understand. A temporary add-on is removed when Firefox closes.</p>
+          </li>
+        </ol>
+
+        <h2>Open a document</h2>
+        <p>Click the toolbar icon to open the popup, then:</p>
+        <ul>
+          <li><strong>Open current document</strong> — for a PDF that is already open in a tab, the reader loads that URL. If the active tab is not a PDF, it falls back to the file picker.</li>
+          <li><strong>Open a file…</strong> — pick a PDF or EPUB from disk. You can also drag a document anywhere onto the reader page.</li>
+        </ul>
+        <p>There is a keyboard shortcut as well: press <kbd class="keycap">Ctrl/Cmd + Shift + O</kbd> to open the current document at any time.</p>
+
+        <h2>Use the reader</h2>
+        <p>The reader has a small toolbar across the top:</p>
+        <div class="table-wrap">
+          <table>
+            <caption>Reader controls.</caption>
+            <thead>
+              <tr><th scope="col">Control</th><th scope="col">What it does</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Mode</td><td>Choose Classic, Half, Vowel anchor, Low distraction, or Custom rule. The change applies live to the open document.</td></tr>
+              <tr><td>Intensity</td><td>Move the slider to change how much of each word is emphasized. It also applies live, with no reload.</td></tr>
+              <tr><td><code>‹</code> and <code>›</code></td><td>Go to the previous or next page in a PDF, or the previous or next chapter in an EPUB. The counter between them shows where you are.</td></tr>
+              <tr><td>Open file</td><td>Choose another document without leaving the reader.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Settings are stored by the extension, so the next document opens with the mode and intensity you last chose.</p>
+
+        <h2>Local <code>file://</code> PDFs</h2>
+        <div class="callout" role="note">
+          <p>To open a PDF from a <code>file://</code> path, the extension needs permission to read local files. In <code>chrome://extensions</code>, open bionic-docs details and enable <strong>Allow access to file URLs</strong>. Without it, the fetch of the local document is blocked and the reader reports that it could not load the file.</p>
+        </div>
+
+        <h2>Verify a build</h2>
+        <p>The same commands CI runs:</p>
+        <pre class="code code--wrap"><code>bun test
+bun run build
+node scripts/verify-build.mjs
+bunx web-ext lint --source-dir dist/firefox</code></pre>
+
+        <div class="docs__foot">
+          <a href="formats.html">← Formats</a>
+          <a href="privacy.html">Privacy →</a>
+        </div>
+      </article>
+    </div>
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer__inner">
+      <div class="footer__brand">
+        <span class="brand__mark" aria-hidden="true">
+          <svg class="icon" viewBox="0 0 24 24" focusable="false"><path d="M6.1 3.2h7.1l4.7 4.7v12.9H6.1z"></path> <path d="M13.2 3.2v4.7h4.7"></path> <path d="M8.6 13.4h3.1"></path> <path d="M11.7 13.4h3.1" stroke-opacity=".4"></path></svg>
+        </span>
+        <div>
+          <p>bionic-docs</p>
+          <p class="muted">Read PDF and EPUB with bionic fixation.</p>
+        </div>
+      </div>
+
+      <nav aria-label="Documentation">
+        <h2>Documentation</h2>
+        <ul>
+          <li><a href="formats.html">Formats</a></li>
+          <li><a href="how-to.html">How-to</a></li>
+          <li><a href="privacy.html">Privacy</a></li>
+          <li><a href="faq.html">FAQ</a></li>
+          <li><a href="architecture.html">Architecture</a></li>
+        </ul>
+      </nav>
+
+      <nav aria-label="Project">
+        <h2>Project</h2>
+        <ul>
+          <li><a href="https://github.com/srivtx/bionic-docs">Repository</a></li>
+          <li><a href="https://github.com/srivtx/bionic-docs/blob/main/LICENSE">MIT license</a></li>
+          <li><a href="https://github.com/srivtx/bionic-docs/issues">Issues</a></li>
+        </ul>
+      </nav>
+    </div>
+
+    <div class="footer__meta">
+      <p>by svx · MIT licensed.</p>
+      <p>© 2026 bionic-docs</p>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/core.js"></script>
+<script src="assets/demo.js"></script>
+</body>
+</html>

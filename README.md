@@ -21,6 +21,8 @@ tracking, no remote code.
 
 </div>
 
+**[Website](https://srivtx.github.io/bionic-docs)** · [Prior art](docs/PRIOR-ART.md) · [Architecture](docs/ARCHITECTURE.md)
+
 ---
 
 ## Why this exists

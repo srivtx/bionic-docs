@@ -1,0 +1,20 @@
+# bionic-docs
+
+> Read PDF and EPUB with bionic fixation, entirely on-device. No upload, no account, no tracking, no remote code.
+
+A Manifest V3 extension for Chrome and Firefox. PDFs are parsed with a locally bundled PDF.js and reflowed into a clean reading column; EPUBs are unzipped locally and rendered chapter by chapter with the same fixation emphasis. The document never leaves your device.
+
+## Pages
+
+- [bionic-docs](https://srivtx.github.io/bionic-docs/): Read PDF and EPUB with bionic fixation, entirely on-device. No upload, no account, no tracking, no remote code.
+- [Architecture](https://srivtx.github.io/bionic-docs/architecture.html): The bionic-docs module map and invariants, and the sourced prior-art comparison: the 100K-user incumbent posts page text to its own API, and the only store product that handles files is cloud, paid, and Chromium-only.
+- [FAQ](https://srivtx.github.io/bionic-docs/faq.html): Answers about bionic-docs: license and affiliation, scanned PDFs, whether files are uploaded, why a PDF reads as plain text, Firefox support, file handling, and offline use.
+- [Formats](https://srivtx.github.io/bionic-docs/formats.html): How bionic-docs handles PDF and EPUB: PDF.js text extraction and line reconstruction, fflate unzip with OPF, spine and TOC parsing, sanitized chapter markup, and the shared fixation step.
+- [How-to](https://srivtx.github.io/bionic-docs/how-to.html): Install bionic-docs unpacked in Chrome, Edge, and Firefox, open a document from the popup or by keyboard, and use the reader toolbar, mode control, and page or chapter navigation.
+- [Privacy](https://srivtx.github.io/bionic-docs/privacy.html): The bionic-docs threat model in plain language: no network requests for content, one fetch for the document you opened, parsing in the extension page, nothing leaving the device, and the anti-network test gate.
+
+## Source
+
+- Repository: https://github.com/srivtx/bionic-docs
+- License: MIT. Not affiliated with Bionic Reading GmbH.
+- By svx.
