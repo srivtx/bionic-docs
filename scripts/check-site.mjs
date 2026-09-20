@@ -24,6 +24,7 @@ const assetsDir = join(siteDir, "assets");
 const stylesheets = [
   join(assetsDir, "lens.css"),
   join(assetsDir, "theme.css"),
+  join(assetsDir, "identity.css"),
 ];
 
 /*
@@ -34,6 +35,7 @@ const stylesheets = [
 const requiredAssets = [
   join(assetsDir, "lens.css"),
   join(assetsDir, "theme.css"),
+  join(assetsDir, "identity.css"),
   join(assetsDir, "core.js"),
 ];
 

@@ -1,0 +1,303 @@
+/* bionic-docs — identity.
+   The shared bionic system lives in theme.css. This file is what makes *this*
+   site itself and not its sibling: a teal ink, a paper stack that drifts
+   behind the headline, a reading highlight that descends the title instead of
+   a caret crossing it, and a page that turns when you flip the reader.
+   bionic-page uses indigo, a writing caret and a floating control — no
+   element is shared between the two identities. */
+
+:root {
+  --accent: #0f766e;
+  --accent-ink: #ffffff;
+  /* Paper tint, used only here so the two sites never read as one tool. */
+  --paper: #f7f7f5;
+  --folio: #0f766e;
+}
+
+[data-theme="dark"] {
+  --accent: #2dd4bf;
+  --accent-ink: #0a0a0a;
+  --paper: #131316;
+  --folio: #2dd4bf;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --accent: #2dd4bf;
+    --accent-ink: #0a0a0a;
+    --paper: #131316;
+    --folio: #2dd4bf;
+  }
+}
+
+/* ── Hero: a stack of paper, and a highlight that reads down it ───────────
+   The headline exists twice: muted and unfixed underneath, fixed on top,
+   revealed top to bottom by a highlight bar that sweeps down the block the
+   way a reader's attention moves down a page. */
+.hero--docs .hero__glow {
+  background:
+    radial-gradient(54% 60% at 10% 0%, var(--accent-soft), transparent 68%),
+    radial-gradient(36% 42% at 84% 84%, color-mix(in srgb, var(--accent) 7%, transparent), transparent 72%);
+}
+
+.sheets {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  pointer-events: none;
+}
+
+.sheet {
+  position: absolute;
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-lg);
+  background: var(--surface);
+  animation: docs-drift 14s var(--ease) infinite alternate;
+}
+
+.sheet--1 {
+  top: 14%;
+  right: 6%;
+  width: min(34vw, 380px);
+  height: min(46vh, 330px);
+  transform: rotate(-2.1deg);
+  opacity: 0.5;
+}
+
+.sheet--2 {
+  top: 22%;
+  right: 10%;
+  width: min(30vw, 330px);
+  height: min(40vh, 280px);
+  transform: rotate(1.4deg);
+  opacity: 0.7;
+  animation-delay: -4s;
+  animation-duration: 18s;
+}
+
+.sheet--3 {
+  top: 30%;
+  right: 4%;
+  width: min(26vw, 280px);
+  height: min(34vh, 236px);
+  transform: rotate(3.2deg);
+  opacity: 0.42;
+  animation-delay: -8s;
+  animation-duration: 22s;
+}
+
+/* Faint ruled lines, so a sheet reads as a page rather than a card. */
+.sheet::after {
+  content: "";
+  position: absolute;
+  inset: 16% 12%;
+  background-image: repeating-linear-gradient(
+    to bottom,
+    var(--hairline) 0 1px,
+    transparent 1px 14px
+  );
+  opacity: 0.75;
+}
+
+@keyframes docs-drift {
+  from {
+    translate: 0 -10px;
+  }
+  to {
+    translate: 0 10px;
+  }
+}
+
+.hero__title {
+  position: relative;
+  display: block;
+}
+
+.hero__title-plain {
+  display: block;
+  color: var(--mute);
+}
+
+.hero__title-fix {
+  position: absolute;
+  inset: 0;
+  display: block;
+  clip-path: inset(0 0 100% 0);
+}
+
+.hero__title.is-reading .hero__title-fix {
+  animation: docs-read 2.6s var(--ease) 140ms both;
+}
+
+.hero__title.is-read .hero__title-fix {
+  clip-path: none;
+}
+
+@keyframes docs-read {
+  from {
+    clip-path: inset(0 0 100% 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+/* The plain layer vacates as the highlight descends, so the two never stack.
+   It keeps its layout box, which is what gives the headline its height. */
+.hero__title.is-reading .hero__title-plain {
+  animation: docs-vacate 2.6s var(--ease) 140ms both;
+}
+
+@keyframes docs-vacate {
+  from {
+    clip-path: inset(0 0 0 0);
+  }
+  to {
+    clip-path: inset(100% 0 0 0);
+  }
+}
+
+.hero__highlight {
+  position: absolute;
+  left: -3%;
+  right: -3%;
+  top: 0;
+  height: 22px;
+  border-radius: 999px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in srgb, var(--accent) 34%, transparent) 22%,
+    color-mix(in srgb, var(--accent) 34%, transparent) 78%,
+    transparent
+  );
+  filter: blur(6px);
+  opacity: 0;
+}
+
+.hero__title.is-reading .hero__highlight {
+  animation: docs-highlight 2.6s var(--ease) 140ms both;
+}
+
+.hero__title.is-read .hero__highlight {
+  display: none;
+}
+
+@keyframes docs-highlight {
+  from {
+    transform: translateY(0);
+    opacity: 0.9;
+  }
+  to {
+    transform: translateY(var(--hl-travel, 100%));
+    opacity: 0;
+  }
+}
+
+/* A folio marker, the way a printed page carries its number. */
+.folio {
+  margin: 0 0 var(--s-3);
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--folio);
+}
+
+/* ── Page turn ────────────────────────────────────────────────────────────
+   Flipping the reader turns the page rather than swapping it. */
+.reader__page {
+  transform-origin: left center;
+}
+
+.reader__page--turning {
+  animation: docs-turn 420ms var(--ease);
+}
+
+@keyframes docs-turn {
+  from {
+    transform: perspective(1400px) rotateY(-9deg) translateX(-6px);
+    opacity: 0.25;
+  }
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
+
+/* ── Generative art ───────────────────────────────────────────────────────
+   Canvas drawn by assets/art.js: a stack of document edges with a reading
+   band moving through it, grain and all. */
+.art {
+  display: block;
+  width: 100%;
+}
+
+.art--footer {
+  height: clamp(132px, 17vw, 188px);
+  border-top: 1px solid var(--hairline);
+  border-bottom: 1px solid var(--hairline);
+  background: var(--surface);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent);
+}
+
+@media (max-width: 900px) {
+  .sheet--1,
+  .sheet--3 {
+    opacity: 0.3;
+  }
+
+  .sheets {
+    right: -20%;
+  }
+}
+
+@media (max-width: 520px) {
+  .art--footer {
+    height: 112px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero__title-fix {
+    clip-path: none;
+  }
+
+  .hero__title-plain {
+    opacity: 0;
+  }
+
+  .hero__title.is-reading .hero__title-fix,
+  .hero__title.is-reading .hero__title-plain,
+  .hero__title.is-reading .hero__highlight {
+    animation: none;
+  }
+
+  .hero__highlight,
+  .sheet {
+    animation: none;
+  }
+
+  .reader__page--turning {
+    animation: none;
+  }
+}
+
+/* ── Hero headline: one metric, two states ────────────────────────────────
+   The two stacked copies must lay out identically or they ghost against each
+   other while the wipe runs. So both keep the same weight, and the fixation
+   head is expressed with a stroke instead of a weight change — stroke does
+   not affect advance widths. The plain layer stays a uniform muted copy. */
+.hero__title b,
+.hero__title .bp-head {
+  font-weight: inherit;
+  -webkit-text-stroke: 1.05px currentColor;
+  paint-order: stroke fill;
+}
+
+.hero__title .bp-tail,
+.hero__title i {
+  opacity: 0.45;
+  -webkit-text-stroke: 0;
+}

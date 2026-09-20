@@ -89,7 +89,7 @@
     /* The hero heading is the real sentence, painted by the real algorithm.
        "dim" wraps the remainder in span.bp-tail, so both halves are visible
        at poster size; the reader demo below starts on the default (half). */
-    var hero = document.querySelector("h1.bionic--xl");
+    var hero = document.querySelector("#hero-title-fix");
     if (hero) core.paint(hero, hero.textContent, options("dim", core.DEFAULT_SETTINGS.intensity));
 
     /* One sentence per mode, in the mode tiles. */
@@ -149,7 +149,7 @@
     }
   };
 
-  var state = { doc: "pdf", index: 0, mode: core.DEFAULT_SETTINGS.mode, on: true };
+  var state = { doc: "pdf", index: 0, mode: core.DEFAULT_SETTINGS.mode, on: true, turning: false };
   var pageHost = $("reader-page");
   var modes = $("reader-modes");
 
@@ -158,6 +158,18 @@
     var doc = DOCS[state.doc];
     var page = doc.pages[state.index];
     pageHost.textContent = "";
+
+    /* Turn the page rather than swapping it. Purely presentational, so it is
+       skipped when the reader prefers reduced motion. */
+    if (state.turning) {
+      pageHost.classList.remove("reader__page--turning");
+      void pageHost.offsetWidth;
+      pageHost.classList.add("reader__page--turning");
+      window.setTimeout(function () {
+        pageHost.classList.remove("reader__page--turning");
+      }, 460);
+    }
+    state.turning = false;
 
     var title = document.createElement("h2");
     title.className = "reader__title";
@@ -197,6 +209,7 @@
   function setDoc(id) {
     state.doc = id;
     state.index = 0;
+    state.turning = true;
     each([$("tab-pdf"), $("tab-epub")], function (tab) {
       var on = tab.id === "tab-" + id;
       tab.setAttribute("aria-selected", on ? "true" : "false");
@@ -215,6 +228,7 @@
     var next = state.index + delta;
     if (next < 0 || next >= total) return;
     state.index = next;
+    state.turning = true;
     render();
   }
 
