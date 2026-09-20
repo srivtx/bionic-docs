@@ -16,6 +16,14 @@
     Array.prototype.forEach.call(list, fn);
   }
 
+  function q(selector, scope) {
+    return (scope || document).querySelector(selector);
+  }
+
+  function qa(selector, scope) {
+    return (scope || document).querySelectorAll(selector);
+  }
+
   /* ----- Theme: light, dark, or whatever the system says --------------- */
   var THEME_KEY = "bionic-docs-theme";
   var themePicker = q(".theme-pick");

@@ -151,8 +151,7 @@
     var title = document.querySelector(".hero__title");
     if (!title) return;
     var fix = title.querySelector(".hero__title-fix");
-    var plain = title.querySelector(".hero__title-plain");
-    if (!fix || !plain) return;
+    if (!fix) return;
 
     function measure() {
       title.style.setProperty("--hl-travel", title.clientHeight + "px");
@@ -164,20 +163,39 @@
     measure();
     window.addEventListener("resize", measure, { passive: true });
 
-    if (reduce) {
+    if (window.__bionicHeadlineTimer) {
+      clearTimeout(window.__bionicHeadlineTimer);
+      window.__bionicHeadlineTimer = 0;
+    }
+    title.classList.remove("is-reading", "is-read");
+
+    var heads = fix.querySelectorAll("b.bp-head");
+    if (reduce || heads.length === 0) {
       title.classList.add("is-read");
-      plain.remove();
       return;
     }
 
+    /* The emphasis is read in: the heads thicken in reading order as the
+       highlight descends, so it is a real weight change you can watch arrive
+       rather than a static reveal. The heads are already heavy here, so the
+       finished height is what gets measured and reserved — it is the wider
+       state, and without the reservation the page below would jump a line. */
+    var span = 420;
+    var step = 55;
+    var total = span + step * Math.max(0, heads.length - 1);
+    var finished = title.getBoundingClientRect().height;
+    if (finished > 0) title.style.minHeight = finished + "px";
+
+    for (var i = 0; i < heads.length; i++) {
+      heads[i].style.setProperty("--i", String(i));
+    }
+    title.style.setProperty("--read", total + "ms");
     title.classList.add("is-reading");
-    fix.addEventListener("animationend", function () {
+    window.__bionicHeadlineTimer = setTimeout(function () {
       title.classList.remove("is-reading");
       title.classList.add("is-read");
-      /* The fixation layer is the real text now, so the "before" copy is
-         removed instead of left in the document saying the same sentence. */
-      plain.remove();
-    });
+      window.__bionicHeadlineTimer = 0;
+    }, total + 120);
   }
 
   function boot() {
@@ -194,15 +212,6 @@
   /* Registered so the router can re-initialise the page after a swap. */
   window.BionicSite = window.BionicSite || { init: [] };
   window.BionicSite.init.push(boot);
-
-  var themeButton = document.getElementById("theme-toggle");
-  if (themeButton) {
-    themeButton.addEventListener("click", function () {
-      window.setTimeout(function () {
-        window.dispatchEvent(new Event("themechange"));
-      }, 0);
-    });
-  }
 
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", boot);

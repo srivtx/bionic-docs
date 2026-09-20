@@ -111,53 +111,46 @@
   }
 }
 
+/* ── Hero headline: the emphasis is read in ───────────────────────────────
+   This used to be two stacked copies revealed by a clip, which forced them to
+   share metrics — and the only way to emphasise a head without changing its
+   advance width is an outline. A 1px outline at headline size is invisible, so
+   the animation read as a colour sweep and you could not see the emphasis
+   arrive at all.
+
+   There is one copy now. The head is genuinely heavier, so the shape changes
+   as the highlight passes and the line takes its final measure as it goes. */
 .hero__title {
   position: relative;
   display: block;
 }
 
-.hero__title-plain {
-  display: block;
-  color: var(--mute);
-}
-
 .hero__title-fix {
-  position: absolute;
-  inset: 0;
   display: block;
-  clip-path: inset(0 0 100% 0);
 }
 
-.hero__title.is-reading .hero__title-fix {
-  animation: docs-read 2.6s var(--ease) 140ms both;
+.hero__title .bp-head {
+  font-weight: var(--fx-weight);
 }
 
-.hero__title.is-read .hero__title-fix {
-  clip-path: none;
+/* The head starts thin and thickens in reading order, one step per head,
+   timed to land with the highlight as it descends the title. */
+.hero__title.is-reading .bp-head {
+  animation: bp-weight 420ms var(--ease) both;
+  animation-delay: calc(var(--i, 0) * 55ms);
 }
 
-@keyframes docs-read {
+@keyframes bp-weight {
   from {
-    clip-path: inset(0 0 100% 0);
+    font-weight: 400;
   }
   to {
-    clip-path: inset(0 0 0 0);
+    font-weight: var(--fx-weight);
   }
 }
 
-/* The plain layer vacates as the highlight descends, so the two never stack.
-   It keeps its layout box, which is what gives the headline its height. */
-.hero__title.is-reading .hero__title-plain {
-  animation: docs-vacate 2.6s var(--ease) 140ms both;
-}
-
-@keyframes docs-vacate {
-  from {
-    clip-path: inset(0 0 0 0);
-  }
-  to {
-    clip-path: inset(100% 0 0 0);
-  }
+.hero__title.is-read .bp-head {
+  font-weight: var(--fx-weight);
 }
 
 .hero__highlight {
@@ -179,7 +172,7 @@
 }
 
 .hero__title.is-reading .hero__highlight {
-  animation: docs-highlight 2.6s var(--ease) 140ms both;
+  animation: docs-highlight var(--read, 2.6s) var(--ease) both;
 }
 
 .hero__title.is-read .hero__highlight {
@@ -254,17 +247,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .hero__title-fix {
-    clip-path: none;
-  }
-
-  .hero__title-plain {
-    opacity: 0;
-  }
-
-  .hero__title.is-reading .hero__title-fix,
-  .hero__title.is-reading .hero__title-plain,
-  .hero__title.is-reading .hero__highlight {
+  .hero__title.is-reading .bp-head {
     animation: none;
   }
 
@@ -278,43 +261,26 @@
   }
 }
 
-/* ── Hero headline: one metric, two states ────────────────────────────────
-   The two stacked copies must lay out identically or they ghost against each
-   other while the wipe runs. So both keep the same weight, and the fixation
-   head is expressed with a stroke instead of a weight change — stroke does
-   not affect advance widths. The plain layer stays a uniform muted copy. */
-.hero__title b,
-.hero__title .bp-head {
-  font-weight: inherit;
-  -webkit-text-stroke: 1.05px currentColor;
-  paint-order: stroke fill;
-}
-
+/* The faded remainder is what makes the emphasis legible as emphasis, rather
+   than as an ordinary bold sentence. */
 .hero__title .bp-tail,
 .hero__title i {
   opacity: 0.45;
-  -webkit-text-stroke: 0;
 }
 
-/* ── Terminal state of the read ───────────────────────────────────────────
-   The vacate animation only lives while .is-reading, so the moment it is
-   replaced by .is-read the plain layer would come back at full opacity
-   underneath the fixation layer, putting every faded tail on an opaque copy
-   of its own glyph. Worse, both copies stayed in the document, so the
-   sentence was in the DOM twice.
-
-   So the finished state promotes the fixation layer to be the real, in-flow
-   text and drops the "before" copy entirely. No shadow, no duplicate text,
-   and the headline still occupies its height. */
-.hero__title.is-read .hero__title-fix {
-  position: static;
-  clip-path: none;
+/* ── With emphasis off, the headline is a headline ────────────────────────
+   The floating control can switch the emphasis off, and that has to include
+   the wave: an animation outranks a plain declaration, so it is cancelled
+   rather than countered. */
+html[data-fixation="off"] .hero__title.is-reading .bp-head,
+html[data-fixation="off"] .hero__title .bp-head {
+  animation: none;
+  font-weight: 400;
 }
 
-.hero__title.is-read .hero__title-plain {
-  display: none;
+html[data-fixation="off"] .hero__title .bp-tail {
+  opacity: 1;
 }
-
 
 /* ── Footer art: the open spread ─────────────────────────────────────────
    Two pages meeting at a spine, the first line of each already fixed, so the
@@ -431,17 +397,4 @@
   .spread__ribbon {
     animation: none;
   }
-}
-
-/* ── The hero, once the transition is over ────────────────────────────────
-   During the read the headline exists twice, so both copies have to lay out
-   identically — that is why the fixation head is drawn with a stroke and an
-   inherited weight. Afterwards only the fixation layer is left, so it can use
-   the real thing: the same weight the extension applies to a page. Measured
-   identical in height at every width from 390px to 1920px, so nothing
-   re-wraps when this takes effect. */
-.hero__title.is-read b,
-.hero__title.is-read .bp-head {
-  font-weight: var(--fx-weight);
-  -webkit-text-stroke: 0;
 }

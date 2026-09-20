@@ -13,7 +13,7 @@ tracking, no remote code.
 [![runtime](https://img.shields.io/badge/runtime-Bun-14151A?logo=bun&logoColor=white)](https://bun.sh)
 [![types](https://img.shields.io/badge/TypeScript-strict-3178C6?logo=typescript&logoColor=white)](tsconfig.json)
 [![manifest](https://img.shields.io/badge/Manifest-V3-4f46e5)](scripts/manifest.mjs)
-[![tests](https://img.shields.io/badge/tests-129-0f766e)](#testing)
+[![tests](https://img.shields.io/badge/tests-131-0f766e)](#testing)
 [![e2e](https://img.shields.io/badge/e2e-11%2F11-0f766e)](#testing)
 [![on-device](https://img.shields.io/badge/processing-on--device-0f766e)](#privacy)
 [![Firefox](https://img.shields.io/badge/Firefox-140%2B-FF7139?logo=firefoxbrowser&logoColor=white)](https://www.mozilla.org/firefox/)
@@ -114,7 +114,7 @@ bun run lint:firefox  # web-ext lint
 
 | Gate | Result |
 |---|---|
-| `bun test` | 129 tests across 8 files |
+| `bun test` | 131 tests across 8 files |
 | `bunx tsc --noEmit` | clean (strict TypeScript) |
 | build + verify | both targets, 11 referenced entries present each |
 | `web-ext lint` | 0 errors (4 warnings from vendored PDF.js) |

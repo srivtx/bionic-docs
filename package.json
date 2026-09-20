@@ -19,8 +19,11 @@
     "lint:firefox": "web-ext lint --source-dir dist/firefox",
     "demo": "node scripts/build-demo.mjs",
     "og": "node scripts/make-og.mjs",
+    "stamp": "node scripts/stamp-assets.mjs",
+    "check-copy": "node scripts/check-copy.mjs",
+    "e2e:site": "node scripts/e2e-site.mjs",
     "check-site": "node scripts/check-site.mjs",
-    "site": "node scripts/build-demo.mjs && node scripts/make-og.mjs && node scripts/check-site.mjs"
+    "site": "node scripts/build-demo.mjs && node scripts/make-og.mjs && node scripts/stamp-assets.mjs && node scripts/check-site.mjs && node scripts/check-copy.mjs"
   },
   "dependencies": {
     "fflate": "^0.8.2",

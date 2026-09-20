@@ -1,6 +1,7 @@
 import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
 import { dirname, isAbsolute, join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+import { assetVersion, stalePages } from "./stamp-assets.mjs";
 
 /*
  * Static-site checker for the bionic sites.
@@ -277,4 +278,15 @@ if (problems.length > 0) {
   process.exit(1);
 }
 
-console.log(`check-site: OK (${htmlFiles.length} pages)`);
+/* The asset version in the query strings has to match the assets. If it does
+   not, a warm cache keeps serving the old CSS and JS and fixes appear to do
+   nothing — which is exactly what happened when this was maintained by hand. */
+const version = assetVersion(join(siteDir, "assets"));
+const stale = stalePages(siteDir, version);
+if (stale.length > 0) {
+  for (const line of stale) console.error(`check-site: stale asset version — ${line}`);
+  console.error("check-site: run `bun run stamp`");
+  process.exit(1);
+}
+
+console.log(`check-site: OK (${htmlFiles.length} pages, assets v=${version})`);
