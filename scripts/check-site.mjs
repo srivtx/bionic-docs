@@ -185,8 +185,8 @@ for (const file of htmlFiles) {
 
   const stylesheetHrefs = links
     .filter((tag) => /(^|\s)stylesheet(\s|$)/i.test(tag.attrs.rel || ""))
-    .map((tag) => (tag.attrs.href || "").trim());
-  for (const sheet of ["assets/lens.css", "assets/theme.css"]) {
+    .map((tag) => (tag.attrs.href || "").trim().split("?")[0]); // ?v= is a cache-buster, not a path
+  for (const sheet of ["assets/lens.css", "assets/theme.css", "assets/identity.css"]) {
     if (!stylesheetHrefs.some((href) => href.endsWith(sheet))) {
       report(file, `missing stylesheet link to ${sheet}`);
     }

@@ -138,7 +138,8 @@
     var title = document.querySelector(".hero__title");
     if (!title) return;
     var fix = title.querySelector(".hero__title-fix");
-    if (!fix) return;
+    var plain = title.querySelector(".hero__title-plain");
+    if (!fix || !plain) return;
 
     function measure() {
       title.style.setProperty("--hl-travel", title.clientHeight + "px");
@@ -148,6 +149,7 @@
 
     if (reduce) {
       title.classList.add("is-read");
+      plain.remove();
       return;
     }
 
@@ -155,6 +157,9 @@
     fix.addEventListener("animationend", function () {
       title.classList.remove("is-reading");
       title.classList.add("is-read");
+      /* The fixation layer is the real text now, so the "before" copy is
+         removed instead of left in the document saying the same sentence. */
+      plain.remove();
     });
   }
 

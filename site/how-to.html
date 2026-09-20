@@ -22,9 +22,9 @@
 <meta name="twitter:image" content="https://srivtx.github.io/bionic-docs/assets/og.png">
 <link rel="canonical" href="https://srivtx.github.io/bionic-docs/how-to.html">
 <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2032%2032%27%3E%3Crect%20width%3D%2732%27%20height%3D%2732%27%20rx%3D%277%27%20fill%3D%27%234f46e5%27%2F%3E%3Cg%20transform%3D%27translate(4%204)%27%20fill%3D%27none%27%20stroke%3D%27%23ffffff%27%20stroke-width%3D%272.4%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%22M6.1%203.2h7.1l4.7%204.7v12.9H6.1z%22%3E%3C%2Fpath%3E%20%3Cpath%20d%3D%22M13.2%203.2v4.7h4.7%22%3E%3C%2Fpath%3E%20%3Cpath%20d%3D%22M8.6%2013.4h3.1%22%3E%3C%2Fpath%3E%20%3Cpath%20d%3D%22M11.7%2013.4h3.1%22%20stroke-opacity%3D%22.4%22%3E%3C%2Fpath%3E%3C%2Fg%3E%3C%2Fsvg%3E">
-<link rel="stylesheet" href="assets/lens.css">
-<link rel="stylesheet" href="assets/theme.css">
-<link rel="stylesheet" href="assets/identity.css">
+<link rel="stylesheet" href="assets/lens.css?v=0.1.0">
+<link rel="stylesheet" href="assets/theme.css?v=0.1.0">
+<link rel="stylesheet" href="assets/identity.css?v=0.1.0">
 <script>
 (function () {
   try {
@@ -191,19 +191,37 @@ bunx web-ext lint --source-dir dist/firefox</code></pre>
 </main>
 
 <footer class="footer">
-    <div class="art art--book" aria-hidden="true">
-      <span class="book">
-        <span class="book__pages"></span>
-        <span class="book__cover">
-          <span class="book__title"></span>
-          <span class="book__rule"></span>
-          <span class="book__rule book__rule--short"></span>
-          <span class="book__rule"></span>
-        </span>
-        <span class="book__spine"></span>
-        <span class="book__ribbon"></span>
+  <div class="art art--spread" aria-hidden="true">
+    <span class="spread">
+      <span class="spread__spine"></span>
+      <span class="spread__page spread__page--left">
+        <span class="spread__line spread__line--fixed"></span>
+        <span class="spread__line"></span>
+        <span class="spread__line spread__line--short"></span>
+        <span class="spread__line"></span>
+        <span class="spread__line spread__line--short"></span>
+        <span class="spread__line"></span>
+        <span class="spread__line"></span>
+        <span class="spread__line spread__line--short"></span>
       </span>
-    </div>
+      <span class="spread__page spread__page--right">
+        <span class="spread__line spread__line--fixed"></span>
+        <span class="spread__line spread__line--short"></span>
+        <span class="spread__line"></span>
+        <span class="spread__line"></span>
+        <span class="spread__line spread__line--short"></span>
+        <span class="spread__line"></span>
+        <span class="spread__line spread__line--short"></span>
+        <span class="spread__line"></span>
+      </span>
+        <span class="spread__line spread__line--short"></span>
+        <span class="spread__line"></span>
+        <span class="spread__line"></span>
+        <span class="spread__line spread__line--short"></span>
+      </span>
+      <span class="spread__ribbon"></span>
+    </span>
+  </div>
   <div class="container">
     <div class="footer__inner">
       <div class="footer__brand">
@@ -212,13 +230,14 @@ bunx web-ext lint --source-dir dist/firefox</code></pre>
         </span>
         <div>
           <p>bionic-docs</p>
-          <p class="muted">Read PDF and EPUB with bionic fixation.</p>
+          <p class="muted">PDF and EPUB, parsed on your machine. Nothing uploaded.</p>
         </div>
       </div>
 
-      <nav aria-label="Documentation">
-        <h2>Documentation</h2>
+      <nav aria-label="Pages">
+        <h2>Pages</h2>
         <ul>
+          <li><a href="index.html">Home</a></li>
           <li><a href="formats.html">Formats</a></li>
           <li><a href="how-to.html">How-to</a></li>
           <li><a href="privacy.html">Privacy</a></li>
@@ -231,21 +250,34 @@ bunx web-ext lint --source-dir dist/firefox</code></pre>
         <h2>Project</h2>
         <ul>
           <li><a href="https://github.com/srivtx/bionic-docs">Repository</a></li>
-          <li><a href="https://github.com/srivtx/bionic-docs/blob/main/LICENSE">MIT license</a></li>
+          <li><a href="https://github.com/srivtx/bionic-docs/releases">Releases</a></li>
           <li><a href="https://github.com/srivtx/bionic-docs/issues">Issues</a></li>
+          <li><a href="https://github.com/srivtx/bionic-docs/blob/main/LICENSE">MIT license</a></li>
         </ul>
       </nav>
+
+      <div>
+        <h2>Build</h2>
+        <ul>
+          <li>v0.1.0 · MIT</li>
+          <li>92 tests · 11/11 e2e</li>
+          <li>Chrome 116+</li>
+          <li>Firefox 140+</li>
+          <li>Nothing leaves the device</li>
+        </ul>
+      </div>
     </div>
 
     <div class="footer__meta">
       <p>by svx · MIT licensed.</p>
+      <p><span class="chip chip--ok">on-device</span></p>
       <p>© 2026 bionic-docs</p>
     </div>
   </div>
 </footer>
 
-<script src="assets/core.js"></script>
-<script src="assets/demo.js"></script>
-<script src="assets/art.js"></script>
+<script src="assets/core.js?v=0.1.0"></script>
+<script src="assets/demo.js?v=0.1.0"></script>
+<script src="assets/art.js?v=0.1.0"></script>
 </body>
 </html>

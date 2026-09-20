@@ -298,19 +298,28 @@
 
 /* ── Terminal state of the read ───────────────────────────────────────────
    The vacate animation only lives while .is-reading, so the moment it is
-   replaced by .is-read the plain layer loses its clip and comes back at full
-   opacity underneath the fixation layer. Every faded tail then sits on an
-   opaque copy of the same glyph, which reads as a shadow behind the text.
-   Hold the clip in the finished state; clip-path keeps the layout box, so
-   the headline still occupies its height. */
-.hero__title.is-read .hero__title-plain {
-  clip-path: inset(100% 0 0 0);
+   replaced by .is-read the plain layer would come back at full opacity
+   underneath the fixation layer, putting every faded tail on an opaque copy
+   of its own glyph. Worse, both copies stayed in the document, so the
+   sentence was in the DOM twice.
+
+   So the finished state promotes the fixation layer to be the real, in-flow
+   text and drops the "before" copy entirely. No shadow, no duplicate text,
+   and the headline still occupies its height. */
+.hero__title.is-read .hero__title-fix {
+  position: static;
+  clip-path: none;
 }
 
-/* ── Footer art: the book ─────────────────────────────────────────────────
-   A hardcover at rest: cover, page edges, a ribbon. It breathes slowly and
-   the page block shifts, as if something is being read. */
-.art--book {
+.hero__title.is-read .hero__title-plain {
+  display: none;
+}
+
+
+/* ── Footer art: the open spread ─────────────────────────────────────────
+   Two pages meeting at a spine, the first line of each already fixed, so the
+   art is the product applied to a document rather than a picture of a book. */
+.art--spread {
   position: relative;
   display: grid;
   place-items: center;
@@ -323,122 +332,108 @@
     var(--surface);
 }
 
-.book {
+.spread {
   position: relative;
-  width: clamp(196px, 27vw, 320px);
-  aspect-ratio: 4 / 3;
-  animation: book-float 11s var(--ease) infinite alternate;
+  width: clamp(236px, 33vw, 420px);
+  aspect-ratio: 16 / 9;
+  animation: spread-float 12s var(--ease) infinite alternate;
 }
 
-.book__cover {
+.spread__page {
   position: absolute;
-  inset: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  padding: 30px 28px 26px 40px;
-  border: 1px solid var(--hairline-strong);
-  border-radius: 3px 9px 9px 3px;
-  background: linear-gradient(
-    132deg,
-    color-mix(in srgb, var(--accent) 22%, var(--surface)) 0%,
-    var(--surface-2) 64%
-  );
-  box-shadow: 0 20px 44px rgba(0, 0, 0, 0.18);
-}
-
-.book__spine {
-  position: absolute;
-  left: 0;
   top: 0;
   bottom: 0;
-  width: 13px;
-  border-radius: 3px 0 0 3px;
-  background: linear-gradient(
-    90deg,
-    color-mix(in srgb, var(--accent) 52%, transparent),
-    transparent
-  );
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+  width: 50%;
+  padding: 22px 18px;
+  border: 1px solid var(--hairline-strong);
+  background: var(--surface-2);
+  box-shadow: 0 16px 34px rgba(0, 0, 0, 0.12);
 }
 
-.book__pages {
+.spread__page--left {
+  left: 0;
+  border-radius: 3px 0 0 5px;
+  transform: perspective(1000px) rotateY(7deg);
+  transform-origin: right center;
+}
+
+.spread__page--right {
+  right: 0;
+  border-radius: 0 5px 5px 0;
+  transform: perspective(1000px) rotateY(-7deg);
+  transform-origin: left center;
+}
+
+.spread__spine {
   position: absolute;
-  right: -9px;
-  top: 7px;
-  bottom: 7px;
-  width: 11px;
-  border-radius: 1px 5px 5px 1px;
-  background: repeating-linear-gradient(
-    to right,
-    var(--hairline-strong) 0 1px,
-    var(--canvas) 1px 3px
-  );
-  animation: book-pages 7s var(--ease) infinite alternate;
+  left: 50%;
+  top: -3%;
+  bottom: -3%;
+  z-index: 1;
+  width: 2px;
+  margin-left: -1px;
+  background: var(--hairline-strong);
 }
 
-.book__title {
-  height: 9px;
-  width: 58%;
-  border-radius: 2px;
-  background: var(--ink);
-  opacity: 0.82;
-}
-
-.book__rule {
+.spread__line {
   height: 3px;
-  width: 86%;
   border-radius: 2px;
   background: var(--mute);
-  opacity: 0.4;
+  opacity: 0.34;
 }
 
-.book__rule--short {
-  width: 52%;
+.spread__line--short {
+  width: 54%;
 }
 
-.book__ribbon {
+/* The product, on the page: a fixation head and a faded remainder. */
+.spread__line--fixed {
+  background: linear-gradient(
+    90deg,
+    var(--ink) 0 36%,
+    color-mix(in srgb, var(--mute) 42%, transparent) 36% 100%
+  );
+  opacity: 1;
+}
+
+.spread__ribbon {
   position: absolute;
-  left: 62%;
-  top: -13px;
+  left: 50%;
+  top: -16px;
+  z-index: 2;
   width: 15px;
-  height: 68px;
+  height: 52px;
+  margin-left: -8px;
   background: var(--accent);
   clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 82%, 0 100%);
   transform-origin: top center;
-  animation: book-ribbon 6.5s var(--ease) infinite alternate;
+  animation: spread-ribbon 6.5s var(--ease) infinite alternate;
 }
 
-@keyframes book-float {
+@keyframes spread-float {
   from {
-    transform: translateY(-5px) rotate(-1.2deg);
+    transform: translateY(-4px);
   }
   to {
-    transform: translateY(5px) rotate(1.2deg);
-  }
-}
-
-@keyframes book-pages {
-  from {
-    width: 10px;
-  }
-  to {
-    width: 15px;
+    transform: translateY(4px);
   }
 }
 
-@keyframes book-ribbon {
+@keyframes spread-ribbon {
   from {
-    transform: rotate(-3deg);
+    transform: rotate(-2.5deg);
   }
   to {
-    transform: rotate(4deg);
+    transform: rotate(3deg);
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .book,
-  .book__pages,
-  .book__ribbon {
+  .spread,
+  .spread__ribbon {
     animation: none;
   }
 }
