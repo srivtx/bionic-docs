@@ -937,33 +937,28 @@ span.bp-tail {
 }
 
 /* ── Page transitions ─────────────────────────────────────────────────────
-   A multi-page site cuts hard between pages: the old document vanishes and
-   the new one appears with no relationship between them. Two halves soften
-   it — the arriving page fades up, and the page you leave fades out as it
-   navigates — so moving around the site reads as one surface.
+   Moving between pages used to be a hard cut, and my first attempt at
+   smoothing it faded this page to nothing before navigating — which meant a
+   blank frame while the next page loaded. That is worse than the cut.
 
-   The arriving half is driven by a class the inline bootstrap adds before
-   first paint, so nothing flashes, and a page with scripts off is simply
-   visible rather than stuck at zero opacity. */
-/* `backwards`, not `both`: the from-state has to apply before the first
-   frame so nothing flashes, but the animation must not keep pinning opacity
-   once it ends or the exit fade below can never take effect. */
-html.nav body {
-  animation: page-in 200ms var(--ease) backwards;
+   The right mechanism is the cross-document View Transition API, which is
+   what a framework router gives you: the browser keeps the page you are on
+   painted while the next one loads, then cross-fades between the two
+   snapshots. Nothing is ever blank and nothing is delayed. Browsers without
+   it simply navigate as they always did, which is still never blank.
+
+   Everything here is CSS; there is no navigation JavaScript left at all. */
+@view-transition {
+  navigation: auto;
 }
 
-html.is-leaving body {
-  opacity: 0;
-  transition: opacity 160ms var(--ease);
-}
-
-@keyframes page-in {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 260ms;
+  animation-timing-function: var(--ease);
+  /* Explicit, so a browser that defaults this to an additive blend cannot
+     wash the page out on the way through. */
+  mix-blend-mode: normal;
 }
 
 /* Anchors glide rather than jump. */
@@ -974,16 +969,24 @@ html.is-leaving body {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  html.nav body {
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
     animation: none;
-  }
-
-  html.is-leaving body {
-    opacity: 1;
-    transition: none;
   }
 
   html {
     scroll-behavior: auto;
   }
+}
+
+/* ── Current page in the top nav ──────────────────────────────────────────
+   The docs sidebar already marks the current page; the top nav did not, so
+   after a client-side navigation there was nothing telling you where you
+   were. Both use aria-current, which is also what a screen reader wants. */
+.nav__links a[aria-current="page"] {
+  color: var(--ink);
+  text-decoration: underline;
+  text-decoration-color: var(--accent);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 6px;
 }

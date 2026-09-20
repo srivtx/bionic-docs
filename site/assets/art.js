@@ -75,7 +75,7 @@
 
   function mint(canvas, paint) {
     var ctx = canvas.getContext("2d");
-    if (!ctx) return;
+    if (!ctx) return function () {};
     var dpr = Math.min(window.devicePixelRatio || 1, 2);
     var w = 0;
     var h = 0;
@@ -83,6 +83,7 @@
     var t = 0;
     var last = 0;
     var visible = true;
+    var observer = null;
 
     function resize() {
       var rect = canvas.getBoundingClientRect();
@@ -104,20 +105,30 @@
       window.requestAnimationFrame(step);
     }
 
+    /* Returns its own teardown. Client-side navigation swaps the page under
+       the canvas, so the loop has to be stoppable or it keeps drawing into a
+       detached element forever. */
+    function stop() {
+      if (raf) window.cancelAnimationFrame(raf);
+      window.removeEventListener("resize", resize);
+      if (observer) observer.disconnect();
+    }
+
     resize();
 
     if (reduce) {
       window.addEventListener("resize", resize, { passive: true });
-      return;
+      return stop;
     }
 
     if ("IntersectionObserver" in window) {
-      new IntersectionObserver(
+      observer = new IntersectionObserver(
         function (entries) {
           visible = entries[0] ? entries[0].isIntersecting : true;
         },
         { rootMargin: "120px" },
-      ).observe(canvas);
+      );
+      observer.observe(canvas);
     }
 
     window.addEventListener("resize", resize, { passive: true });
@@ -129,6 +140,8 @@
       { passive: true },
     );
     window.requestAnimationFrame(step);
+
+    return stop;
   }
 
 
@@ -144,6 +157,10 @@
     function measure() {
       title.style.setProperty("--hl-travel", title.clientHeight + "px");
     }
+    if (window.__bionicHeadlineResize) {
+      window.removeEventListener("resize", window.__bionicHeadlineResize);
+    }
+    window.__bionicHeadlineResize = measure;
     measure();
     window.addEventListener("resize", measure, { passive: true });
 
@@ -164,8 +181,19 @@
   }
 
   function boot() {
+    /* Anything still running from the previous page is stopped first: with
+       client-side navigation the old canvas is detached, and its loop would
+       otherwise keep drawing into it forever. */
+    var stops = window.__bionicArt || [];
+    for (var i = 0; i < stops.length; i++) stops[i]();
+    window.__bionicArt = [];
+
     headline();
   }
+
+  /* Registered so the router can re-initialise the page after a swap. */
+  window.BionicSite = window.BionicSite || { init: [] };
+  window.BionicSite.init.push(boot);
 
   var themeButton = document.getElementById("theme-toggle");
   if (themeButton) {
