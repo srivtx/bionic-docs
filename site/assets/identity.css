@@ -130,7 +130,7 @@
 }
 
 .hero__title .bp-head {
-  font-weight: var(--fx-weight);
+  font-weight: var(--fx-hero);
 }
 
 /* The head starts thin and thickens in reading order, one step per head,
@@ -145,12 +145,12 @@
     font-weight: 400;
   }
   to {
-    font-weight: var(--fx-weight);
+    font-weight: var(--fx-hero);
   }
 }
 
 .hero__title.is-read .bp-head {
-  font-weight: var(--fx-weight);
+  font-weight: var(--fx-hero);
 }
 
 .hero__highlight {
@@ -266,6 +266,20 @@
 .hero__title .bp-tail,
 .hero__title i {
   opacity: 0.45;
+}
+
+/* ── Off means off ────────────────────────────────────────────────────────
+   Switching the emphasis off removes it from everything the page renders,
+   everywhere it appears: the headline, the samples, the demo, the reader. The
+   text returns to the weight and opacity it would have had anyway. */
+html[data-fixation="off"] .bionic b,
+html[data-fixation="off"] b.bp-head {
+  font-weight: 400;
+}
+
+html[data-fixation="off"] .bionic i,
+html[data-fixation="off"] span.bp-tail {
+  opacity: 1;
 }
 
 /* ── With emphasis off, the headline is a headline ────────────────────────

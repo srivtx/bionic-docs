@@ -88,6 +88,51 @@
 
   applyTheme(storedTheme());
 
+  /* ----- Emphasis switch -------------------------------------------------
+     Lives in the nav, so it is bound here with the rest of the header: that
+     markup is the same on every page and is never replaced by a client-side
+     navigation, so it must not be bound twice. */
+  var KEY_FIX = "bionic-page-fixation";
+  var fixSwitch = q("#fixation");
+
+  function readFixation() {
+    try {
+      return window.localStorage.getItem(KEY_FIX) === "off" ? "off" : "on";
+    } catch (err) {
+      return "on";
+    }
+  }
+
+  function applyFixation(state) {
+    var on = state !== "off";
+    /* The attribute only ever exists when the emphasis is off, so the plain
+       page is the default and a missing attribute is not a special case. */
+    if (on) root.removeAttribute("data-fixation");
+    else root.setAttribute("data-fixation", "off");
+    if (!fixSwitch) return;
+    fixSwitch.setAttribute("aria-checked", on ? "true" : "false");
+    fixSwitch.setAttribute(
+      "aria-label",
+      on ? "Bionic emphasis is on. Turn it off." : "Bionic emphasis is off. Turn it on.",
+    );
+  }
+
+  if (fixSwitch) {
+    fixSwitch.addEventListener("click", function () {
+      var next = fixSwitch.getAttribute("aria-checked") === "true" ? "off" : "on";
+      try {
+        if (next === "off") window.localStorage.setItem(KEY_FIX, "off");
+        else window.localStorage.removeItem(KEY_FIX);
+      } catch (err) {
+        void 0;
+      }
+      applyFixation(next);
+    });
+  }
+
+  applyFixation(readFixation());
+
+
 
   /* ----- Navigation toggle --------------------------------------------- */
   var navToggle = $("nav-toggle");

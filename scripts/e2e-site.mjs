@@ -187,6 +187,36 @@ for (const page of pages) {
     await sleep(80);
   }
 
+  /* The emphasis switch: it must actually switch, and it must remember. */
+  const hasSwitch = await ev(`document.querySelector(".nav__fix") ? 1 : 0`);
+  if (hasSwitch) {
+    const state = await ev(`(function(){
+      var s=document.querySelector('.nav__fix');
+      return s.getAttribute('role')+'/'+s.getAttribute('aria-checked')+'/'+s.getAttribute('aria-label');
+    })()`);
+    check("emphasis switch is a switch, on by default", String(state).startsWith("switch/true"), state);
+
+    const weight = `(function(){var b=document.querySelector('b.bp-head');return b?Math.round(getComputedStyle(b).fontWeight):-1})()`;
+    const on = await ev(weight);
+    await ev(`document.querySelector(".nav__fix").click()`);
+    await sleep(260);
+    const attr = await ev(`document.documentElement.getAttribute("data-fixation")`);
+    const off = await ev(weight);
+    check("switching it off removes the emphasis", attr === "off" && (on <= 0 || off < 500), `data-fixation=${attr}, weight ${on} -> ${off}`);
+
+    /* It is stored, so a reload has to keep it — and a client-side navigation
+       must not lose it either. */
+    await send("Page.navigate", { url: `${base}${page}` }, sid);
+    await sleep(1900);
+    const persisted = await ev(`document.documentElement.getAttribute("data-fixation")`);
+    check("the choice survives a reload", persisted === "off", `data-fixation=${persisted}`);
+    await ev(`document.querySelector(".nav__fix").click()`);
+    await sleep(220);
+    const back = await ev(`document.documentElement.getAttribute("data-fixation")`);
+    check("switching it back on restores it", back === null, `data-fixation=${back}`);
+    errors = [];
+  }
+
   /* Fixation samples must be real markup, not plain text. */
   const samples = await ev(
     `[...document.querySelectorAll("[data-bionic-sample]")].map(e=>e.querySelectorAll("b.bp-head").length).join(",")`,

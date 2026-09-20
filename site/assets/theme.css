@@ -9,6 +9,9 @@
   /* Fixation defaults, mirrored from the extensions so the landing-page
      demo renders exactly what a real page looks like after a pass. */
   --fx-weight: 700;
+  /* The headline is 60px, where the full 700 reads as shouting. Its own
+     weight, a step lighter, keeps the emphasis legible without the shout. */
+  --fx-hero: 600;
   --fx-rest: 0.72;
 }
 
@@ -1063,5 +1066,61 @@ span.bp-tail {
 @media (prefers-reduced-motion: reduce) {
   .theme-pick__btn {
     transition: none;
+  }
+}
+
+/* ── The emphasis switch ──────────────────────────────────────────────────
+   This used to be a floating button pinned to the bottom-right corner, over
+   the page, draggable, always in the way. It is a control, so it belongs with
+   the other controls, in the nav where it is reachable on every page.
+
+   The icon is the product rather than a symbol for it: two "words", each with
+   a heavy leading part and a light remainder. Filled rects, not strokes, so
+   the weight difference survives being drawn 16px wide. */
+.nav__fix {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  border: 1px solid var(--hairline);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--ink);
+  cursor: pointer;
+  transition: background var(--dur) var(--ease), color var(--dur) var(--ease),
+    border-color var(--dur) var(--ease);
+}
+
+.nav__fix:hover {
+  border-color: var(--hairline-strong);
+}
+
+.nav__fix .fixmark {
+  width: 17px;
+  height: 17px;
+}
+
+.nav__fix .fixmark rect {
+  fill: currentColor;
+  stroke: none;
+}
+
+/* Off is not just dimmer: the leading parts drop to the weight of the rest,
+   which is exactly what happens to the text. */
+.nav__fix[aria-checked="false"] {
+  color: var(--mute);
+  background: transparent;
+}
+
+.nav__fix[aria-checked="false"] .fixmark rect:nth-child(1),
+.nav__fix[aria-checked="false"] .fixmark rect:nth-child(3) {
+  opacity: 0.32;
+}
+
+@media (max-width: 600px) {
+  .nav__fix {
+    width: 36px;
+    height: 32px;
   }
 }
