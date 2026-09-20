@@ -19,6 +19,13 @@
       <span id="position" class="position" aria-live="polite">No document</span>
       <button id="next" class="btn icon" type="button" aria-label="Next page or chapter">›</button>
 
+      <div class="toc-wrap">
+        <button id="tocToggle" class="btn toc-toggle" type="button" aria-expanded="false" aria-controls="tocPanel">Contents</button>
+        <nav id="tocPanel" class="toc" aria-label="Contents" hidden>
+          <ul id="tocList" class="toc-list"></ul>
+        </nav>
+      </div>
+
       <label class="field">
         <span class="field-label">Mode</span>
         <select id="mode"></select>
@@ -30,9 +37,14 @@
         <output id="intensityValue" for="intensity">50%</output>
       </label>
 
+      <span class="keyhint">← → pages · Home/End · C contents</span>
       <span class="privacy" title="No upload, no account, no tracking">On-device</span>
     </div>
   </header>
+
+  <div id="resume" class="resume" hidden>
+    <button id="resumeButton" class="btn" type="button" aria-label="Resume reading position"></button>
+  </div>
 
   <main id="doc" class="doc" aria-live="polite"></main>
 

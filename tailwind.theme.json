@@ -1,0 +1,223 @@
+{
+  "theme": {
+    "extend": {
+      "colors": {
+        "primary": "#0f766e",
+        "accent": "#0f766e",
+        "accent-ink": "#ffffff",
+        "accent-soft": "#0f766e1a",
+        "accent-dark": "#2dd4bf",
+        "accent-ink-dark": "#0a0a0a",
+        "accent-soft-dark": "#2dd4bf1a",
+        "folio": "#0f766e",
+        "folio-dark": "#2dd4bf",
+        "canvas": "#ffffff",
+        "canvas-dark": "#0a0a0a",
+        "surface": "#fafafa",
+        "surface-dark": "#111112",
+        "surface-2": "#f4f4f5",
+        "surface-2-dark": "#18181b",
+        "hairline": "#e6e6e8",
+        "hairline-dark": "#232326",
+        "hairline-strong": "#d4d4d8",
+        "hairline-strong-dark": "#33333a",
+        "ink": "#0a0a0a",
+        "ink-dark": "#fafafa",
+        "body": "#3f3f46",
+        "body-dark": "#c4c4ca",
+        "mute": "#71717a",
+        "mute-dark": "#8b8b93",
+        "faint": "#6f6f78",
+        "faint-dark": "#8b8b93",
+        "success": "#15803d",
+        "success-dark": "#4ade80",
+        "warning": "#b45309",
+        "warning-dark": "#fbbf24",
+        "error": "#b91c1c",
+        "error-dark": "#f87171",
+        "info": "#1d4ed8",
+        "info-dark": "#93c5fd",
+        "term-bg": "#0b0b0e",
+        "term-bar": "#121216",
+        "term-ink": "#e8e8ef",
+        "term-mute": "#8f8f9b",
+        "term-dim": "#63636e",
+        "term-cmd": "#f2f2f7",
+        "term-err": "#f87171",
+        "term-warn": "#fbbf24",
+        "term-info": "#93c5fd",
+        "term-ok": "#4ade80",
+        "term-acc": "#a5b4fc"
+      },
+      "fontFamily": {
+        "display": [
+          "Geist"
+        ],
+        "title": [
+          "Geist"
+        ],
+        "headline": [
+          "Geist"
+        ],
+        "headline-sm": [
+          "Geist"
+        ],
+        "subhead": [
+          "Geist"
+        ],
+        "lede": [
+          "Geist"
+        ],
+        "lead-editorial": [
+          "Geist"
+        ],
+        "body": [
+          "Geist"
+        ],
+        "body-sm": [
+          "Geist"
+        ],
+        "nav": [
+          "Geist"
+        ],
+        "button": [
+          "Geist"
+        ],
+        "button-sm": [
+          "Geist"
+        ],
+        "label": [
+          "Geist Mono"
+        ],
+        "mono": [
+          "Geist Mono"
+        ],
+        "metric": [
+          "Geist Mono"
+        ]
+      },
+      "fontSize": {
+        "display": [
+          "3.75rem",
+          {
+            "letterSpacing": "-0.04em",
+            "fontWeight": "600"
+          }
+        ],
+        "title": [
+          "2.5rem",
+          {
+            "letterSpacing": "-0.03em",
+            "fontWeight": "600"
+          }
+        ],
+        "headline": [
+          "1.9rem",
+          {
+            "letterSpacing": "-0.025em",
+            "fontWeight": "600"
+          }
+        ],
+        "headline-sm": [
+          "1.4375rem",
+          {
+            "letterSpacing": "-0.025em",
+            "fontWeight": "600"
+          }
+        ],
+        "subhead": [
+          "1.0625rem",
+          {
+            "letterSpacing": "-0.02em",
+            "fontWeight": "600"
+          }
+        ],
+        "lede": [
+          "1.125rem",
+          {
+            "fontWeight": "400"
+          }
+        ],
+        "lead-editorial": [
+          "1.1875rem",
+          {
+            "letterSpacing": "-0.015em",
+            "fontWeight": "400"
+          }
+        ],
+        "body": [
+          "1rem",
+          {
+            "fontWeight": "400"
+          }
+        ],
+        "body-sm": [
+          "0.9375rem",
+          {
+            "fontWeight": "400"
+          }
+        ],
+        "nav": [
+          "0.875rem",
+          {
+            "fontWeight": "500"
+          }
+        ],
+        "button": [
+          "0.9rem",
+          {
+            "fontWeight": "550"
+          }
+        ],
+        "button-sm": [
+          "0.8125rem",
+          {
+            "fontWeight": "550"
+          }
+        ],
+        "label": [
+          "0.6875rem",
+          {
+            "letterSpacing": "0.1em",
+            "fontWeight": "500"
+          }
+        ],
+        "mono": [
+          "0.8125rem",
+          {
+            "fontWeight": "400"
+          }
+        ],
+        "metric": [
+          "1.375rem",
+          {
+            "letterSpacing": "-0.02em",
+            "fontWeight": "600"
+          }
+        ]
+      },
+      "borderRadius": {
+        "xs": "3px",
+        "sm": "5px",
+        "md": "7px",
+        "lg": "10px",
+        "brand": "8px",
+        "full": "999px"
+      },
+      "spacing": {
+        "s-1": "4px",
+        "s-2": "8px",
+        "s-3": "12px",
+        "s-4": "16px",
+        "s-5": "24px",
+        "s-6": "32px",
+        "s-7": "48px",
+        "s-8": "64px",
+        "s-9": "96px",
+        "gutter": "24px",
+        "nav-height": "56px",
+        "container": "1120px"
+      }
+    }
+  }
+}

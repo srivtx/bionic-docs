@@ -13,7 +13,7 @@ tracking, no remote code.
 [![runtime](https://img.shields.io/badge/runtime-Bun-14151A?logo=bun&logoColor=white)](https://bun.sh)
 [![types](https://img.shields.io/badge/TypeScript-strict-3178C6?logo=typescript&logoColor=white)](tsconfig.json)
 [![manifest](https://img.shields.io/badge/Manifest-V3-4f46e5)](scripts/manifest.mjs)
-[![tests](https://img.shields.io/badge/tests-92-0f766e)](#testing)
+[![tests](https://img.shields.io/badge/tests-129-0f766e)](#testing)
 [![e2e](https://img.shields.io/badge/e2e-11%2F11-0f766e)](#testing)
 [![on-device](https://img.shields.io/badge/processing-on--device-0f766e)](#privacy)
 [![Firefox](https://img.shields.io/badge/Firefox-140%2B-FF7139?logo=firefoxbrowser&logoColor=white)](https://www.mozilla.org/firefox/)
@@ -67,8 +67,13 @@ bun run build
 1. Click the toolbar icon and choose **Open current document** (for a PDF open
    in a tab) or **Open a file…**.
 2. Pick a mode and adjust intensity in the reader toolbar; changes apply live.
-3. Navigate with the ‹ › buttons (pages in a PDF, chapters in an EPUB).
-4. Press `Ctrl`/`Cmd`+`Shift`+`O` to open the current document at any time.
+3. Navigate with the ‹ › buttons (pages in a PDF, chapters in an EPUB), or
+   with the `←`/`→` and `PageUp`/`PageDown` keys; `Home` and `End` jump to the
+   first or last, and `C` toggles a collapsible **Contents** panel (a page list
+   for a PDF, the document's own table of contents for an EPUB).
+4. Reopen a document you have read before and the reader offers to resume the
+   last page or chapter; it remembers up to 25 documents.
+5. Press `Ctrl`/`Cmd`+`Shift`+`O` to open the current document at any time.
 
 ## Privacy
 
@@ -109,7 +114,7 @@ bun run lint:firefox  # web-ext lint
 
 | Gate | Result |
 |---|---|
-| `bun test` | 92 tests across 7 files |
+| `bun test` | 129 tests across 8 files |
 | `bunx tsc --noEmit` | clean (strict TypeScript) |
 | build + verify | both targets, 11 referenced entries present each |
 | `web-ext lint` | 0 errors (4 warnings from vendored PDF.js) |

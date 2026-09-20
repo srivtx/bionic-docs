@@ -135,6 +135,87 @@ output { color: var(--bp-ink); font-variant-numeric: tabular-nums; min-width: 3c
   padding: 3px 10px;
 }
 
+.keyhint {
+  font-size: 0.72rem;
+  color: var(--bp-mute);
+  white-space: nowrap;
+}
+@media (hover: none) and (pointer: coarse) {
+  .keyhint { display: none; }
+}
+
+.toc-wrap { position: relative; }
+.toc-toggle[aria-expanded="true"] {
+  border-color: var(--bp-accent);
+  background: var(--bp-accent-soft);
+  color: var(--bp-ink);
+}
+
+.toc {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  z-index: 6;
+  width: min(360px, calc(100vw - 36px));
+  max-height: min(60vh, 520px);
+  overflow: auto;
+  padding: 8px;
+  border: 1px solid var(--bp-hairline);
+  border-radius: 12px;
+  background: var(--bp-canvas);
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.18);
+}
+.toc[hidden] { display: none; }
+
+.toc-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.toc-entry { margin: 0; }
+.toc-link {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  width: 100%;
+  padding: 6px 8px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--bp-ink);
+  font: inherit;
+  font-size: 0.85rem;
+  line-height: 1.4;
+  text-align: left;
+  cursor: pointer;
+}
+.toc-link:hover { background: var(--bp-accent-soft); }
+.toc-link:focus-visible { outline: 2px solid var(--bp-accent); outline-offset: -2px; }
+.toc-marker {
+  min-width: 2.5ch;
+  color: var(--bp-mute);
+  font-variant-numeric: tabular-nums;
+}
+.toc-label { flex: 1; }
+.toc-entry[data-depth="1"] .toc-link { padding-left: 20px; }
+.toc-entry[data-depth="2"] .toc-link { padding-left: 32px; }
+.toc-entry[data-depth="3"] .toc-link { padding-left: 44px; }
+.toc-entry[data-depth="4"] .toc-link { padding-left: 56px; }
+.toc-empty {
+  margin: 0;
+  padding: 6px 8px;
+  color: var(--bp-mute);
+  font-size: 0.85rem;
+}
+
+.resume {
+  display: flex;
+  justify-content: center;
+  padding: 12px 18px 0;
+}
+.resume[hidden] { display: none; }
+.resume .btn { font-size: 0.85rem; }
+
 .doc {
   max-width: 68ch;
   margin: 0 auto;
@@ -208,6 +289,7 @@ body.dragging .dropzone-inner { border-color: var(--bp-accent); background: var(
 
 @media (max-width: 720px) {
   .controls { width: 100%; margin-left: 0; }
+  .keyhint { display: none; }
   .doc { padding: 24px 16px 80px; }
 }
 

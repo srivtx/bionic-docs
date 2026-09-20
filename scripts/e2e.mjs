@@ -130,7 +130,9 @@ async function main() {
   await rpc(sock, "Page.navigate", { url: `http://localhost:${PORT}/reader.html?src=/sample.pdf` });
   const pdfHeads = await waitFor(sock, "document.querySelectorAll('.bp-head').length", 20000);
   const pdfText = await rpc(sock, "Runtime.evaluate", {
-    expression: "document.body.innerText.slice(0, 200)",
+    // The reader now renders the Contents panel and key hint before the document,
+    // so the assertion has to read the document container rather than the body.
+    expression: "(document.getElementById(\"doc\")?.innerText ?? \"\").slice(0, 200)",
     returnByValue: true,
   });
   const pdfInfo = await rpc(sock, "Runtime.evaluate", {
@@ -176,7 +178,7 @@ async function main() {
       chapters: document.querySelectorAll('.epub-chapter').length,
       title: document.querySelector('.epub-title')?.textContent ?? '',
       position: document.getElementById('position')?.textContent ?? '',
-      text: document.body.innerText.slice(0, 160)
+      text: (document.getElementById("doc")?.innerText ?? "").slice(0, 160)
     })`,
     returnByValue: true,
   });
