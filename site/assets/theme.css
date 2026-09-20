@@ -716,6 +716,37 @@ span.bp-tail {
   margin-top: var(--s-3);
 }
 
+/* ── Footer ───────────────────────────────────────────────────────────────
+   The footer is one surface, not a stack of strips. A single hairline above
+   it, a pool of accent light behind the art that fades down through the
+   columns, and one hairline before the meta line. The art band inside it has
+   no border and no background of its own, so the two read as one thing
+   instead of a rectangle glued onto the bottom of the page. */
+.footer {
+  border-top: 1px solid var(--hairline);
+  padding-block: 0;
+  background:
+    radial-gradient(76% 132% at 50% -4%, var(--accent-soft), transparent 60%),
+    var(--surface);
+}
+
+.footer > .container {
+  padding-block: 0 var(--s-7);
+}
+
+.footer__inner {
+  padding-top: var(--s-6);
+}
+
+.footer__brand p:last-child {
+  max-width: 34ch;
+  text-wrap: pretty;
+}
+
+.footer__meta {
+  margin-top: var(--s-7);
+}
+
 /* ── Cards ────────────────────────────────────────────────────────────────
    .card is a plain block and .card p carries no margin, so two paragraphs in
    one card ran together. Only the run between paragraphs is spaced; a card

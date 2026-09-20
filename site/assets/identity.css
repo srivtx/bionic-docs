@@ -323,13 +323,8 @@
   position: relative;
   display: grid;
   place-items: center;
-  height: clamp(164px, 23vw, 262px);
+  height: clamp(150px, 21vw, 240px);
   overflow: hidden;
-  border-top: 1px solid var(--hairline);
-  border-bottom: 1px solid var(--hairline);
-  background:
-    radial-gradient(56% 118% at 50% 118%, var(--accent-soft), transparent 74%),
-    var(--surface);
 }
 
 .spread {
