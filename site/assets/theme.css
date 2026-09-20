@@ -655,3 +655,23 @@ span.bp-tail {
 .bdemo__pane textarea.input {
   resize: vertical;
 }
+
+/* ── Proof chips under a call to action ───────────────────────────────────
+   .btn-row carries no bottom margin and .flagline resets its own, so an
+   adjacent pair collided. Give the row its own air. */
+.btn-row + .flagline {
+  margin-top: var(--s-4);
+}
+
+.flagline + .btn-row {
+  margin-top: var(--s-2);
+}
+
+/* ── Hero rhythm ──────────────────────────────────────────────────────────
+   The reset zeroes heading margins, so an eyebrow immediately before the
+   headline touched it. One step of air, hero only, so section heads that
+   already use a flex gap are untouched. */
+.hero .eyebrow + h1,
+.hero__inner .eyebrow + h1 {
+  margin-top: var(--s-3);
+}

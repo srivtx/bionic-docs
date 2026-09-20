@@ -58,7 +58,7 @@ export function manifestFor(target, version) {
       background: { scripts: ["background.js"] },
       browser_specific_settings: {
         gecko: {
-          id: "bionic-docs@example.com",
+          id: "bionic-docs@srivtx.github.io",
           strict_min_version: "140.0",
           data_collection_permissions: { required: ["none"] },
         },
