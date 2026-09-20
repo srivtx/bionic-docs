@@ -432,15 +432,26 @@ span.bp-tail {
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.18);
 }
 
+/* The handle is a 30px circle with a 16px glyph in it. It has to centre the
+   glyph itself: a block box leaves the svg at the top-left, which put the
+   arrows 7px off centre on both axes. */
 .compare__grip {
   position: absolute;
   top: 50%;
   z-index: 1;
+  display: grid;
+  place-items: center;
   width: 30px;
   height: 30px;
   transform: translate(-50%, -50%);
   color: var(--accent-ink);
   pointer-events: none;
+}
+
+.compare__grip .icon {
+  width: 17px;
+  height: 17px;
+  stroke-width: 2;
 }
 
 /* ── Reader ───────────────────────────────────────────────────────────────
@@ -785,4 +796,26 @@ span.bp-tail {
    that uses .stack for its rhythm is left alone because that adds its own. */
 .card p + p {
   margin-top: var(--s-3);
+}
+
+/* ── Compare: the handle answers the hand ─────────────────────────────────
+   It lifts under the pointer and compresses while you are actually dragging,
+   which is what makes a drag feel connected rather than abstract. */
+.compare__knob::after {
+  transition: transform var(--dur) var(--ease);
+}
+
+.compare:hover .compare__knob::after,
+.compare:focus-visible .compare__knob::after {
+  transform: translate(-50%, -50%) scale(1.08);
+}
+
+.compare.is-dragging .compare__knob::after {
+  transform: translate(-50%, -50%) scale(0.94);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .compare__knob::after {
+    transition: none;
+  }
 }
