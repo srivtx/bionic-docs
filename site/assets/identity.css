@@ -61,7 +61,8 @@
   width: min(34vw, 380px);
   height: min(46vh, 330px);
   transform: rotate(-2.1deg);
-  opacity: 0.5;
+  opacity: 0.8;
+  box-shadow: 0 18px 38px rgba(0, 0, 0, 0.1);
 }
 
 .sheet--2 {
@@ -70,7 +71,8 @@
   width: min(30vw, 330px);
   height: min(40vh, 280px);
   transform: rotate(1.4deg);
-  opacity: 0.7;
+  opacity: 1;
+  box-shadow: 0 18px 38px rgba(0, 0, 0, 0.1);
   animation-delay: -4s;
   animation-duration: 18s;
 }
@@ -81,7 +83,8 @@
   width: min(26vw, 280px);
   height: min(34vh, 236px);
   transform: rotate(3.2deg);
-  opacity: 0.42;
+  opacity: 0.65;
+  box-shadow: 0 18px 38px rgba(0, 0, 0, 0.1);
   animation-delay: -8s;
   animation-duration: 22s;
 }
@@ -233,19 +236,12 @@
   width: 100%;
 }
 
-.art--footer {
-  height: clamp(132px, 17vw, 188px);
-  border-top: 1px solid var(--hairline);
-  border-bottom: 1px solid var(--hairline);
-  background: var(--surface);
-  -webkit-mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent);
-  mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent);
-}
+
 
 @media (max-width: 900px) {
   .sheet--1,
   .sheet--3 {
-    opacity: 0.3;
+    opacity: 0.55;
   }
 
   .sheets {
@@ -254,9 +250,7 @@
 }
 
 @media (max-width: 520px) {
-  .art--footer {
-    height: 112px;
-  }
+  
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -300,4 +294,151 @@
 .hero__title i {
   opacity: 0.45;
   -webkit-text-stroke: 0;
+}
+
+/* ── Terminal state of the read ───────────────────────────────────────────
+   The vacate animation only lives while .is-reading, so the moment it is
+   replaced by .is-read the plain layer loses its clip and comes back at full
+   opacity underneath the fixation layer. Every faded tail then sits on an
+   opaque copy of the same glyph, which reads as a shadow behind the text.
+   Hold the clip in the finished state; clip-path keeps the layout box, so
+   the headline still occupies its height. */
+.hero__title.is-read .hero__title-plain {
+  clip-path: inset(100% 0 0 0);
+}
+
+/* ── Footer art: the book ─────────────────────────────────────────────────
+   A hardcover at rest: cover, page edges, a ribbon. It breathes slowly and
+   the page block shifts, as if something is being read. */
+.art--book {
+  position: relative;
+  display: grid;
+  place-items: center;
+  height: clamp(164px, 23vw, 262px);
+  overflow: hidden;
+  border-top: 1px solid var(--hairline);
+  border-bottom: 1px solid var(--hairline);
+  background:
+    radial-gradient(56% 118% at 50% 118%, var(--accent-soft), transparent 74%),
+    var(--surface);
+}
+
+.book {
+  position: relative;
+  width: clamp(196px, 27vw, 320px);
+  aspect-ratio: 4 / 3;
+  animation: book-float 11s var(--ease) infinite alternate;
+}
+
+.book__cover {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 30px 28px 26px 40px;
+  border: 1px solid var(--hairline-strong);
+  border-radius: 3px 9px 9px 3px;
+  background: linear-gradient(
+    132deg,
+    color-mix(in srgb, var(--accent) 22%, var(--surface)) 0%,
+    var(--surface-2) 64%
+  );
+  box-shadow: 0 20px 44px rgba(0, 0, 0, 0.18);
+}
+
+.book__spine {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 13px;
+  border-radius: 3px 0 0 3px;
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--accent) 52%, transparent),
+    transparent
+  );
+}
+
+.book__pages {
+  position: absolute;
+  right: -9px;
+  top: 7px;
+  bottom: 7px;
+  width: 11px;
+  border-radius: 1px 5px 5px 1px;
+  background: repeating-linear-gradient(
+    to right,
+    var(--hairline-strong) 0 1px,
+    var(--canvas) 1px 3px
+  );
+  animation: book-pages 7s var(--ease) infinite alternate;
+}
+
+.book__title {
+  height: 9px;
+  width: 58%;
+  border-radius: 2px;
+  background: var(--ink);
+  opacity: 0.82;
+}
+
+.book__rule {
+  height: 3px;
+  width: 86%;
+  border-radius: 2px;
+  background: var(--mute);
+  opacity: 0.4;
+}
+
+.book__rule--short {
+  width: 52%;
+}
+
+.book__ribbon {
+  position: absolute;
+  left: 62%;
+  top: -13px;
+  width: 15px;
+  height: 68px;
+  background: var(--accent);
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 82%, 0 100%);
+  transform-origin: top center;
+  animation: book-ribbon 6.5s var(--ease) infinite alternate;
+}
+
+@keyframes book-float {
+  from {
+    transform: translateY(-5px) rotate(-1.2deg);
+  }
+  to {
+    transform: translateY(5px) rotate(1.2deg);
+  }
+}
+
+@keyframes book-pages {
+  from {
+    width: 10px;
+  }
+  to {
+    width: 15px;
+  }
+}
+
+@keyframes book-ribbon {
+  from {
+    transform: rotate(-3deg);
+  }
+  to {
+    transform: rotate(4deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .book,
+  .book__pages,
+  .book__ribbon {
+    animation: none;
+  }
 }

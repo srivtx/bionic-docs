@@ -131,80 +131,6 @@
     window.requestAnimationFrame(step);
   }
 
-  /* ---- the stack --------------------------------------------------------
-     Rows of document edges. A band descends through them; whatever it is over
-     is drawn fixed (head bold, tail faint), everything else is a plain rule.
-     The stack is forked from a hash, so it is identical on every reload. */
-
-  function stack(ctx, w, h, t, p) {
-    ctx.clearRect(0, 0, w, h);
-
-    var pad = 16;
-    var rows = Math.max(6, Math.floor((h - pad * 2) / 7.5));
-    var bandH = (h - pad * 2) / rows;
-
-    /* One descent takes about seven seconds, with a beat at each end. */
-    var cycle = 7.2;
-    var phase = (t % cycle) / cycle;
-    var eased = phase < 0.5 ? 2 * phase * phase : 1 - Math.pow(-2 * phase + 2, 2) / 2;
-    var bandY = pad + (h - pad * 2) * eased;
-    var influence = bandH * 5;
-
-    /* The reading band itself, soft at both edges. */
-    var grad = ctx.createLinearGradient(0, bandY - influence, 0, bandY + influence);
-    grad.addColorStop(0, rgba(p.accent, 0));
-    grad.addColorStop(0.5, rgba(p.accent, 0.14));
-    grad.addColorStop(1, rgba(p.accent, 0));
-    ctx.fillStyle = grad;
-    ctx.fillRect(0, bandY - influence, w, influence * 2);
-
-    for (var row = 0; row < rows; row++) {
-      var top = pad + row * bandH;
-      var y = top + bandH / 2;
-      var indent = pad + hash(row * 3 + 1) * w * 0.16;
-      var right = w - pad - hash(row * 7 + 5) * w * 0.1;
-      var closeness = Math.max(0, 1 - Math.abs(y - bandY) / influence);
-      var fixed = closeness > 0.34;
-
-      /* The page edge: a tick down the left of the row, and a folded corner
-         on every seventh page. */
-      ctx.fillStyle = rgba(p.hair, 0.9);
-      ctx.fillRect(indent - 5, top + 1, 1, bandH - 2);
-      if (row % 7 === 3) {
-        ctx.fillStyle = rgba(p.hair, 0.9);
-        ctx.fillRect(right - 4, top + 1, 4, 1);
-        ctx.fillRect(right - 1, top + 1, 1, 4);
-      }
-
-      /* Three short lines of "text" per page. */
-      var lines = 2 + (hash(row * 11 + 2) > 0.55 ? 1 : 0);
-      for (var k = 0; k < lines; k++) {
-        var lx = indent + 3;
-        var ly = top + 2 + (k + 1) * (bandH / (lines + 1));
-        var span = (right - indent - 8) * (0.42 + hash(row * 17 + k * 5 + 7) * 0.52);
-        var head = span * (0.3 + hash(row * 23 + k * 9 + 13) * 0.3);
-
-        if (fixed) {
-          var solid = 0.42 + 0.58 * closeness;
-          ctx.fillStyle = rgba(p.ink, solid * 0.55);
-          ctx.fillRect(lx + head, ly, Math.max(1, span - head), 2);
-          ctx.fillStyle = rgba(p.ink, solid);
-          ctx.fillRect(lx, ly, Math.max(1, head), 2);
-        } else {
-          ctx.fillStyle = rgba(p.mute, 0.2);
-          ctx.fillRect(lx, ly, Math.max(1, span), 2);
-        }
-      }
-    }
-
-    /* Grain, so the surface is paper and not a chart. */
-    for (var g = 0; g < rows * 3; g++) {
-      var gx = hash(g * 13 + 3) * w;
-      var gy = hash(g * 29 + 9) * h;
-      ctx.fillStyle = rgba(p.ink, 0.035);
-      ctx.fillRect(gx, gy, 1, 1);
-    }
-  }
 
   /* ---- boot ------------------------------------------------------------- */
 
@@ -233,8 +159,6 @@
   }
 
   function boot() {
-    var footer = document.querySelector(".art--footer");
-    if (footer) mint(footer, stack);
     headline();
   }
 

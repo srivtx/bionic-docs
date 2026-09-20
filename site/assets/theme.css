@@ -360,21 +360,62 @@ span.bp-tail {
   position: absolute;
   inset: 0;
   background: var(--canvas);
-  overflow: hidden;
+  /* Reveal by clipping a full-width layer, never by narrowing it. A narrowed
+     box re-wraps its own text, so the strip showed the whole paragraph
+     squeezed into it instead of the left slice of the same paragraph, with
+     the padding squeezed too. One custom property drives the whole thing. */
+  clip-path: inset(0 calc(100% - var(--p, 50%)) 0 0);
+  will-change: clip-path;
 }
 
+/* Same box as the layer underneath, so the two are always in register. */
 .compare__top .compare__text {
-  position: absolute;
-  inset: 0;
+  margin: 0;
 }
 
 .compare__knob {
   position: absolute;
   top: 0;
   bottom: 0;
+  left: var(--p, 50%);
   width: 2px;
+  margin-left: -1px;
   background: var(--accent);
   pointer-events: none;
+}
+
+/* The handle rides the divider. It used to sit at a fixed 50%. */
+.compare__grip {
+  left: var(--p, 50%);
+}
+
+/* Which side is which, so the strip explains itself. */
+.compare__tag {
+  position: absolute;
+  top: var(--s-3);
+  z-index: 2;
+  padding: 2px 9px;
+  border-radius: 999px;
+  background: var(--surface-2);
+  color: var(--mute);
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  pointer-events: none;
+}
+
+.compare__tag--on {
+  left: var(--s-3);
+}
+
+.compare__tag--off {
+  right: var(--s-3);
+}
+
+/* A little headroom so the tags never sit on the first line. */
+.compare__text {
+  padding-top: calc(var(--s-5) + 16px);
 }
 
 .compare__knob::after {
@@ -394,7 +435,6 @@ span.bp-tail {
 .compare__grip {
   position: absolute;
   top: 50%;
-  left: 50%;
   z-index: 1;
   width: 30px;
   height: 30px;
@@ -673,5 +713,13 @@ span.bp-tail {
    already use a flex gap are untouched. */
 .hero .eyebrow + h1,
 .hero__inner .eyebrow + h1 {
+  margin-top: var(--s-3);
+}
+
+/* ── Cards ────────────────────────────────────────────────────────────────
+   .card is a plain block and .card p carries no margin, so two paragraphs in
+   one card ran together. Only the run between paragraphs is spaced; a card
+   that uses .stack for its rhythm is left alone because that adds its own. */
+.card p + p {
   margin-top: var(--s-3);
 }
