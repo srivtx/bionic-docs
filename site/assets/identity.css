@@ -323,7 +323,7 @@
   position: relative;
   display: grid;
   place-items: center;
-  height: clamp(150px, 21vw, 240px);
+  height: clamp(160px, 22vw, 252px);
   overflow: hidden;
 }
 

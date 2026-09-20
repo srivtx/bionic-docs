@@ -717,17 +717,49 @@ span.bp-tail {
 }
 
 /* ── Footer ───────────────────────────────────────────────────────────────
-   The footer is one surface, not a stack of strips. A single hairline above
-   it, a pool of accent light behind the art that fades down through the
-   columns, and one hairline before the meta line. The art band inside it has
-   no border and no background of its own, so the two read as one thing
-   instead of a rectangle glued onto the bottom of the page. */
+   The bottom of the page used to be banded: a full-bleed hairline at the end
+   of every section, another at the footer's top edge, and an abrupt step from
+   the page canvas to the footer surface at each one. Stacked together that
+   reads as stripes, not as a closing section.
+
+   Two changes make it continuous:
+   1. Every rule is a SOFT rule — the hairline fades out at both margins, so
+      no line ever runs edge to edge across the page.
+   2. The footer surface eases in over ~220px instead of starting at a hard
+      edge, and carries a pool of accent light behind the art. There is no
+      boundary to see, only a gradient.
+
+   The art band inside the footer has no border and no background of its own,
+   so the art and the footer are one composition. */
+.section + .section,
+.footer,
+.footer__meta {
+  border-image: linear-gradient(
+      90deg,
+      transparent 0,
+      var(--hairline) 16%,
+      var(--hairline) 84%,
+      transparent 100%
+    )
+    1;
+}
+
+.section + .section,
 .footer {
-  border-top: 1px solid var(--hairline);
+  border-top: 1px solid transparent;
+}
+
+.footer__meta {
+  border-top: 1px solid transparent;
+}
+
+.footer {
   padding-block: 0;
-  background:
-    radial-gradient(76% 132% at 50% -4%, var(--accent-soft), transparent 60%),
-    var(--surface);
+  background-color: var(--canvas);
+  background-image:
+    radial-gradient(82% 118% at 50% -10%, var(--accent-soft), transparent 58%),
+    linear-gradient(180deg, transparent 0, var(--surface) 240px);
+  background-repeat: no-repeat;
 }
 
 .footer > .container {
