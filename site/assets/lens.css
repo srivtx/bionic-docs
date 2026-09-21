@@ -1639,10 +1639,12 @@ html[data-fixation="off"] .fixmark .fx-a {
   color: var(--bp-ink);
   font-weight: 700;
 }
-.footer__brand span {
+/* Two classes deep: `.footer__brand p` sets the brand itself to 700. */
+.footer__brand span,
+.footer__brand .footer__tagline {
   display: block;
   margin-top: 6px;
-  font-size: 0.86rem;
+  font-size: 0.84rem;
   color: var(--bp-mute);
   font-weight: 400;
   max-width: 34ch;
