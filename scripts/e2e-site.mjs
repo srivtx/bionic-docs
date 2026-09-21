@@ -167,6 +167,30 @@ const check = (name, ok, detail) => {
   console.log(`${ok ? "  ok  " : " FAIL "} ${name}${detail ? ` — ${detail}` : ""}`);
 };
 
+/* Poll an expression until it is true. The headline writes itself in and the
+   switch needs its own script to have arrived, so on a cold cache both are
+   moving targets: sampling them once races the thing being measured. */
+async function waitFor(expr, timeout = 7000) {
+  const until = Date.now() + timeout;
+  for (;;) {
+    if (await ev(expr)) return true;
+    if (Date.now() > until) return false;
+    await sleep(120);
+  }
+}
+
+/* Clicking does nothing until the wiring has run. Drive the switch to the state
+   we want and stop as soon as it is there, rather than clicking once and hoping. */
+async function setFixation(on) {
+  const want = on ? null : "off";
+  for (let i = 0; i < 15; i++) {
+    if ((await ev(`document.documentElement.getAttribute("data-fixation")`)) === want) return true;
+    await ev(`document.querySelector(".nav__fix")?.click()`);
+    await sleep(180);
+  }
+  return (await ev(`document.documentElement.getAttribute("data-fixation")`)) === want;
+}
+
 for (const page of pages) {
   errors = [];
   await send("Page.navigate", { url: `${base}${page}` }, sid);
@@ -198,8 +222,7 @@ for (const page of pages) {
 
     const weight = `(function(){var b=document.querySelector('b.bp-head');return b?Math.round(getComputedStyle(b).fontWeight):-1})()`;
     const on = await ev(weight);
-    await ev(`document.querySelector(".nav__fix").click()`);
-    await sleep(260);
+    await setFixation(false);
     const attr = await ev(`document.documentElement.getAttribute("data-fixation")`);
     const off = await ev(weight);
     /* Off is not "400". It is "no treatment": every head is back at the weight
@@ -241,8 +264,7 @@ for (const page of pages) {
     await sleep(1900);
     const persisted = await ev(`document.documentElement.getAttribute("data-fixation")`);
     check("the choice survives a reload", persisted === "off", `data-fixation=${persisted}`);
-    await ev(`document.querySelector(".nav__fix").click()`);
-    await sleep(220);
+    await setFixation(true);
     const back = await ev(`document.documentElement.getAttribute("data-fixation")`);
     check("switching it back on restores it", back === null, `data-fixation=${back}`);
     errors = [];
@@ -256,6 +278,13 @@ for (const page of pages) {
     const counts = samples.split(",").map(Number);
     check("every sample is emphasised", counts.every((n) => n > 0), `heads per sample: ${samples}`);
   }
+
+  /* The headline writes itself in, so its weight is a moving value until the
+     write has finished. Wait for it to settle rather than sampling the wave. */
+  await waitFor(`(function(){
+    var b=document.querySelector(".hero__title b.bp-head");
+    return !!b && Math.round(getComputedStyle(b).fontWeight)>=600;
+  })()`);
 
   /* The hero headline must genuinely emphasise, and at the real weight. */
   const hero = await ev(`(function(){
