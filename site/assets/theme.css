@@ -495,40 +495,6 @@ span.bp-tail {
   font-size: 1.12rem;
   line-height: 1.72;
 }
-
-/*
- * Emphasis off. Not "400": every run goes back to the weight it would have had
- * anyway, which is what it inherits. Resetting only the wrapped runs left a
- * one-letter word — never split, so never wrapped — sitting heavy in a heading.
- */
-html[data-fixation="off"] b.bp-head,
-html[data-fixation="off"] .bionic b {
-  font-weight: inherit;
-  color: inherit;
-}
-html[data-fixation="off"] span.bp-tail,
-html[data-fixation="off"] .bionic i {
-  font-weight: inherit;
-  opacity: 1;
-}
-
-/* ============ buttons & chips ============ */
-.btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  font: 600 0.95rem var(--sans);
-  padding: 12px 24px;
-  border-radius: var(--r-pill);
-  border: 1px solid transparent;
-  cursor: pointer;
-  min-height: 46px;
-  white-space: nowrap;
-  transition: transform var(--ease), box-shadow var(--ease),
-    background var(--ease), border-color var(--ease), color var(--ease),
-    filter var(--ease);
-}
 .btn:hover {
   text-decoration: none;
 }

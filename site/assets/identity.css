@@ -97,31 +97,6 @@
   font-weight: var(--fx-hero);
 }
 
-/*
- * Emphasis off. Written at the same depth as the rules above so it outranks
- * them: an animation is cancelled rather than countered.
- */
-html[data-fixation="off"] .hero__title .bp-head,
-html[data-fixation="off"] .hero__title.is-reading .bp-head,
-html[data-fixation="off"] .hero__title .bp-tail,
-html[data-fixation="off"] .hero__title i,
-html[data-fixation="off"] .hero__title .lit,
-html[data-fixation="off"] .lit {
-  animation: none;
-  font-weight: inherit;
-  color: inherit;
-  opacity: 1;
-  background: none;
-  background-clip: border-box;
-  -webkit-background-clip: border-box;
-  -webkit-text-fill-color: currentColor;
-  filter: none;
-}
-html[data-fixation="off"] .hero__highlight {
-  animation: none;
-  opacity: 0;
-}
-
 /* ---- the reader -------------------------------------------------------
    One card: a chrome bar with the document tabs, a page of text set in the
    serif the extension is for, and a footer with the position and the controls. */

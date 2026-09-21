@@ -176,9 +176,6 @@
 .fixmark .fx-b {
   fill: var(--bp-hairline);
 }
-html[data-fixation="off"] .fixmark .fx-a {
-  fill: var(--bp-hairline);
-}
 .nav__toggle {
   display: none;
 }
