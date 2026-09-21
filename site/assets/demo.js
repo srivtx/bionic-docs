@@ -170,29 +170,392 @@
   var heroFix = $("hero-title-fix");
   if (heroTitle && heroFix) {
     paintSample(heroFix, "half");
-    var heroHeads = qa("b.bp-head", heroFix);
-    each(heroHeads, function (head, i) {
-      head.style.setProperty("--i", String(i));
-    });
-    if (reduceMotion || heroHeads.length === 0) {
-      heroTitle.classList.add("is-reading");
-    } else {
-      var read = Math.min(2.1, 0.7 + heroHeads.length * 0.07);
-      heroTitle.style.setProperty("--read", read.toFixed(2) + "s");
-      heroTitle.classList.add("is-reading");
-    }
+    /* The highlight sweep, and the entrance that lights each anchor. */
+    heroTitle.style.setProperty("--read", "1.9s");
+    heroTitle.classList.add("is-reading");
   }
 
   /* ---- Hero word chips -------------------------------------------------- */
   var heroWords = $("hero-words");
   if (heroWords) {
-    ["documents", "chapters", "reflowed", "extracted", "sanitized"].forEach(function (word) {
+    ["documents", "chapters", "reflowed", "extracted", "sanitized"].forEach(function (word, i) {
       var chip = document.createElement("span");
       chip.className = "wchip";
       chip.textContent = word;
+      chip.style.animationDelay = 4.6 + i * 0.08 + "s";
       core.paint(chip, word, options("dim"));
       heroWords.appendChild(chip);
     });
+  }
+
+  /* ---- the entrance -----------------------------------------------------
+     Copied from the design. A dot travels the headline word by word, leaving a
+     trail and a ring, and each word brightens as the beam reaches it; then the
+     beam sweeps into the reading card and the rest of the card cascades. A
+     preloader is held until the page has actually loaded, and never longer
+     than 2.6s. */
+  var animCore = window.BionicCore;
+  var heroEl = q(".hero");
+  var titleEl = q(".hero__title");
+  var readcard = $("readcard");
+  var beamBody = $("readcard-body");
+  var fadeEls = qa("[data-hero-fade]");
+  var animDone = false;
+  var beamDot = null;
+  var extras = [];
+  var pairs = [];
+  var cardWords = [];
+  var cardExtras = [];
+
+  function beamRect(el) {
+    var r = el.getBoundingClientRect();
+    var h = heroEl.getBoundingClientRect();
+    return { x: r.left - h.left, y: r.top - h.top, w: r.width, h: r.height };
+  }
+  function beamTrail(x0, y0, x1, y1) {
+    if (reduceMotion) return;
+    var dx = x1 - x0;
+    var dy = y1 - y0;
+    var len = Math.sqrt(dx * dx + dy * dy);
+    if (len < 16) return;
+    var t = document.createElement("span");
+    t.className = "fx-trail";
+    t.style.left = x0 + "px";
+    t.style.top = y0 - 1 + "px";
+    t.style.width = len + "px";
+    t.style.transform = "rotate(" + Math.atan2(dy, dx) + "rad)";
+    t.style.transformOrigin = "0 50%";
+    heroEl.appendChild(t);
+    t.addEventListener("animationend", function () {
+      t.remove();
+    });
+  }
+  function beamRing(x, y) {
+    if (reduceMotion) return;
+    var r = document.createElement("span");
+    r.className = "fx-ring";
+    r.style.left = x - 5 + "px";
+    r.style.top = y - 5 + "px";
+    heroEl.appendChild(r);
+    r.addEventListener("animationend", function () {
+      r.remove();
+    });
+  }
+  function wait(ms) {
+    return new Promise(function (res) {
+      setTimeout(res, ms);
+    });
+  }
+  function beamMove(x, y, dur) {
+    return new Promise(function (res) {
+      if (reduceMotion) {
+        res();
+        return;
+      }
+      beamDot.style.transition =
+        "left " + dur + "ms cubic-bezier(.5,0,.15,1), top " + dur + "ms cubic-bezier(.5,0,.15,1), opacity .4s ease";
+      void beamDot.offsetWidth;
+      beamDot.style.left = x - 5 + "px";
+      beamDot.style.top = y - 5 + "px";
+      setTimeout(res, dur);
+    });
+  }
+  function beamIgnite(el) {
+    el.classList.add("on");
+    if (el.classList.contains("bp-head")) el.classList.add("lit");
+  }
+
+  /* Wrap the bare text nodes of the headline in spans, so a run that the
+     algorithm left as plain text can be dimmed and lit with the rest. */
+  function beamTargets() {
+    if (reduceMotion || !heroEl || !heroFix) return;
+    var cur = null;
+    each(Array.prototype.slice.call(heroFix.childNodes), function (node) {
+      if (node.nodeType === 1 && node.classList.contains("bp-head")) {
+        cur = [node];
+        pairs.push(cur);
+      } else if (cur && node.nodeType === 3 && node.textContent.trim()) {
+        cur.push(node);
+      } else if (cur && node.nodeType === 1 && node.classList.contains("bp-tail")) {
+        cur.push(node);
+      } else if (node.nodeType === 3 && node.textContent.trim()) {
+        extras.push(node);
+      }
+    });
+    /* A text node cannot carry a class or a transition, so it becomes a span
+       in place. */
+    function wrap(node) {
+      var span = document.createElement("span");
+      span.textContent = node.textContent;
+      node.parentNode.replaceChild(span, node);
+      return span;
+    }
+    extras = extras.map(wrap);
+    pairs = pairs.map(function (nodes) {
+      return nodes.map(function (node) {
+        return node.nodeType === 3 ? wrap(node) : node;
+      });
+    });
+    each(Array.prototype.slice.call(heroFix.childNodes), function (node) {
+      if (node.nodeType !== 1) return;
+      if (node.classList.contains("hero__caret")) return;
+      if (node.classList.contains("hero__highlight")) return;
+      node.classList.add("pre-word");
+    });
+    if (beamBody) {
+      cardWords = Array.prototype.slice.call(beamBody.querySelectorAll(".bp-head"));
+      each(cardWords, function (word) {
+        word.classList.add("pre-word");
+      });
+      each(qa("p", beamBody), function (para) {
+        each(Array.prototype.slice.call(para.childNodes), function (node) {
+          if (node.nodeType === 3 && node.textContent.trim()) {
+            cardExtras.push(wrap(node));
+          }
+        });
+      });
+    }
+    each(fadeEls, function (el) {
+      el.classList.add("pre");
+    });
+  }
+
+  async function opening() {
+    if (reduceMotion || !heroEl) {
+      fadeEls.concat([readcard]).forEach(function (el) {
+        if (el) el.classList.add("pre", "on");
+      });
+      animDone = true;
+      return;
+    }
+    beamDot = document.createElement("span");
+    beamDot.className = "fx-dot";
+    heroEl.appendChild(beamDot);
+
+    await wait(120);
+    if (fadeEls[0]) fadeEls[0].classList.add("on"); /* metabar */
+    await wait(340);
+
+    /* the beam reads the title, word by word */
+    beamDot.style.opacity = "1";
+    var prev = null;
+    for (var i = 0; i < pairs.length; i++) {
+      var rc = beamRect(pairs[i][0]);
+      var x = rc.x + rc.w * 0.45;
+      var y = rc.y + rc.h * 0.62;
+      if (prev) {
+        beamTrail(prev.x, prev.y, x, y);
+        var d = Math.sqrt((x - prev.x) * (x - prev.x) + (y - prev.y) * (y - prev.y));
+        await beamMove(x, y, Math.min(60 + d * 0.55, 320));
+      } else {
+        await beamMove(x, y, 260);
+      }
+      beamRing(x, y);
+      pairs[i].forEach(beamIgnite);
+      prev = { x: x, y: y };
+      if (i === 1 && fadeEls[1]) fadeEls[1].classList.add("on"); /* lede */
+      if (i === 3 && fadeEls[2]) fadeEls[2].classList.add("on"); /* buttons */
+      if (i === 5 && fadeEls[3]) fadeEls[3].classList.add("on"); /* chips */
+      await wait(170);
+    }
+    extras.forEach(beamIgnite);
+    await wait(200);
+
+    /* sweep into the reading card */
+    if (fadeEls[4]) fadeEls[4].classList.add("on");
+    await wait(260);
+    if (cardWords.length && prev) {
+      var rc0 = beamRect(cardWords[0]);
+      var fx = rc0.x + rc0.w * 0.45;
+      var fy = rc0.y + rc0.h * 0.6;
+      beamTrail(prev.x, prev.y, fx, fy);
+      await beamMove(fx, fy, 520);
+      var stopAt = Math.min(cardWords.length, 18);
+      var prev2 = { x: fx, y: fy };
+      for (var j = 0; j < stopAt; j++) {
+        var w = cardWords[j];
+        var r3 = beamRect(w);
+        var wx = r3.x + r3.w * 0.45;
+        var wy = r3.y + r3.h * 0.6;
+        if (j > 0) {
+          beamTrail(prev2.x, prev2.y, wx, wy);
+          var dd = Math.sqrt((wx - prev2.x) * (wx - prev2.x) + (wy - prev2.y) * (wy - prev2.y));
+          await beamMove(wx, wy, Math.min(40 + dd * 0.6, 150));
+        }
+        if (j % 3 === 0) beamRing(wx, wy);
+        beamIgnite(w);
+        prev2 = { x: wx, y: wy };
+        await wait(78);
+      }
+      beamDot.style.opacity = "0";
+
+      /* cascade the rest of the card from left to right */
+      var br = beamRect(beamBody);
+      cardWords.forEach(function (w2, k) {
+        if (k < stopAt) return;
+        var r4 = beamRect(w2);
+        var frac = Math.max(0, Math.min(1, (r4.x - br.x) / br.width));
+        w2.style.transitionDelay = frac * 460 + "ms";
+        beamIgnite(w2);
+      });
+      cardExtras.forEach(function (el, k) {
+        el.style.transitionDelay = 150 + (k % 6) * 60 + "ms";
+        beamIgnite(el);
+      });
+    }
+
+    /* one pulse on the intensity slider, like a heartbeat */
+    var rng = $("hero-intensity");
+    if (rng) {
+      await wait(500);
+      rng.classList.add("pulse");
+      setTimeout(function () {
+        rng.classList.remove("pulse");
+      }, 1100);
+    }
+    animDone = true;
+  }
+
+  beamTargets();
+
+  /* ---- preloader -------------------------------------------------------- */
+  var loader = $("loader");
+  function dismissLoader() {
+    if (!loader) {
+      opening();
+      return;
+    }
+    loader.classList.add("done");
+    setTimeout(function () {
+      if (loader && loader.parentNode) loader.parentNode.removeChild(loader);
+      loader = null;
+    }, 650);
+    setTimeout(opening, 240);
+  }
+  if (reduceMotion) {
+    if (loader && loader.parentNode) loader.parentNode.removeChild(loader);
+    loader = null;
+    opening();
+  } else {
+    var minShown = wait(1250);
+    var loaded = new Promise(function (res) {
+      if (document.readyState === "complete") res();
+      else window.addEventListener("load", res);
+      setTimeout(res, 2600); /* never trap the user */
+    });
+    Promise.all([minShown, loaded]).then(dismissLoader);
+  }
+
+  /* ---- magnetic buttons, a card that tilts, a rail that skews ------------ */
+  var coarsePointer =
+    typeof window.matchMedia === "function" && window.matchMedia("(pointer: coarse)").matches;
+
+  if (!reduceMotion && !coarsePointer) {
+    each(qa("[data-magnet], .nav__gh, .totop"), function (el) {
+      var magnetRaf = null;
+      el.addEventListener("mousemove", function (event) {
+        var r = el.getBoundingClientRect();
+        var dx = (event.clientX - (r.left + r.width / 2)) / r.width;
+        var dy = (event.clientY - (r.top + r.height / 2)) / r.height;
+        if (magnetRaf) window.cancelAnimationFrame(magnetRaf);
+        magnetRaf = window.requestAnimationFrame(function () {
+          el.style.transform = "translate(" + dx * 5 + "px," + dy * 4 + "px)";
+        });
+      });
+      el.addEventListener("mouseleave", function () {
+        if (magnetRaf) window.cancelAnimationFrame(magnetRaf);
+        el.style.transform = "";
+      });
+    });
+
+    if (readcard) {
+      var tiltRaf = null;
+      readcard.addEventListener("mousemove", function (event) {
+        var r = readcard.getBoundingClientRect();
+        var dx = (event.clientX - (r.left + r.width / 2)) / r.width;
+        var dy = (event.clientY - (r.top + r.height / 2)) / r.height;
+        if (tiltRaf) window.cancelAnimationFrame(tiltRaf);
+        tiltRaf = window.requestAnimationFrame(function () {
+          readcard.style.transition = "transform 90ms ease-out";
+          readcard.style.transform =
+            "rotateY(" + dx * 4 + "deg) rotateX(" + -dy * 3.4 + "deg) translateY(-2px)";
+        });
+      });
+      readcard.addEventListener("mouseleave", function () {
+        if (tiltRaf) window.cancelAnimationFrame(tiltRaf);
+        readcard.style.transition = "transform 500ms cubic-bezier(.22,.9,.24,1)";
+        readcard.style.transform = "";
+      });
+    }
+
+    /* the rails lean into the scroll, then settle */
+    var tilt = $("railband-tilt");
+    if (tilt) {
+      var lastY = window.scrollY || 0;
+      var skew = 0;
+      var target = 0;
+      var skewRaf = null;
+      function skewLoop() {
+        skew += (target - skew) * 0.12;
+        target *= 0.8;
+        tilt.style.transform = Math.abs(skew) > 0.04 ? "skewX(" + skew.toFixed(2) + "deg)" : "";
+        if (Math.abs(skew) > 0.04 || Math.abs(target) > 0.04) {
+          skewRaf = window.requestAnimationFrame(skewLoop);
+        } else {
+          skewRaf = null;
+          tilt.style.transform = "";
+        }
+      }
+      window.addEventListener(
+        "scroll",
+        function () {
+          var y = window.scrollY || 0;
+          target = Math.max(-3.2, Math.min(3.2, (y - lastY) * 0.09));
+          lastY = y;
+          if (!skewRaf) skewRaf = window.requestAnimationFrame(skewLoop);
+        },
+        { passive: true },
+      );
+    }
+  }
+
+  /* ---- the numbers count up when they arrive ---------------------------- */
+  var numbers = qa(".metric__n");
+  function countUp(el) {
+    var target = parseInt(el.getAttribute("data-count"), 10);
+    var suffix = el.getAttribute("data-suffix") || "";
+    if (isNaN(target)) return;
+    if (reduceMotion) {
+      el.textContent = target + suffix;
+      return;
+    }
+    var started = null;
+    var duration = 1100;
+    function countStep(t) {
+      if (!started) started = t;
+      var k = Math.min(1, (t - started) / duration);
+      k = 1 - Math.pow(1 - k, 3);
+      el.textContent = Math.round(target * k) + suffix;
+      if (k < 1) window.requestAnimationFrame(countStep);
+    }
+    window.requestAnimationFrame(countStep);
+  }
+  if ("IntersectionObserver" in window && !reduceMotion) {
+    var countObserver = new IntersectionObserver(
+      function (entries) {
+        each(entries, function (entry) {
+          if (!entry.isIntersecting) return;
+          countUp(entry.target);
+          countObserver.unobserve(entry.target);
+        });
+      },
+      { threshold: 0.5 },
+    );
+    each(numbers, function (n) {
+      countObserver.observe(n);
+    });
+  } else {
+    each(numbers, countUp);
   }
 
   /* ---- Rails: duplicate each track so the loop has no seam -------------- */
@@ -575,21 +938,29 @@
   /* Reveals are added here rather than in the markup, so a visitor without
      JavaScript sees the whole page instead of a blank one. */
   if (!reduceMotion && "IntersectionObserver" in window) {
-    var reveals = qa(
-      ".section__head, .reader, .compare, .tile, .step, .panel, .card, .metric, .term, .faq__item, .prose",
+    var rvEls = qa(
+      ".section__head, .reader, .compare, .tiles .tile, .steps .step, .controls .panel, .grid--2 .card, .metrics .metric, .prose, .term, .faq__item, .railband__caption",
     );
+    var groups = {};
+    each(rvEls, function (el) {
+      var parent = el.parentNode;
+      if (!groups[parent]) groups[parent] = 0;
+      var i = groups[parent];
+      groups[parent] = i + 1;
+      el.classList.add("rv");
+      el.style.setProperty("--rd", Math.min(i * 0.08, 0.4) + "s");
+    });
     var revealObserver = new IntersectionObserver(
       function (entries) {
         each(entries, function (entry) {
           if (!entry.isIntersecting) return;
-          entry.target.classList.add("rv", "in");
+          entry.target.classList.add("in");
           revealObserver.unobserve(entry.target);
         });
       },
-      { rootMargin: "0px 0px -8% 0px" },
+      { threshold: 0.12, rootMargin: "0px 0px -6% 0px" },
     );
-    each(reveals, function (el) {
-      el.classList.add("rv");
+    each(rvEls, function (el) {
       revealObserver.observe(el);
     });
   }

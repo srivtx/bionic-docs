@@ -76,10 +76,6 @@
   .hero__title.is-reading .hero__highlight {
     animation: docs-sweep var(--read, 1.9s) var(--ease-out) both;
   }
-  .hero__title.is-reading .bp-head {
-    animation: docs-fix var(--read, 1.9s) var(--ease-out) both;
-    animation-delay: calc(var(--i, 0) * 70ms);
-  }
 }
 @keyframes docs-sweep {
   0% {
@@ -97,14 +93,6 @@
     opacity: 0;
   }
 }
-@keyframes docs-fix {
-  from {
-    font-weight: 400;
-  }
-  to {
-    font-weight: var(--fx-hero);
-  }
-}
 .hero__title.is-reading .bp-head {
   font-weight: var(--fx-hero);
 }
@@ -116,11 +104,18 @@
 html[data-fixation="off"] .hero__title .bp-head,
 html[data-fixation="off"] .hero__title.is-reading .bp-head,
 html[data-fixation="off"] .hero__title .bp-tail,
-html[data-fixation="off"] .hero__title i {
+html[data-fixation="off"] .hero__title i,
+html[data-fixation="off"] .hero__title .lit,
+html[data-fixation="off"] .lit {
   animation: none;
   font-weight: inherit;
   color: inherit;
   opacity: 1;
+  background: none;
+  background-clip: border-box;
+  -webkit-background-clip: border-box;
+  -webkit-text-fill-color: currentColor;
+  filter: none;
 }
 html[data-fixation="off"] .hero__highlight {
   animation: none;

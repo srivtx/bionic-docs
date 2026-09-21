@@ -22,9 +22,9 @@
 <meta name="twitter:image" content="https://srivtx.github.io/bionic-docs/assets/og.png">
 <link rel="canonical" href="https://srivtx.github.io/bionic-docs/index.html">
 <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2032%2032%27%3E%3Crect%20width%3D%2732%27%20height%3D%2732%27%20rx%3D%277%27%20fill%3D%27%230f766e%27%2F%3E%3Cg%20transform%3D%27translate(5%204)%27%20fill%3D%27none%27%20stroke%3D%27%23ffffff%27%20stroke-width%3D%272.2%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%22M2%203.4h12.6a2%202%200%200%201%202%202V20a2%202%200%200%201-2%202H2z%22%3E%3C%2Fpath%3E%20%3Cpath%20d%3D%22M4.6%208.2h9%22%3E%3C%2Fpath%3E%20%3Cpath%20d%3D%22M4.6%2012.4h5.4%22%20stroke-opacity%3D%22.45%22%3E%3C%2Fpath%3E%3C%2Fg%3E%3C%2Fsvg%3E">
-<link rel="stylesheet" href="assets/theme.css?v=0eac377625">
-<link rel="stylesheet" href="assets/lens.css?v=0eac377625">
-<link rel="stylesheet" href="assets/identity.css?v=0eac377625">
+<link rel="stylesheet" href="assets/theme.css?v=ff1fe31578">
+<link rel="stylesheet" href="assets/lens.css?v=ff1fe31578">
+<link rel="stylesheet" href="assets/identity.css?v=ff1fe31578">
 <script>
 (function () {
   try {
@@ -42,6 +42,13 @@
 </script>
 </head>
 <body>
+<div class="loader" id="loader" aria-hidden="true">
+  <div class="loader__inner">
+    <svg class="loader__mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3.2" y="3.2" width="17.6" height="17.6" rx="3.6"></rect><path d="M7.4 12h4.6"></path><path d="M12 12h4.6" stroke-opacity=".4"></path></svg>
+    <span class="loader__word">Bionic Docs</span>
+    <span class="loader__bar"><i></i></span>
+  </div>
+</div>
 <span class="progress" id="progress" aria-hidden="true"></span>
 <a class="skip-link" href="#main">Skip to content</a>
 
@@ -114,7 +121,7 @@
     <div class="container">
       <div class="hero__inner">
         <div>
-          <div class="metabar">
+          <div class="metabar" data-hero-fade>
             <span class="metabar__item metabar__item--accent"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="3.4" y="5" width="17.2" height="14" rx="2.4"></rect><path d="M3.4 9.6h17.2"></path></svg>Manifest V3</span>
             <span class="metabar__sep" aria-hidden="true"></span>
             <span class="metabar__item">Chrome + Firefox</span>
@@ -125,15 +132,15 @@
             <span class="hero__highlight" aria-hidden="true"></span>
             <span class="hero__title-fix" id="hero-title-fix">Read PDF and EPUB with bionic fixation.</span>
           </h1>
-          <p class="hero__lede">A document you open is parsed inside the extension page and the leading letters of every word are emphasized. Nothing is uploaded, there is no account, and no remote code runs — the PDF and EPUB parsers are bundled into the package.</p>
-          <div class="btn-row">
-            <a class="btn btn--accent" href="#reader">
+          <p class="hero__lede" data-hero-fade>A document you open is parsed inside the extension page and the leading letters of every word are emphasized. Nothing is uploaded, there is no account, and no remote code runs — the PDF and EPUB parsers are bundled into the package.</p>
+          <div class="btn-row" data-hero-fade>
+            <a class="btn btn--accent" href="#reader" data-magnet>
               Try the reader
               <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12h13M13 6l6 6-6 6"></path></svg>
             </a>
-            <a class="btn btn--outline" href="#install">Build it from source</a>
+            <a class="btn btn--outline" href="#install" data-magnet>Build it from source</a>
           </div>
-          <ul class="flagline">
+          <ul class="flagline" data-hero-fade>
             <li class="chip">PDF + EPUB</li>
             <li class="chip">No upload</li>
             <li class="chip">No account</li>
@@ -141,7 +148,7 @@
           </ul>
         </div>
 
-        <div class="hero__visual">
+        <div class="hero__visual" data-hero-fade>
           <div class="readcard" id="readcard">
             <div class="readcard__bar">
               <span class="readcard__dot"></span><span class="readcard__dot"></span><span class="readcard__dot"></span>
@@ -462,11 +469,11 @@
         <p>Every figure here is from the repository's own testing table, and a check fails the build if a page stops agreeing with it.</p>
       </div>
       <ul class="metrics">
-        <li class="metric"><span class="metric__n">131</span><span class="metric__k">tests across 8 files</span></li>
-        <li class="metric"><span class="metric__n">11/11</span><span class="metric__k">e2e checks in real Chrome</span></li>
-        <li class="metric"><span class="metric__n">11</span><span class="metric__k">manifest entries per target</span></li>
-        <li class="metric"><span class="metric__n">5</span><span class="metric__k">reading modes</span></li>
-        <li class="metric"><span class="metric__n">0</span><span class="metric__k">uploads, ever</span></li>
+        <li class="metric"><span class="metric__n" data-count="131">131</span><span class="metric__k">tests across 8 files</span></li>
+        <li class="metric"><span class="metric__n" data-count="11" data-suffix="/11">11/11</span><span class="metric__k">e2e checks in real Chrome</span></li>
+        <li class="metric"><span class="metric__n" data-count="11">11</span><span class="metric__k">manifest entries per target</span></li>
+        <li class="metric"><span class="metric__n" data-count="5">5</span><span class="metric__k">reading modes</span></li>
+        <li class="metric"><span class="metric__n" data-count="0">0</span><span class="metric__k">uploads, ever</span></li>
       </ul>
     </div>
   </section>
@@ -617,7 +624,7 @@
   <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 19V5M6 11l6-6 6 6"></path></svg>
 </button>
 
-<script src="assets/core.js?v=0eac377625"></script>
-<script src="assets/demo.js?v=0eac377625"></script>
+<script src="assets/core.js?v=ff1fe31578"></script>
+<script src="assets/demo.js?v=ff1fe31578"></script>
 </body>
 </html>
