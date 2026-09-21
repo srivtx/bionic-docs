@@ -55,14 +55,14 @@
 :root {
   --bp-ink: #14161a;
   --bp-body: #3f4550;
-  --bp-mute: #6b7280;
+  --bp-mute: #656b76;
   --bp-canvas: #fbfbf9;
   --bp-canvas-soft: #f4f4f0;
   --bp-hairline: #e6e6df;
   --bp-accent: #4f46e5;
   --bp-accent-2: #8b5cf6;
   --bp-accent-soft: #edefff;
-  --bp-success: #0d9488;
+  --bp-success: #047857;
   --bp-grad: linear-gradient(120deg, #4f46e5, #8b5cf6);
   --shadow-sm: 0 1px 2px rgb(20 22 26 / 5%), 0 2px 8px rgb(20 22 26 / 4%);
   --shadow-md: 0 1px 2px rgb(20 22 26 / 6%), 0 12px 32px rgb(20 22 26 / 8%);

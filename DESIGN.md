@@ -1,145 +1,128 @@
 ---
 version: alpha
 name: bionic-docs
-description: "The bionic-docs landing site — the Lens suite base system with a teal ink, a reading highlight that descends the headline, a paper stack behind it, and a reader that turns like a page."
+description: "The bionic-docs landing site — the shared Lens suite base with a teal ink, a reading highlight that descends the headline, and a reader that turns like a page."
 colors:
   primary: "#0f766e"
+  primary-dark: "#2dd4bf"
   accent: "#0f766e"
-  accent-ink: "#ffffff"
-  accent-soft: "color-mix(in srgb, #0f766e 10%, transparent)"
   accent-dark: "#2dd4bf"
-  accent-ink-dark: "#0a0a0a"
-  accent-soft-dark: "color-mix(in srgb, #2dd4bf 10%, transparent)"
-  folio: "#0f766e"
-  folio-dark: "#2dd4bf"
-  canvas: "#ffffff"
-  canvas-dark: "#0a0a0a"
-  surface: "#fafafa"
-  surface-dark: "#111112"
-  surface-2: "#f4f4f5"
-  surface-2-dark: "#18181b"
-  hairline: "#e6e6e8"
-  hairline-dark: "#232326"
-  hairline-strong: "#d4d4d8"
-  hairline-strong-dark: "#33333a"
-  ink: "#0a0a0a"
-  ink-dark: "#fafafa"
-  body: "#3f3f46"
-  body-dark: "#c4c4ca"
-  mute: "#71717a"
-  mute-dark: "#8b8b93"
-  faint: "#6f6f78"
-  faint-dark: "#8b8b93"
-  success: "#15803d"
-  success-dark: "#4ade80"
-  warning: "#b45309"
-  warning-dark: "#fbbf24"
-  error: "#b91c1c"
-  error-dark: "#f87171"
-  info: "#1d4ed8"
-  info-dark: "#93c5fd"
-  term-bg: "#0b0b0e"
-  term-bar: "#121216"
-  term-ink: "#e8e8ef"
-  term-mute: "#8f8f9b"
-  term-dim: "#63636e"
-  term-cmd: "#f2f2f7"
-  term-err: "#f87171"
-  term-warn: "#fbbf24"
-  term-info: "#93c5fd"
-  term-ok: "#4ade80"
-  term-acc: "#a5b4fc"
+  accent-2: "#14b8a6"
+  accent-2-dark: "#5eead4"
+  accent-soft: "#e2f4f2"
+  accent-soft-dark: "#0f2724"
+  accent-ink: "#FFFFFF"
+  accent-ink-dark: "#08211E"
+  ink: "#14161A"
+  ink-dark: "#F4F5F7"
+  body: "#3F4550"
+  body-dark: "#C3C9D4"
+  mute: "#656B76"
+  mute-dark: "#878FA0"
+  canvas: "#FBFBF9"
+  canvas-dark: "#0B0D11"
+  canvas-soft: "#F4F4F0"
+  canvas-soft-dark: "#13161C"
+  hairline: "#E6E6DF"
+  hairline-dark: "#222734"
+  success: "#047857"
+  success-dark: "#34D399"
+  term-bg: "#0D1117"
+  term-bar: "#161B22"
+  term-ink: "#C9D1D9"
+  term-prompt: "#7EE787"
+  term-dim: "#8B949E"
 typography:
   display:
     fontFamily: Geist
-    fontSize: 3.75rem
-    fontWeight: 600
-    lineHeight: 1.02
+    fontSize: 5.2rem
+    fontWeight: 800
+    lineHeight: 1
     letterSpacing: "-0.04em"
-  title:
+  h1:
     fontFamily: Geist
-    fontSize: 2.5rem
-    fontWeight: 600
-    lineHeight: 1.1
-    letterSpacing: "-0.03em"
-  headline:
+    fontSize: 3.6rem
+    fontWeight: 400
+    lineHeight: 1.12
+    letterSpacing: "-0.032em"
+  h1-anchor:
     fontFamily: Geist
-    fontSize: 1.9rem
-    fontWeight: 600
-    lineHeight: 1.1
-    letterSpacing: "-0.025em"
-  headline-sm:
+    fontWeight: 750
+  h2:
     fontFamily: Geist
-    fontSize: 1.4375rem
+    fontSize: 2.4rem
     fontWeight: 600
-    lineHeight: 1.1
-    letterSpacing: "-0.025em"
-  subhead:
+    lineHeight: 1.12
+    letterSpacing: "-0.028em"
+  h3:
     fontFamily: Geist
-    fontSize: 1.0625rem
+    fontSize: 1.05rem
     fontWeight: 600
-    lineHeight: 1.1
-    letterSpacing: "-0.02em"
+    lineHeight: 1.3
+    letterSpacing: "-0.022em"
   lede:
     fontFamily: Geist
-    fontSize: 1.125rem
+    fontSize: 1.06rem
     fontWeight: 400
-    lineHeight: 1.6
-  lead-editorial:
-    fontFamily: Geist
-    fontSize: 1.1875rem
-    fontWeight: 400
-    lineHeight: 1.5
-    letterSpacing: "-0.015em"
-  body:
+    lineHeight: 1.65
+  body-md:
     fontFamily: Geist
     fontSize: 1rem
     fontWeight: 400
-    lineHeight: 1.6
-    fontFeature: '"ss01" on, "cv11" on'
+    lineHeight: 1.65
   body-sm:
     fontFamily: Geist
-    fontSize: 0.9375rem
+    fontSize: 0.92rem
     fontWeight: 400
-    lineHeight: 1.6
-  nav:
+    lineHeight: 1.62
+  reading:
+    fontFamily: Georgia
+    fontSize: 1.06rem
+    fontWeight: 400
+    lineHeight: 1.85
+  reading-lg:
+    fontFamily: Georgia
+    fontSize: 1.18rem
+    fontWeight: 400
+    lineHeight: 1.85
+  eyebrow:
     fontFamily: Geist
-    fontSize: 0.875rem
-    fontWeight: 500
-    lineHeight: 1.6
-  button:
-    fontFamily: Geist
-    fontSize: 0.9rem
-    fontWeight: 550
+    fontSize: 0.7rem
+    fontWeight: 700
     lineHeight: 1
-  button-sm:
-    fontFamily: Geist
-    fontSize: 0.8125rem
-    fontWeight: 550
-    lineHeight: 1
+    letterSpacing: "0.18em"
   label:
-    fontFamily: Geist Mono
-    fontSize: 0.6875rem
-    fontWeight: 500
+    fontFamily: Geist
+    fontSize: 0.72rem
+    fontWeight: 700
     lineHeight: 1
-    letterSpacing: 0.1em
-  mono:
-    fontFamily: Geist Mono
-    fontSize: 0.8125rem
-    fontWeight: 400
-    lineHeight: 1.7
+    letterSpacing: "0.12em"
   metric:
-    fontFamily: Geist Mono
-    fontSize: 1.375rem
+    fontFamily: Geist
+    fontSize: 2.6rem
+    fontWeight: 800
+    lineHeight: 1
+    letterSpacing: "-0.03em"
+  control:
+    fontFamily: Geist
+    fontSize: 0.95rem
     fontWeight: 600
     lineHeight: 1
-    letterSpacing: "-0.02em"
+  mono-sm:
+    fontFamily: Geist Mono
+    fontSize: 0.74rem
+    fontWeight: 600
+    lineHeight: 1.4
+  mono-md:
+    fontFamily: Geist Mono
+    fontSize: 0.9rem
+    fontWeight: 400
+    lineHeight: 2
 rounded:
-  xs: 3px
-  sm: 5px
-  md: 7px
-  lg: 10px
-  brand: 8px
+  xs: 6px
+  sm: 9px
+  md: 12px
+  lg: 20px
   full: 999px
 spacing:
   s-1: 4px
@@ -151,534 +134,409 @@ spacing:
   s-7: 48px
   s-8: 64px
   s-9: 96px
-  gutter: 24px
-  nav-height: 56px
   container: 1120px
+  nav-height: 64px
+  section-y: 96px
+  section-y-tight: 56px
 components:
-  button:
+  nav:
+    backgroundColor: "{colors.canvas}"
+    textColor: "{colors.body}"
+    height: 64px
+  nav-link:
+    textColor: "{colors.body}"
+    typography: "{typography.body-sm}"
+    rounded: "{rounded.full}"
+    padding: "8px 12px"
+  nav-link-active:
+    backgroundColor: "{colors.accent-soft}"
+    textColor: "{colors.accent}"
+    rounded: "{rounded.full}"
+  nav-fix:
+    backgroundColor: "{colors.canvas}"
+    textColor: "{colors.body}"
+    rounded: "{rounded.full}"
+    size: 40px
+    height: 34px
+  nav-gh:
+    backgroundColor: "{colors.canvas}"
     textColor: "{colors.ink}"
-    typography: "{typography.button}"
-    rounded: "{rounded.sm}"
-    padding: "0 14px"
-    height: 38px
-  button-primary:
-    backgroundColor: "{colors.primary}"
-    textColor: "{colors.accent-ink}"
-    typography: "{typography.button}"
-    rounded: "{rounded.sm}"
-    padding: "0 14px"
-    height: 38px
-  button-primary-hover:
-    backgroundColor: "color-mix(in srgb, #0f766e 88%, #0a0a0a)"
-  button-outline:
-    textColor: "{colors.ink}"
-    typography: "{typography.button}"
-    rounded: "{rounded.sm}"
-    padding: "0 14px"
-    height: 38px
-  button-ghost:
+    typography: "{typography.body-sm}"
+    rounded: "{rounded.full}"
+    padding: "7px 14px"
+  theme-pick:
+    backgroundColor: "{colors.canvas}"
     textColor: "{colors.mute}"
-    typography: "{typography.button}"
-    rounded: "{rounded.sm}"
-    padding: "0 14px"
-    height: 38px
-  button-sm:
-    typography: "{typography.button-sm}"
-    rounded: "{rounded.sm}"
-    padding: "0 10px"
+    rounded: "{rounded.full}"
     height: 32px
+  theme-pick-active:
+    backgroundColor: "{colors.accent-soft}"
+    textColor: "{colors.accent}"
+    rounded: "{rounded.full}"
+  button-accent:
+    backgroundColor: "{colors.accent}"
+    textColor: "{colors.accent-ink}"
+    typography: "{typography.control}"
+    rounded: "{rounded.full}"
+    padding: "12px 24px"
+    height: 46px
+  button-outline:
+    backgroundColor: "{colors.canvas}"
+    textColor: "{colors.ink}"
+    typography: "{typography.control}"
+    rounded: "{rounded.full}"
+    padding: "12px 24px"
+    height: 46px
+  button-ghost:
+    textColor: "{colors.body}"
+    typography: "{typography.control}"
+    rounded: "{rounded.full}"
+    padding: "8px 12px"
+  button-ghost-sm:
+    textColor: "{colors.body}"
+    typography: "{typography.body-sm}"
+    rounded: "{rounded.full}"
+    padding: "7px 15px"
+    height: 34px
   chip:
-    backgroundColor: "{colors.surface}"
+    backgroundColor: "{colors.canvas}"
     textColor: "{colors.mute}"
-    typography: "{typography.label}"
+    typography: "{typography.body-sm}"
     rounded: "{rounded.full}"
-  chip-error:
-    textColor: "{colors.error}"
-    typography: "{typography.label}"
+    padding: "6px 14px"
+  chip-hover:
+    textColor: "{colors.accent}"
+  keycap:
+    backgroundColor: "{colors.canvas-soft}"
+    textColor: "{colors.ink}"
+    typography: "{typography.mono-sm}"
+    rounded: "{rounded.xs}"
+    padding: "0.12em 0.4em"
+  eyebrow:
+    textColor: "{colors.mute}"
+    typography: "{typography.eyebrow}"
+  eyebrow-number:
+    textColor: "{colors.accent}"
+    typography: "{typography.eyebrow}"
+  section-head:
+    textColor: "{colors.body}"
+    width: 660px
+  readcard:
+    backgroundColor: "{colors.canvas-soft}"
+    textColor: "{colors.body}"
+    rounded: "{rounded.lg}"
+  readcard-bar:
+    backgroundColor: "{colors.canvas}"
+    textColor: "{colors.mute}"
+    typography: "{typography.body-sm}"
+  readcard-body:
+    backgroundColor: "{colors.canvas-soft}"
+    textColor: "{colors.body}"
+    typography: "{typography.reading}"
+    padding: "28px 30px"
+  rail-card:
+    backgroundColor: "{colors.canvas}"
+    textColor: "{colors.ink}"
+    typography: "{typography.body-sm}"
     rounded: "{rounded.full}"
-  chip-warning:
-    textColor: "{colors.warning}"
-    typography: "{typography.label}"
+    padding: "11px 20px"
+  rail-icon:
+    backgroundColor: "{colors.accent-soft}"
+    textColor: "{colors.accent}"
+    rounded: "{rounded.sm}"
+    size: 32px
+  reader:
+    backgroundColor: "{colors.canvas}"
+    rounded: "{rounded.lg}"
+  reader-tab:
+    backgroundColor: "{colors.canvas}"
+    textColor: "{colors.body}"
+    typography: "{typography.body-sm}"
     rounded: "{rounded.full}"
-  chip-info:
-    textColor: "{colors.info}"
-    typography: "{typography.label}"
+    padding: "7px 15px"
+  reader-tab-active:
+    backgroundColor: "{colors.accent}"
+    textColor: "{colors.accent-ink}"
     rounded: "{rounded.full}"
-  chip-ok:
+  reader-page:
+    backgroundColor: "{colors.canvas}"
+    textColor: "{colors.body}"
+    typography: "{typography.reading}"
+    padding: "34px 40px"
+  reader-chrome:
+    backgroundColor: "{colors.canvas-soft}"
+    textColor: "{colors.mute}"
+    typography: "{typography.mono-sm}"
+    padding: "12px 18px"
+  demo-panel:
+    backgroundColor: "{colors.canvas}"
+    rounded: "{rounded.lg}"
+  demo-head:
+    backgroundColor: "{colors.canvas-soft}"
     textColor: "{colors.success}"
     typography: "{typography.label}"
+    padding: "16px 20px"
+  demo-pane:
+    backgroundColor: "{colors.canvas}"
+    padding: "26px 28px"
+  demo-pane-alt:
+    backgroundColor: "{colors.canvas-soft}"
+    padding: "26px 28px"
+  demo-output:
+    textColor: "{colors.body}"
+    typography: "{typography.reading}"
+  mode-chip:
+    backgroundColor: "{colors.canvas}"
+    textColor: "{colors.body}"
+    typography: "{typography.body-sm}"
+    rounded: "{rounded.full}"
+    padding: "7px 15px"
+  mode-chip-active:
+    backgroundColor: "{colors.accent}"
+    textColor: "{colors.accent-ink}"
+    rounded: "{rounded.full}"
+  compare:
+    backgroundColor: "{colors.canvas-soft}"
+    rounded: "{rounded.lg}"
+  compare-text:
+    textColor: "{colors.body}"
+    typography: "{typography.reading-lg}"
+    padding: "48px 52px"
+  compare-grip:
+    backgroundColor: "{colors.accent}"
+    textColor: "{colors.accent-ink}"
+    rounded: "{rounded.full}"
+    size: 44px
+  tile:
+    backgroundColor: "{colors.canvas}"
+    textColor: "{colors.body}"
+    rounded: "{rounded.lg}"
+    padding: 22px
+  tile-sample:
+    textColor: "{colors.body}"
+    typography: "{typography.reading}"
+  tile-note:
+    textColor: "{colors.mute}"
+    typography: "{typography.body-sm}"
+  step:
+    backgroundColor: "{colors.canvas}"
+    textColor: "{colors.body}"
+    rounded: "{rounded.lg}"
+    padding: "28px 26px"
+  step-icon:
+    backgroundColor: "{colors.accent-soft}"
+    textColor: "{colors.accent}"
+    rounded: 14px
+    size: 46px
+  panel:
+    backgroundColor: "{colors.canvas}"
+    textColor: "{colors.body}"
+    rounded: "{rounded.lg}"
+    padding: 32px
+  key:
+    backgroundColor: "{colors.canvas-soft}"
+    textColor: "{colors.ink}"
+    typography: "{typography.mono-sm}"
+    rounded: 11px
+    height: 46px
+  key-accent:
+    backgroundColor: "{colors.accent}"
+    textColor: "{colors.accent-ink}"
+    rounded: 11px
+    height: 46px
+  switch-track:
+    backgroundColor: "{colors.hairline}"
+    rounded: "{rounded.full}"
+    width: 40px
+    height: 22px
+  switch-track-on:
+    backgroundColor: "{colors.accent}"
     rounded: "{rounded.full}"
   card:
     backgroundColor: "{colors.canvas}"
     textColor: "{colors.body}"
-    rounded: "{rounded.md}"
-    padding: "{spacing.s-5}"
-  field:
-    textColor: "{colors.mute}"
-    typography: "{typography.mono}"
-  input:
+    rounded: "{rounded.lg}"
+    padding: 30px
+  metric-card:
     backgroundColor: "{colors.canvas}"
-    textColor: "{colors.ink}"
-    typography: "{typography.mono}"
-    rounded: "{rounded.md}"
-    padding: "{spacing.s-4}"
-  nav:
-    backgroundColor: "color-mix(in srgb, #ffffff 82%, transparent)"
-    height: "{spacing.nav-height}"
-  nav-link:
+    rounded: "{rounded.lg}"
+    padding: "34px 16px"
+  metric-number:
+    textColor: "{colors.accent}"
+    typography: "{typography.metric}"
+  metric-label:
     textColor: "{colors.mute}"
-    typography: "{typography.nav}"
-    rounded: "{rounded.sm}"
-    padding: 6px
-  nav-link-hover:
-    backgroundColor: "{colors.surface-2}"
-    textColor: "{colors.ink}"
-  nav-link-active:
-    backgroundColor: "{colors.accent-soft}"
-  brand:
-    textColor: "{colors.ink}"
-    typography: "{typography.body}"
-  brand-mark:
-    backgroundColor: "{colors.accent}"
-    textColor: "{colors.accent-ink}"
-    rounded: "{rounded.brand}"
-    size: 26px
-  brand-tag:
-    textColor: "{colors.faint}"
-    typography: "{typography.label}"
-  footer:
-    backgroundColor: "{colors.canvas}"
-    textColor: "{colors.faint}"
-    padding: "{spacing.s-7}"
-  footer-heading:
-    textColor: "{colors.faint}"
-    typography: "{typography.label}"
-  footer-link:
-    textColor: "{colors.body}"
-    typography: "{typography.nav}"
-  footer-meta:
-    textColor: "{colors.faint}"
-    typography: "{typography.nav}"
-  divider:
-    backgroundColor: "{colors.hairline}"
-    height: 1px
-  divider-strong:
-    backgroundColor: "{colors.hairline-strong}"
-    height: 1px
-  eyebrow:
-    textColor: "{colors.mute}"
-    typography: "{typography.label}"
-  folio:
-    textColor: "{colors.folio}"
-    typography: "{typography.label}"
-  code:
-    backgroundColor: "{colors.surface}"
-    textColor: "{colors.ink}"
-    typography: "{typography.mono}"
-    rounded: "{rounded.md}"
-    padding: "{spacing.s-4}"
+    typography: "{typography.body-sm}"
   term:
     backgroundColor: "{colors.term-bg}"
     textColor: "{colors.term-ink}"
-    typography: "{typography.mono}"
+    typography: "{typography.mono-md}"
     rounded: "{rounded.lg}"
-    padding: "{spacing.s-4}"
   term-bar:
     backgroundColor: "{colors.term-bar}"
-    textColor: "{colors.term-mute}"
-  term-prompt:
-    backgroundColor: "{colors.term-bg}"
     textColor: "{colors.term-dim}"
-  term-command:
-    textColor: "{colors.term-cmd}"
-  term-error:
-    textColor: "{colors.term-err}"
-  term-warning:
-    textColor: "{colors.term-warn}"
-  term-info:
-    textColor: "{colors.term-info}"
-  term-ok:
-    textColor: "{colors.term-ok}"
-  term-accent:
-    textColor: "{colors.term-acc}"
-  table-head:
-    textColor: "{colors.mute}"
-    typography: "{typography.label}"
-  table-cell:
-    textColor: "{colors.body}"
-    typography: "{typography.body-sm}"
-  callout:
-    backgroundColor: "{colors.surface}"
-    textColor: "{colors.body}"
-    rounded: "{rounded.sm}"
-    padding: "{spacing.s-5}"
-  install:
-    backgroundColor: "{colors.surface}"
-    textColor: "{colors.ink}"
-    rounded: "{rounded.md}"
-    padding: "{spacing.s-3}"
-  keycap:
-    backgroundColor: "{colors.surface}"
-    textColor: "{colors.ink}"
-    typography: "{typography.mono}"
-    rounded: "{rounded.sm}"
-    padding: "2px 7px"
-  tile:
-    backgroundColor: "{colors.surface}"
-    rounded: "{rounded.md}"
-    padding: "{spacing.s-4}"
-  tile-name:
-    textColor: "{colors.ink}"
-    typography: "{typography.subhead}"
-  tile-sample:
+    typography: "{typography.mono-sm}"
+    padding: "12px 16px"
+  faq-item:
     backgroundColor: "{colors.canvas}"
-    textColor: "{colors.body}"
-    typography: "{typography.nav}"
-    rounded: "{rounded.sm}"
-  tile-note:
-    textColor: "{colors.mute}"
-    typography: "{typography.body-sm}"
-  metric:
-    backgroundColor: "{colors.surface}"
-    rounded: "{rounded.md}"
-    padding: "{spacing.s-4}"
-  metric-number:
     textColor: "{colors.ink}"
-    typography: "{typography.metric}"
-  metric-key:
-    textColor: "{colors.mute}"
-    typography: "{typography.body-sm}"
-  bionic-head:
-    textColor: "{colors.ink}"
-  bionic-tail:
-    textColor: "{colors.body}"
-  metabar:
-    backgroundColor: "{colors.surface}"
-    textColor: "{colors.mute}"
-    typography: "{typography.label}"
-    rounded: "{rounded.full}"
-    padding: "6px 14px"
-  metabar-accent:
+    rounded: "{rounded.lg}"
+    padding: "18px 22px"
+  faq-item-open:
+    backgroundColor: "{colors.canvas}"
     textColor: "{colors.accent}"
-    typography: "{typography.label}"
-  metabar-sep:
-    backgroundColor: "{colors.hairline-strong}"
-    width: 1px
-    height: 13px
-  reader:
-    backgroundColor: "{colors.surface-2}"
     rounded: "{rounded.lg}"
-  reader-chrome:
-    backgroundColor: "{colors.surface}"
+  totop:
+    backgroundColor: "{colors.ink}"
+    textColor: "{colors.canvas}"
+    rounded: "{rounded.full}"
+    size: 44px
+  footer:
+    backgroundColor: "{colors.canvas-soft}"
+    textColor: "{colors.body}"
+  footer-heading:
     textColor: "{colors.mute}"
-    typography: "{typography.mono}"
-    padding: "{spacing.s-3}"
-  reader-tab:
-    textColor: "{colors.mute}"
-    typography: "{typography.mono}"
-    rounded: "{rounded.sm}"
-    padding: "3px 10px"
-  reader-tab-on:
-    backgroundColor: "{colors.canvas}"
-    textColor: "{colors.ink}"
-    typography: "{typography.mono}"
-    rounded: "{rounded.sm}"
-    padding: "3px 10px"
-  reader-page:
-    backgroundColor: "{colors.canvas}"
+    typography: "{typography.label}"
+  footer-link:
     textColor: "{colors.body}"
     typography: "{typography.body-sm}"
-    padding: "{spacing.s-6}"
-  reader-title:
-    textColor: "{colors.ink}"
-    typography: "{typography.subhead}"
-  reader-foot:
-    backgroundColor: "{colors.surface}"
-    textColor: "{colors.mute}"
-    typography: "{typography.mono}"
-    padding: "{spacing.s-4}"
-  reader-position:
-    textColor: "{colors.mute}"
-    typography: "{typography.mono}"
-  mode-chip:
-    backgroundColor: "{colors.canvas}"
-    textColor: "{colors.body}"
-    typography: "{typography.button-sm}"
-    rounded: "{rounded.full}"
-    padding: "5px 11px"
-  mode-chip-on:
-    backgroundColor: "{colors.accent}"
-    textColor: "{colors.accent-ink}"
-    rounded: "{rounded.full}"
-    padding: "5px 11px"
-  sheet:
-    backgroundColor: "{colors.surface}"
-    rounded: "{rounded.lg}"
-  sheet-dark:
-    backgroundColor: "{colors.surface-dark}"
-    rounded: "{rounded.lg}"
-  spread-page:
-    backgroundColor: "{colors.surface-2}"
-    padding: "{spacing.s-5}"
-  spread-spine:
-    backgroundColor: "{colors.hairline-strong}"
-    width: 2px
-  spread-line:
-    backgroundColor: "{colors.mute}"
-    height: 3px
-  spread-ribbon:
-    backgroundColor: "{colors.accent}"
-    width: 15px
-    height: 52px
-  footer-art:
-    height: 252px
-  nav-dark:
-    backgroundColor: "color-mix(in srgb, #0a0a0a 82%, transparent)"
-    height: "{spacing.nav-height}"
-  nav-link-dark:
-    textColor: "{colors.mute-dark}"
-    typography: "{typography.nav}"
-  nav-link-active-dark:
-    backgroundColor: "{colors.accent-soft-dark}"
-  brand-dark:
-    textColor: "{colors.ink-dark}"
-    typography: "{typography.body}"
-  brand-mark-dark:
-    backgroundColor: "{colors.accent-dark}"
-    textColor: "{colors.accent-ink-dark}"
-    rounded: "{rounded.brand}"
-    size: 26px
-  card-dark:
-    backgroundColor: "{colors.canvas-dark}"
-    textColor: "{colors.body-dark}"
-    rounded: "{rounded.md}"
-    padding: "{spacing.s-5}"
-  footer-dark:
-    backgroundColor: "{colors.canvas-dark}"
-    textColor: "{colors.faint-dark}"
-    padding: "{spacing.s-7}"
-  divider-dark:
-    backgroundColor: "{colors.hairline-dark}"
-    height: 1px
-  divider-strong-dark:
-    backgroundColor: "{colors.hairline-strong-dark}"
-    height: 1px
-  chip-dark:
-    backgroundColor: "{colors.surface-2-dark}"
-    textColor: "{colors.mute-dark}"
-    typography: "{typography.label}"
-    rounded: "{rounded.full}"
-  chip-error-dark:
-    textColor: "{colors.error-dark}"
-  chip-warning-dark:
-    textColor: "{colors.warning-dark}"
-  chip-info-dark:
-    textColor: "{colors.info-dark}"
-  chip-ok-dark:
-    textColor: "{colors.success-dark}"
-  reader-dark:
-    backgroundColor: "{colors.surface-dark}"
-    rounded: "{rounded.lg}"
-  reader-page-dark:
-    backgroundColor: "{colors.canvas-dark}"
-    textColor: "{colors.body-dark}"
-    typography: "{typography.body-sm}"
-    padding: "{spacing.s-6}"
-  reader-tab-on-dark:
-    backgroundColor: "{colors.canvas-dark}"
-    textColor: "{colors.ink-dark}"
-    typography: "{typography.mono}"
-    rounded: "{rounded.sm}"
-    padding: "3px 10px"
-  spread-page-dark:
-    backgroundColor: "{colors.surface-2-dark}"
-    padding: "{spacing.s-5}"
-  folio-dark:
-    textColor: "{colors.folio-dark}"
-    typography: "{typography.label}"
 ---
 
 ## Overview
 
 bionic-docs is the landing site for a Manifest V3 extension that reads PDF and
 EPUB with bionic fixation, entirely on-device. It shares the **Lens suite** base
-system (`site/assets/lens.css`, `site/assets/theme.css`) with its sibling and
-differs only in identity (`site/assets/identity.css`).
+system (`site/assets/theme.css` and `site/assets/lens.css`) with its sibling and
+differs in `site/assets/identity.css`.
 
-The personality is **editorial and paper-like**: a 4px rhythm, 1120px container,
-hairline borders, no heavy shadows, and exactly one accent. Where the sibling
-feels engineered, this one feels like a book — a stack of sheets drifting behind
-the headline, a highlight that sweeps *down* the title the way attention moves
-down a page, and a reader that turns rather than swaps. The page should feel
-quiet, trustworthy and offline.
+The personality is **editorial and quiet**: a 1120px container, hairline borders,
+layered soft shadows, 12/20/pill radii, and exactly one accent. Where the sibling
+feels engineered, this one feels like a document — a highlight that sweeps *down*
+the title the way attention moves down a page, and a reader that turns rather
+than swaps. The page should feel quiet, trustworthy and offline.
 
-This identity is **teal**, and its signature is a descending reading highlight
-over a stack of paper. The sibling uses indigo, a writing caret and a floating
-control; the two identities share no element. Every rule here is a **soft rule**
-that fades out at the margins — no line runs edge to edge.
+The page is one document: a fixed nav, a hero with a reading card, a band of
+scrolling rails, then numbered sections, then a footer whose wordmark is set the
+way the algorithm sets a word. This identity is **teal**, and its signature is
+the descending reading highlight. The sibling uses indigo and a writing caret;
+the two share the same base system and no identity.
+
+UI type is Geist and Geist Mono, self-hosted. Reading text — the reader, the
+compare panel, the mode samples — is set in a serif, because that is the kind of
+text the extension is for.
 
 ## Colors
 
-One accent, a hairline-driven neutral ramp, and semantic status colors. All
-values are the literal custom properties declared in `lens.css`, `theme.css` and
-`identity.css`; the light values are the normative tokens above, and the dark
-overrides are listed here because the schema has a single value axis.
+One accent, a hairline-driven neutral ramp, and one semantic status color. All
+values are the literal custom properties declared in `theme.css` (the shared
+base), `lens.css` (layout and components) and `identity.css` (the teal ink and
+the reader). This repo's identity overrides only the accent group; everything
+else is shared with the sibling.
 
-- **Accent — teal `#0f766e` (`#2dd4bf` in dark):** the sole driver of
-  interaction. `primary` is the spec-required alias of `accent`; they are the
-  same value. Accent ink is white on light and near-black on dark.
-- **Folio — `#0f766e` (`#2dd4bf` in dark):** the printed page-number marker
-  color; it aliases the accent today but is kept separate so the folio can
-  diverge from interactive action (PRINT-1).
-- **Paper — `#f7f7f5` (`#131316` in dark):** a warmer paper tint defined in
-  `identity.css` as `--paper`, currently **unused** by any shipped page. It is
-  reserved, not normative, and is deliberately not tokenised here.
-- **Accent wash — `accent-soft`:** `color-mix(in srgb, accent 10%, transparent)`,
-  behind the hero and as the current-page wash in the docs sidebar. It is a
-  translucent token, so contrast tools that flatten it will report a misleading
-  ratio.
-- **Canvas / surface / surface-2 — `#ffffff` / `#fafafa` / `#f4f4f5`:** page,
-  raised chrome (reader tabs, sheets), and pressed surfaces.
-- **Hairline / hairline-strong — `#e6e6e8` / `#d4d4d8`:** every border and
-  divider. These are border-and-fill tokens, not text colors.
-- **Ink / body / mute / faint — `#0a0a0a` / `#3f3f46` / `#71717a` / `#6f6f78`:**
-  the text ramp: headlines, prose, secondary copy, and labels.
-- **Success / warning / error / info:** status only, carried by `.chip--*`.
-- **Terminal palette (`term-*`):** a self-contained dark set for `.term`, the
-  same in both themes.
-
-**Dark theme.** The same token names take dark values under
-`[data-theme="dark"]` and `prefers-color-scheme: dark`: canvas `#0a0a0a`,
-surface `#111112`, surface-2 `#18181b`, hairline `#232326`,
-hairline-strong `#33333a`, ink `#fafafa`, body `#c4c4ca`, mute/faint `#8b8b93`,
-accent/folio `#2dd4bf`, paper `#131316`; the status colors brighten. The schema
-has no theme axis, so these are documented as `*-dark` tokens and `*-dark`
-component variants rather than as a single normative value.
-
-**Accessibility.** Every body and metadata pair clears WCAG AA (4.5:1) in both
-themes; the accent on white is 5.47:1 and on dark canvas 10.64:1, and the folio
-marker on paper is 5.10:1. One pair is below AA and is deliberate:
-
-- **`.term .dim` / term prompt (`term-dim` on `term-bg`, 3.31:1)** — this is the
-  *dimmed* half of a terminal line (the `$` prompt and de-emphasised output).
-  Low contrast is the entire semantic; it is never used for prose.
-
-Low-distraction mode fades word tails with `opacity` (0.72 default, 0.45 at
-display size). Opacity is not a color token, so no lintable pair exists; the fade
-is intentional and reversible. The `sheet` and `spread` page lines use `mute` and
-`hairline` at reduced opacity as **decoration only** (the spread's "fixed" line
-mixes `ink` 36% with `mute` 42%); they are not text.
+- **`--bp-accent` — teal `#0F766E`, `#2DD4BF` in dark:** the sole driver of
+  interaction. Set in `identity.css`.
+- **`--bp-accent-2` — `#14B8A6`, `#5EEAD4` in dark:** the far end of `--bp-grad`,
+  a 120° linear gradient used on pills, the brand mark, the keycap, and the
+  metric numerals.
+- **`--bp-accent-soft` — `#E2F4F2`, `#0F2724` in dark:** the current-page wash
+  behind a nav link, and the icon-tile fill.
+- **`--bp-ink` / `--bp-body` / `--bp-mute` — `#14161A` / `#3F4550` / `#656B76`:**
+  the text ramp: headlines, prose, and secondary copy.
+- **`--bp-canvas` / `--bp-canvas-soft` — `#FBFBF9` / `#F4F4F0`:** page, and the
+  raised bands (rail band, metrics band, footer, reader chrome).
+- **`--bp-hairline` — `#E6E6DF`:** every border and divider, and the quiet half
+  of the footer wordmark. A border-and-fill token, not a text color.
+- **`--bp-success` — `#047857`, `#34D399` in dark:** the live dot on the demo
+  panel only.
+- **Shadows:** three steps, `--shadow-sm`, `--shadow-md`, `--shadow-lg`, used for
+  cards, panels and the terminal respectively.
 
 ## Typography
 
-**Geist** for text and **Geist Mono** for data, both self-hosted variable fonts
-(`fonts/geist-*.woff2`, SIL OFL 1.1, weights 100–900) with **no external
-requests**. Body text enables `"ss01"` and `"cv11"`. Headings are tight
-(`-0.02em` to `-0.04em`) and lead at 1.02–1.1; prose leads at 1.6, and the
-reader's own page text leads at 1.85.
+Geist for the interface, Geist Mono for figures and commands, and Georgia for
+anything that is document text. All three resolve without a network request:
+Geist and Geist Mono are self-hosted woff2 subsets, Georgia is a system serif.
 
-- **Display / title / headline:** Geist 600, tightening from `-0.025em` to
-  `-0.04em` as size grows. The hero and section headings use fluid `clamp()`
-  sizes (e.g. `clamp(2.5rem, 5.4vw, 3.75rem)`); the tokens record the upper
-  bound, and the full expression is not representable as a single `Dimension`.
-- **Lede / body / body-sm:** Geist 400 at 1.125rem / 1rem / 0.9375rem.
-- **Label:** Geist Mono 500, 0.6875rem, uppercase, `0.1em` tracking — eyebrows,
-  the folio marker, footer headings, the metabar, the reader chrome.
-- **Mono:** Geist Mono 400 at 0.8125rem / 1.7 for code and the terminal.
-- **Metric:** Geist Mono 600 at 1.375rem, tabular figures.
+The headline is the one place the two families of weight meet. It is set at 400
+and its fixation anchors rise to 750, so the emphasis is the *difference*
+between the two, not the size. Nothing else on the page mixes weights inside a
+line.
 
-As in the shared hero, the fixation "head" in the headline is drawn with
-`-webkit-text-stroke: 1.05px` (weight unchanged) so the plain and fixed copies
-keep identical advance widths and never ghost while the highlight descends. That
-single metric is fixed in both copies and cannot be expressed as a `fontWeight`
-token.
+Section headings are 600. The largest type on the page is the footer wordmark at
+`clamp(2.6rem, 8vw, 5.2rem)`, which is the product name set the way the
+algorithm sets a word: a solid opening and a quiet remainder.
 
-## Layout & Spacing
+## Layout
 
-A strict **4px rhythm** (`--s-1` … `--s-9`), a **1120px** fixed-max container
-with a 24px gutter (20px under 860px), and a sticky 56px nav. Sections are
-`96px` block padding (`64px` under 860px) with a soft hairline between them. The
-grid is `repeat(auto-fit, minmax(260px, 1fr))`, with 320px / 240px variants, a
-2-up `.duo`, and a docs shell of `196px | 1fr` with a 56px gap that collapses to
-one column at 820px. Sidebars (`.docs__nav`) stick at
-`calc(nav-height + 28px)`. Radii never grow with the layout; spacing never breaks
-the 4px step.
+One 1120px container with 28px gutters, used by the nav, every section and the
+footer, so all three share a single left edge. Sections are 96px of vertical
+padding, or 56px for the tight ones, and a hairline rule separates them.
+
+The hero is a two-column grid that collapses to one column at 940px. Every other
+multi-column arrangement — the rails, the tiles, the steps, the metrics, the two
+card grids — is an auto-fit grid so the count follows the width without
+breakpoints. The nav collapses to a sheet at 1180px, because the actions are the
+crowded part of the bar.
+
+The four display sizes are fluid. The tokens above are their caps, and the
+declared values are `clamp(2.6rem, 8vw, 5.2rem)` for the footer wordmark,
+`clamp(2.3rem, 5.2vw, 3.6rem)` for the headline, `clamp(1.7rem, 3.4vw, 2.4rem)`
+for a section heading and `clamp(1.8rem, 3.6vw, 2.6rem)` for a metric.
 
 ## Elevation & Depth
 
-Depth is **tonal and flat**, not shadowed. Hierarchy comes from a border, a
-surface step (`canvas → surface → surface-2`), and accent washes. Shadows are
-reserved for paper: the three drifting `sheet`s (`0 18px 38px`), the
-`spread__page` leaves (`0 16px 34px`), and the terminal. The hero is lit by soft
-radial accent washes; the footer eases from canvas into surface over ~240px so
-there is no visible boundary. Focus is a 2px accent outline with a 2px offset,
-never a glow.
+Depth is **soft and layered**, not flat. Hierarchy comes from a hairline border,
+a surface step (`canvas → canvas-soft`), and accent washes, on top of three
+shadow steps (`--shadow-sm`, `--shadow-md`, `--shadow-lg`) reserved for cards,
+the reader and the terminal. The hero is lit by soft radial accent washes over a
+masked grid. Focus is a 2px accent outline with a 2px offset, never a glow.
 
 ## Shapes
 
-Radii are small and consistent: `3px` / `5px` / `7px` / `10px`, the brand mark at
-`8px`, and `999px` for pills (chips, metabar, mode chips, the hero highlight).
-Tabs and sheets are `5px`–`10px`; the spread leaves carry a `3px`–`5px` spine
-radius. The geometry here is **paper**: rotated rectangles in perspective, a 2px
-spine, a `15px` ribbon notched with `clip-path`, and ruled lines. The shared
-half-solid soft rule reappears between sections.
+Radii are a short, consistent set: `6px` for inline code, `9px` for the brand
+mark, `11px`–`14px` for keys and icon tiles, `12px` for controls, `20px` for cards
+and `999px` for pills (chips, metabar, mode chips, tabs). A hairline rule
+separates sections.
 
 ## Components
 
-Base atoms come from the shared system and are identical in both sites: `button`
-(+ `primary` / `outline` / `ghost` / `sm`), `chip` (+ status variants), `card`,
-`field` / `input`, `nav`, `brand` (+ `mark` / `tag`), `footer`, `code`, `term`,
-`table`, `callout`, `install`, `keycap`, `tile`, `metric`, `eyebrow`, and the
-1px `divider`. Variants are sibling entries (`button-primary-hover`), never
-nested.
+The base system is shared and every component below reads its color from a
+token, so the two sites cannot drift apart by accident.
 
-The bionic-specific atoms, all from `theme.css` and this site's `identity.css`:
-
-- **`reader`** — the document mockup on a `surface-2` frame: a `surface` chrome
-  bar with `reader-tab` / `reader-tab-on` tabs and mode chips, a scrollable
-  `canvas` page with a `reader-title`, and a `surface` foot carrying the page
-  position (`reader-position`, tabular) plus Prev/Next and the fixation toggle.
-  Turning the page plays `docs-turn` (a `rotateY` under `perspective`).
-- **`mode-chip`** — selectable pills (distinct from status `chip`); the selected
-  one (`mode-chip-on`, `[aria-selected="true"]`) is solid accent with accent ink.
-- **`metabar`** — the pill of product facts above the headline: mono, uppercase,
-  hairline separators, the first item in `metabar-accent`. It collapses to a
-  small radius and hides its separators under 600px.
-- **`folio`** — the printed page marker above the headline, mono uppercase in
-  `folio` (teal).
-- **`sheet`** — one of three rotated paper cards drifting behind the hero, ruled
-  with a repeating hairline gradient and animated by `docs-drift`.
-- **`spread` art (`spread-page` / `spread-spine` / `spread-line` /
-  `spread-ribbon`)** — the footer's open book: two leaves meeting at a spine,
-  each first line already "fixed". The fixed line is a `linear-gradient` of `ink`
-  into `mute`, which the schema cannot express as a color, so only the solid
-  lines are tokenised.
-- **`bionic-head` / `bionic-tail`** — fixation emphasis: the head is weight 700
-  at `ink` (800 at `--xl`), the tail is weight 400 faded by `opacity`.
-
-The dark theme is expressed as the `*-dark` sibling variants; components that
-are dark by design (`.term`, the terminal) do not change.
+- **Navigation.** A fixed bar with a translucent canvas behind a blur. The
+  section you are reading is marked with an accent-soft wash, and the emphasis
+  switch is an icon button: the mark is the two halves of a word, and the label
+  lives in `aria-label` and `title`.
+- **Buttons.** `button-accent` is the only high-emphasis action on a page, and
+  there is a rule for how many are allowed: one per section, at most. Everything
+  else is `button-outline` or `button-ghost`.
+- **The reader.** The one component that exists only here: a card with the
+  document tabs in the chrome, a page of document text set in the serif with the
+  fixation applied, and a footer carrying the position and the controls. It
+  renders what the extension renders — a `.pdf-page` with one `.pdf-line` per
+  extracted line, an `.epub-chapter` with its `.epub-title`.
+- **The reading card.** The hero's visual. Same idea as the reader, smaller, and
+  it reads out the page position of whatever the reader below is showing.
+- **Demonstration panels** (`demo-panel`, `compare`, `tile`) all use
+  `reading` typography, because the point of each is to show document text.
+- **The terminal** is the only dark surface on a light page, and the only place
+  a monospace stack is used for anything longer than a word.
+- **Cards and panels** lift by 3–5px on hover and never change their border
+  color to anything but an accent mix. Motion is 160ms for a color, 340ms for a
+  move, and every one of them is behind `prefers-reduced-motion`.
 
 ## Do's and Don'ts
 
-- **Do** treat every rule as a **soft rule**: `border-image` fades the hairline
-  out at both margins, so nothing runs edge to edge.
-- **Do** keep the reader honest: the fixture PDF is one page, so any extra demo
-  page is explicitly labelled representative prose.
-- **Don't** fade the page to blank on navigation. Use the cross-document View
-  Transition API (`@view-transition { navigation: auto }`); without it, navigate
-  as before — never blank, never delayed.
-- **Do** keep **one accent per site**. Teal here; indigo on the sibling. No
-  element is shared between the two identities.
-- **Don't** ship a remote dependency: PDF.js and fflate are bundled, and fonts,
-  art and the demo are all local; no remote code is fetched or evaluated.
-- **Don't** use emoji anywhere in the product surface.
-- **Do** always carry **"by svx"** beside the wordmark in the nav and in the
-  footer meta (`by svx · MIT licensed.`).
+- **Do** keep one accent. The teal means "interactive" or "measured" and nothing
+  else.
+- **Don't** add a second accent, a gradient behind text, or a decorative image.
+  The page's only ornament is the emphasis itself.
+- **Do** keep the emphasis visible: the fixation weight is the product. A page
+  where the head and the tail look alike is a broken page.
+- **Do** check the reading text in the serif at a real size, not just the UI.
 - **Don't** add uploads, accounts, analytics or telemetry — nothing leaves the
   device, and the limitations (scanned PDFs, reflowed layout, Firefox 140+) are
   part of the contract, not footnotes.
-- **Do** keep the 4px rhythm, the small radius set, and the single container
-  width.
-- **Do** respect `prefers-reduced-motion`: the sheets, the descending highlight
-  and the page turn all have a still fallback.
+- **Do** respect `prefers-reduced-motion`: the descending highlight, the page
+  turn, the rails and every reveal have a still fallback. The reveal animations
+  are added by JavaScript so a visitor without it sees the whole page.
