@@ -202,7 +202,38 @@ for (const page of pages) {
     await sleep(260);
     const attr = await ev(`document.documentElement.getAttribute("data-fixation")`);
     const off = await ev(weight);
-    check("switching it off removes the emphasis", attr === "off" && (on <= 0 || off < 500), `data-fixation=${attr}, weight ${on} -> ${off}`);
+    /* Off is not "400". It is "no treatment": every head is back at the weight
+       it would have had anyway, which is whatever it inherits — 600 in a
+       heading, 400 in a paragraph. Asserting a number would have missed a head
+       sitting in a heading and keeping the heading's own weight. */
+    const unrestored = await ev(`(function(){
+      var bad=[];
+      document.querySelectorAll("b.bp-head").forEach(function(b){
+        var own=Math.round(getComputedStyle(b).fontWeight);
+        var base=Math.round(getComputedStyle(b.parentElement).fontWeight);
+        if(own!==base) bad.push(b.textContent.slice(0,10)+" "+own+"!="+base);
+      });
+      return bad.slice(0,4).join(" | ");
+    })()`);
+    check("switching it off removes the emphasis", attr === "off" && unrestored === "", `data-fixation=${attr}, head ${on} -> ${off}; ${unrestored || "every head is back at its inherited weight"}`);
+
+    /* A one-letter word is never split into a head and a tail, so it stays a
+       bare text node and keeps whatever weight it inherits — 600, in a heading.
+       Resetting only the wrapped runs left exactly that word emphasised. Off
+       has to mean the headline reads at one weight. */
+    const uniform = await ev(`(function(){
+      var t=document.querySelector(".hero__title-fix")||document.querySelector(".hero__title");
+      if(!t) return "";
+      var w=new Set(), walk=document.createTreeWalker(t,NodeFilter.SHOW_TEXT), n;
+      while(n=walk.nextNode()){
+        if(!n.nodeValue.trim()) continue;
+        w.add(getComputedStyle(n.parentElement).fontWeight);
+      }
+      return [...w].join(",");
+    })()`);
+    if (uniform) {
+      check("nothing is left emphasised in the headline", String(uniform).split(",").length === 1, `weights left in the headline: ${uniform}`);
+    }
 
     /* It is stored, so a reload has to keep it — and a client-side navigation
        must not lose it either. */
