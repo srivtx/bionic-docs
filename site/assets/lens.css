@@ -138,6 +138,10 @@
   background: var(--bp-canvas);
   transition: border-color var(--ease), box-shadow var(--ease);
 }
+.nav__gh-mark {
+  fill: currentColor;
+  stroke: none;
+}
 .nav__gh:hover {
   border-color: var(--bp-ink);
   text-decoration: none;
@@ -177,6 +181,12 @@ html[data-fixation="off"] .fixmark .fx-a {
 }
 .nav__toggle {
   display: none;
+}
+.icon--mute {
+  color: var(--bp-mute);
+}
+.icon--success {
+  color: var(--bp-success);
 }
 @media (max-width: 1180px) {
   .nav__links {
@@ -725,6 +735,10 @@ html[data-fixation="off"] .fixmark .fx-a {
 }
 .section--tight {
   padding: 56px 0;
+}
+/* The design's install and FAQ sections start flush against the rule above. */
+.section--flush {
+  padding-top: 0;
 }
 .section__head {
   max-width: 660px;
@@ -1454,6 +1468,12 @@ html[data-fixation="off"] .fixmark .fx-a {
 .term__body .c {
   color: #8b949e;
 }
+.term__body .cmd {
+  color: #79c0ff;
+}
+.term__body .flag {
+  color: #d2a8ff;
+}
 .term__line {
   display: flex;
   align-items: flex-start;
@@ -1603,11 +1623,15 @@ html[data-fixation="off"] .fixmark .fx-a {
   color: var(--bp-ink);
   position: relative;
 }
-.footer__mark .bp-tail,
-.footer__mark i {
+.footer__mark {
+  /* The design's mark keeps the remainder quiet. Its own algorithm wrapped
+     every mode, so it could paint the tail; the real one only wraps dim mode,
+     so the quiet half comes from the element's own colour instead. */
   color: var(--bp-hairline);
-  opacity: 1;
-  font-weight: inherit;
+}
+.footer__mark .bp-head,
+.footer__mark b {
+  color: var(--bp-ink);
 }
 [data-theme="dark"] .footer__mark .bp-tail,
 [data-theme="dark"] .footer__mark i {

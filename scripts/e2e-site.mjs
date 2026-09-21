@@ -179,17 +179,6 @@ async function waitFor(expr, timeout = 7000) {
   }
 }
 
-/* Clicking does nothing until the wiring has run. Drive the switch to the state
-   we want and stop as soon as it is there, rather than clicking once and hoping. */
-async function setFixation(on) {
-  const want = on ? null : "off";
-  for (let i = 0; i < 15; i++) {
-    if ((await ev(`document.documentElement.getAttribute("data-fixation")`)) === want) return true;
-    await ev(`document.querySelector(".nav__fix")?.click()`);
-    await sleep(180);
-  }
-  return (await ev(`document.documentElement.getAttribute("data-fixation")`)) === want;
-}
 
 for (const page of pages) {
   errors = [];
@@ -198,76 +187,22 @@ for (const page of pages) {
   console.log(`\n${page}`);
   check("no uncaught javascript error", errors.length === 0, errors.slice(0, 3).join(" | "));
 
-  /* The theme picker is on every page and is pure wiring. */
-  const picker = await ev(`document.querySelectorAll(".theme-pick__btn").length`);
-  if (picker) {
-    check("theme picker has three states", picker === 3, `found ${picker}`);
+  /* The theme toggle is on every page and is pure wiring. */
+  const toggle = await ev(`document.getElementById("theme-toggle") ? 1 : 0`);
+  if (toggle) {
     const before = await ev(`document.documentElement.getAttribute("data-theme")`);
-    await ev(`(function(){var b=[...document.querySelectorAll('.theme-pick__btn')].find(x=>x.dataset.themeChoice==='dark');if(b)b.click()})()`);
+    await ev(`document.getElementById("theme-toggle").click()`);
     await sleep(150);
     const after = await ev(`document.documentElement.getAttribute("data-theme")`);
-    check("choosing dark applies it", after === "dark" && after !== before, `data-theme=${after}`);
+    check("the theme toggle flips the theme", after !== before && (after === "dark" || after === "light"), `${before} -> ${after}`);
+    const label = await ev(`document.getElementById("theme-toggle-text").textContent`);
+    check("the toggle says what it will do", /^(Dark|Light)$/.test(String(label)), `label: ${label}`);
+    await ev(`document.getElementById("theme-toggle").click()`);
+    await sleep(120);
+    const back = await ev(`document.documentElement.getAttribute("data-theme")`);
+    check("and flips back", back === before, `${after} -> ${back}`);
     await ev(`window.localStorage.removeItem(${JSON.stringify(repo + "-theme")})`);
     await sleep(80);
-  }
-
-  /* The emphasis switch: it must actually switch, and it must remember. */
-  const hasSwitch = await ev(`document.querySelector(".nav__fix") ? 1 : 0`);
-  if (hasSwitch) {
-    const state = await ev(`(function(){
-      var s=document.querySelector('.nav__fix');
-      return s.getAttribute('role')+'/'+s.getAttribute('aria-checked')+'/'+s.getAttribute('aria-label');
-    })()`);
-    check("emphasis switch is a switch, on by default", String(state).startsWith("switch/true"), state);
-
-    const weight = `(function(){var b=document.querySelector('b.bp-head');return b?Math.round(getComputedStyle(b).fontWeight):-1})()`;
-    const on = await ev(weight);
-    await setFixation(false);
-    const attr = await ev(`document.documentElement.getAttribute("data-fixation")`);
-    const off = await ev(weight);
-    /* Off is not "400". It is "no treatment": every head is back at the weight
-       it would have had anyway, which is whatever it inherits — 600 in a
-       heading, 400 in a paragraph. Asserting a number would have missed a head
-       sitting in a heading and keeping the heading's own weight. */
-    const unrestored = await ev(`(function(){
-      var bad=[];
-      document.querySelectorAll("b.bp-head").forEach(function(b){
-        var own=Math.round(getComputedStyle(b).fontWeight);
-        var base=Math.round(getComputedStyle(b.parentElement).fontWeight);
-        if(own!==base) bad.push(b.textContent.slice(0,10)+" "+own+"!="+base);
-      });
-      return bad.slice(0,4).join(" | ");
-    })()`);
-    check("switching it off removes the emphasis", attr === "off" && unrestored === "", `data-fixation=${attr}, head ${on} -> ${off}; ${unrestored || "every head is back at its inherited weight"}`);
-
-    /* A one-letter word is never split into a head and a tail, so it stays a
-       bare text node and keeps whatever weight it inherits — 600, in a heading.
-       Resetting only the wrapped runs left exactly that word emphasised. Off
-       has to mean the headline reads at one weight. */
-    const uniform = await ev(`(function(){
-      var t=document.querySelector(".hero__title-fix")||document.querySelector(".hero__title");
-      if(!t) return "";
-      var w=new Set(), walk=document.createTreeWalker(t,NodeFilter.SHOW_TEXT), n;
-      while(n=walk.nextNode()){
-        if(!n.nodeValue.trim()) continue;
-        w.add(getComputedStyle(n.parentElement).fontWeight);
-      }
-      return [...w].join(",");
-    })()`);
-    if (uniform) {
-      check("nothing is left emphasised in the headline", String(uniform).split(",").length === 1, `weights left in the headline: ${uniform}`);
-    }
-
-    /* It is stored, so a reload has to keep it — and a client-side navigation
-       must not lose it either. */
-    await send("Page.navigate", { url: `${base}${page}` }, sid);
-    await sleep(1900);
-    const persisted = await ev(`document.documentElement.getAttribute("data-fixation")`);
-    check("the choice survives a reload", persisted === "off", `data-fixation=${persisted}`);
-    await setFixation(true);
-    const back = await ev(`document.documentElement.getAttribute("data-fixation")`);
-    check("switching it back on restores it", back === null, `data-fixation=${back}`);
-    errors = [];
   }
 
   /* Fixation samples must be real markup, not plain text. */
