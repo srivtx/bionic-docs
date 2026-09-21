@@ -754,30 +754,41 @@
     }
   });
 
-  /* ---- Compare divider -------------------------------------------------- */
+  /* ---- Compare divider --------------------------------------------------
+     The design writes the clip, the divider, the handle and the readout
+     directly, so a drag is four style writes and nothing re-lays-out. Pointer
+     drag, arrow keys for keyboards, and one sweep to show what it is for. */
   var compare = $("compare");
   if (compare) {
+    var compareTop = $("compare-top");
+    var compareKnob = $("compare-knob");
+    var compareGrip = q(".compare__grip", compare);
+    var comparePct = $("compare-pct");
+    var split = 50;
     var dragging = false;
     var touched = false;
-    var split = 0.5;
-    var pct = $("compare-pct");
-    function paintSplit() {
-      var value = Math.round(split * 100);
-      compare.style.setProperty("--p", value + "%");
-      compare.setAttribute("aria-valuenow", String(value));
-      compare.setAttribute("aria-valuetext", value + "% bionic, " + (100 - value) + "% as written");
-      if (pct) pct.textContent = value + "%";
+    function setSplit(value) {
+      split = Math.max(0, Math.min(100, value));
+      if (compareTop) compareTop.style.clipPath = "inset(0 " + (100 - split) + "% 0 0)";
+      if (compareKnob) compareKnob.style.left = split + "%";
+      if (compareGrip) compareGrip.style.left = split + "%";
+      var rounded = Math.round(split);
+      if (comparePct) comparePct.textContent = rounded + "%";
+      compare.setAttribute("aria-valuenow", String(rounded));
+      compare.setAttribute(
+        "aria-valuetext",
+        rounded + "% bionic, " + (100 - rounded) + "% as written"
+      );
     }
-    function fromClientX(clientX) {
+    setSplit(split);
+    function splitFromClientX(clientX) {
       var rect = compare.getBoundingClientRect();
       if (rect.width <= 0) return;
-      split = Math.min(1, Math.max(0, (clientX - rect.left) / rect.width));
-      paintSplit();
+      setSplit(((clientX - rect.left) / rect.width) * 100);
     }
     compare.addEventListener("pointerdown", function (event) {
       dragging = true;
       touched = true;
-      compare.classList.add("is-dragging");
       if (compare.setPointerCapture) {
         try {
           compare.setPointerCapture(event.pointerId);
@@ -785,50 +796,62 @@
           void 0;
         }
       }
-      fromClientX(event.clientX);
+      splitFromClientX(event.clientX);
     });
     compare.addEventListener("pointermove", function (event) {
-      if (dragging) fromClientX(event.clientX);
+      if (dragging) splitFromClientX(event.clientX);
     });
-    function endDrag() {
+    compare.addEventListener("pointerup", function () {
       dragging = false;
-      compare.classList.remove("is-dragging");
-    }
-    compare.addEventListener("pointerup", endDrag);
-    compare.addEventListener("pointercancel", endDrag);
+    });
+    compare.addEventListener("pointercancel", function () {
+      dragging = false;
+    });
     compare.addEventListener("keydown", function (event) {
-      var stepBy = event.shiftKey ? 0.1 : 0.02;
-      if (event.key === "ArrowLeft") split -= stepBy;
-      else if (event.key === "ArrowRight") split += stepBy;
-      else if (event.key === "Home") split = 0;
-      else if (event.key === "End") split = 1;
+      touched = true;
+      if (event.key === "ArrowLeft") setSplit(split - 4);
+      else if (event.key === "ArrowRight") setSplit(split + 4);
+      else if (event.key === "Home") setSplit(0);
+      else if (event.key === "End") setSplit(100);
       else return;
       event.preventDefault();
-      touched = true;
-      split = Math.min(1, Math.max(0, split));
-      paintSplit();
     });
-    paintSplit();
 
     if (!reduceMotion && "IntersectionObserver" in window) {
-      var seen = new IntersectionObserver(function (entries) {
-        each(entries, function (entry) {
-          if (!entry.isIntersecting) return;
-          seen.disconnect();
-          if (touched) return;
-          var started = 0;
-          function sweepCompare(now) {
-            if (touched) return;
-            if (!started) started = now;
-            var t = Math.min(1, (now - started) / 1700);
-            split = 0.5 + Math.sin(t * Math.PI) * 0.2;
-            paintSplit();
-            if (t < 1) window.requestAnimationFrame(sweepCompare);
-          }
-          window.requestAnimationFrame(sweepCompare);
-        });
-      }, { threshold: 0.4 });
-      seen.observe(compare);
+      var swept = false;
+      var sweep = new IntersectionObserver(
+        function (entries) {
+          each(entries, function (entry) {
+            if (!entry.isIntersecting || swept) return;
+            swept = true;
+            sweep.unobserve(compare);
+            /* Out, in, and back — the same three moves as the design. */
+            var moves = [[82, 700], [28, 800], [50, 600]];
+            var index = 0;
+            function next() {
+              if (touched || index >= moves.length) return;
+              var from = split;
+              var to = moves[index][0];
+              var duration = moves[index][1];
+              index += 1;
+              var started = null;
+              function tween(now) {
+                if (touched) return;
+                if (!started) started = now;
+                var k = Math.min(1, (now - started) / duration);
+                var eased = 1 - Math.pow(1 - k, 3);
+                setSplit(from + (to - from) * eased);
+                if (k < 1) window.requestAnimationFrame(tween);
+                else window.setTimeout(next, 120);
+              }
+              window.requestAnimationFrame(tween);
+            }
+            window.setTimeout(next, 450);
+          });
+        },
+        { threshold: 0.6 }
+      );
+      sweep.observe(compare);
     }
   }
 

@@ -279,9 +279,10 @@ for (const page of pages) {
     await send("Input.dispatchMouseEvent", { type: "mousePressed", x: rect.x + rect.w / 2, y, button: "left", buttons: 1, clickCount: 1 }, sid);
     await send("Input.dispatchMouseEvent", { type: "mouseMoved", x: rect.x + rect.w * 0.72, y, button: "left", buttons: 1 }, sid);
     await sleep(150);
-    const p = await ev(`getComputedStyle(document.querySelector('.compare')).getPropertyValue('--p')`);
+    const p = await ev(`document.getElementById('compare-pct').textContent`);
     await send("Input.dispatchMouseEvent", { type: "mouseReleased", x: rect.x + rect.w * 0.72, y, button: "left", buttons: 0 }, sid);
-    check("divider follows a drag", String(p).trim().startsWith("7"), `--p=${String(p).trim()} after dragging to 72%`);
+    const landed = parseFloat(String(p));
+    check("divider follows a drag", Math.abs(landed - 72) <= 2, `${String(p).trim()} after dragging to 72%`);
   }
 
   /* The reader, where present. */

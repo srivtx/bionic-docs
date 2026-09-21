@@ -33,25 +33,11 @@
 .btn--accent {
   box-shadow: 0 4px 16px rgb(15 118 110 / 26%);
 }
-.nav__fix .fixmark .fx-a {
-  fill: var(--bp-accent);
-}
-
 /* ---- the headline: a highlight that reads down it ---------------------
    The anchor weight arrives with the highlight rather than before it, so the
    emphasis looks like something being read, not something being typed. */
 .hero__title {
   position: relative;
-}
-.hero__title .bp-head {
-  font-weight: var(--fx-hero);
-}
-.hero__title-fix {
-  display: inline;
-}
-.hero__title .bp-tail,
-.hero__title i {
-  opacity: 1;
 }
 .hero__highlight {
   position: absolute;
@@ -93,10 +79,6 @@
     opacity: 0;
   }
 }
-.hero__title.is-reading .bp-head {
-  font-weight: var(--fx-hero);
-}
-
 /* ---- the reader -------------------------------------------------------
    One card: a chrome bar with the document tabs, a page of text set in the
    serif the extension is for, and a footer with the position and the controls. */
@@ -258,20 +240,4 @@
 }
 .tnum {
   font-variant-numeric: tabular-nums;
-}
-
-/* ---- the footer wordmark ---------------------------------------------- */
-.footer__mark b,
-.footer__mark .bp-head {
-  font-weight: 800;
-  color: var(--bp-ink);
-}
-.footer__mark .bp-tail,
-.footer__mark i {
-  font-weight: 800;
-  color: var(--bp-hairline);
-}
-[data-theme="dark"] .footer__mark .bp-tail,
-[data-theme="dark"] .footer__mark i {
-  color: #262b35;
 }
