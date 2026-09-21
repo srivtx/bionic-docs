@@ -1,1126 +1,531 @@
-/* bionic — per-tool accent and components for the Lens suite.
-   Base system: lens.css. Only the accent and bionic-specific pieces live
-   here, so the two extensions and the rest of the suite stay consistent. */
+/*
+ * bionic-page — the design system.
+ *
+ * Tokens, base typography, and the shared primitives every page is built from:
+ * buttons, chips, fields, switches, and the fixation rules themselves.
+ *
+ * Type is Geist and Geist Mono, self-hosted (SIL Open Font License 1.1),
+ * variable weights 100–900. The reading text inside the demo, the compare
+ * panel and the mode tiles is set in a serif, because that is the kind of text
+ * the extension is for. No external requests.
+ */
 
+@font-face {
+  font-family: "Geist";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("fonts/geist-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Geist";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("fonts/geist-latin-ext.woff2") format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7,
+    U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF,
+    U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: "Geist Mono";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("fonts/geist-mono-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Geist Mono";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("fonts/geist-mono-latin-ext.woff2") format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7,
+    U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF,
+    U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+/* ============ tokens ============ */
 :root {
-  --accent: #4f46e5;
-  --accent-ink: #ffffff;
+  --bp-ink: #14161a;
+  --bp-body: #3f4550;
+  --bp-mute: #6b7280;
+  --bp-canvas: #fbfbf9;
+  --bp-canvas-soft: #f4f4f0;
+  --bp-hairline: #e6e6df;
+  --bp-accent: #4f46e5;
+  --bp-accent-2: #8b5cf6;
+  --bp-accent-soft: #edefff;
+  --bp-success: #0d9488;
+  --bp-grad: linear-gradient(120deg, #4f46e5, #8b5cf6);
+  --shadow-sm: 0 1px 2px rgb(20 22 26 / 5%), 0 2px 8px rgb(20 22 26 / 4%);
+  --shadow-md: 0 1px 2px rgb(20 22 26 / 6%), 0 12px 32px rgb(20 22 26 / 8%);
+  --shadow-lg: 0 2px 4px rgb(20 22 26 / 6%), 0 24px 64px rgb(20 22 26 / 12%);
+  --r-ctl: 12px;
+  --r-card: 20px;
+  --r-pill: 999px;
+  --sans: "Geist", -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI",
+    Roboto, Helvetica, Arial, sans-serif;
+  --serif: Georgia, "Iowan Old Style", "Times New Roman", serif;
+  --mono: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --ease: 160ms cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-out: 340ms cubic-bezier(0.22, 0.9, 0.24, 1);
+  --ease-spring: 560ms cubic-bezier(0.22, 1.3, 0.36, 1);
 
-  /* Fixation defaults, mirrored from the extensions so the landing-page
-     demo renders exactly what a real page looks like after a pass. */
+  /* Fixation. The head is the anchor the eye lands on; the tail is only
+     dimmed in the low-distraction mode, so it rests at full strength. */
   --fx-weight: 700;
-  /* The headline is 60px, where the full 700 reads as shouting. Its own
-     weight, a step lighter, keeps the emphasis legible without the shout. */
-  --fx-hero: 600;
+  --fx-hero: 750;
   --fx-rest: 0.72;
 }
 
 [data-theme="dark"] {
-  --accent: #818cf8;
-  --accent-ink: #0a0a0a;
+  --bp-ink: #f4f5f7;
+  --bp-body: #c3c9d4;
+  --bp-mute: #878fa0;
+  --bp-canvas: #0b0d11;
+  --bp-canvas-soft: #13161c;
+  --bp-hairline: #222734;
+  --bp-accent: #8b8cf7;
+  --bp-accent-2: #a78bfa;
+  --bp-accent-soft: #1c2034;
+  --bp-success: #34d399;
+  --shadow-sm: 0 1px 2px rgb(0 0 0 / 30%), 0 2px 8px rgb(0 0 0 / 20%);
+  --shadow-md: 0 1px 2px rgb(0 0 0 / 35%), 0 12px 32px rgb(0 0 0 / 30%);
+  --shadow-lg: 0 2px 4px rgb(0 0 0 / 35%), 0 24px 64px rgb(0 0 0 / 40%);
 }
 
+/* "System" is the absence of the attribute, so the media query takes over and
+   an explicit choice always wins. */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --accent: #818cf8;
-    --accent-ink: #0a0a0a;
+    --bp-ink: #f4f5f7;
+    --bp-body: #c3c9d4;
+    --bp-mute: #878fa0;
+    --bp-canvas: #0b0d11;
+    --bp-canvas-soft: #13161c;
+    --bp-hairline: #222734;
+    --bp-accent: #8b8cf7;
+    --bp-accent-2: #a78bfa;
+    --bp-accent-soft: #1c2034;
+    --bp-success: #34d399;
+    --shadow-sm: 0 1px 2px rgb(0 0 0 / 30%), 0 2px 8px rgb(0 0 0 / 20%);
+    --shadow-md: 0 1px 2px rgb(0 0 0 / 35%), 0 12px 32px rgb(0 0 0 / 30%);
+    --shadow-lg: 0 2px 4px rgb(0 0 0 / 35%), 0 24px 64px rgb(0 0 0 / 40%);
   }
 }
 
-/* Contrast: the shared --mute (#71717a) only reaches 4.40:1 on --surface-2
-   (#f4f4f5), under the 4.5:1 floor for body text. Darken the light value so
-   the demo foot, slider label and compare tags clear it; the dark token is
-   left as-is (it is already 5.2:1 on the dark surface). Scoped to light so
-   it never leaks into dark, whichever way dark is selected. */
-@media (prefers-color-scheme: light) {
-  :root:not([data-theme="dark"]) {
-    --mute: #6b6b73;
-  }
+/* ============ base ============ */
+* {
+  box-sizing: border-box;
 }
-
-:root[data-theme="light"] {
-  --mute: #6b6b73;
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 80px;
 }
-
-/* ── Brand mark ─────────────────────────────────────────────────────────── */
-.brand__mark {
-  width: 26px;
-  height: 26px;
-  border-radius: 8px;
-}
-
-.brand__mark .icon {
-  width: 18px;
-  height: 18px;
-  stroke-width: 2.4;
-}
-
-/* ── Fixation text ────────────────────────────────────────────────────────
-   The whole point of both extensions. These are the content script's own
-   class names, so anything rendered here looks exactly like a page after a
-   real pass: the head is bold, and in low-distraction mode the tail fades. */
-.bionic b,
-b.bp-head {
-  font-weight: var(--fx-weight);
-  color: var(--ink);
-  /* Deliberately NOT font-synthesis-weight: none. The webfont is a variable
-     face so 700 is real when it loads, but if it ever fails the browser must
-     be allowed to synthesise the weight — otherwise every fixation head
-     renders at normal weight and the whole effect disappears. */
-}
-
-.bionic i,
-span.bp-tail {
-  font-style: normal;
-  font-weight: 400;
-  opacity: var(--fx-rest);
-}
-
-.bionic--xl {
-  font-size: clamp(2.1rem, 5.6vw, 3.75rem);
-  line-height: 1.05;
-  letter-spacing: -0.035em;
-  text-wrap: balance;
-}
-
-/* Display type needs more separation than body text to read the same way at
-   poster size. The demo panes below keep the extension's real defaults
-   (700 / 0.72), which is what a page actually looks like after a pass. */
-.bionic--xl b,
-.bionic--xl .bp-head {
-  font-weight: 800;
-}
-
-.bionic--xl i,
-.bionic--xl .bp-tail {
-  opacity: 0.45;
-}
-
-.bionic--lg {
-  font-size: clamp(1.35rem, 2.6vw, 1.9rem);
-  line-height: 1.25;
-  letter-spacing: -0.02em;
-}
-
-.bionic--lg b,
-.bionic--lg .bp-head {
-  font-weight: 750;
-}
-
-.bionic--lg i,
-.bionic--lg .bp-tail {
-  opacity: 0.55;
-}
-
-/* ── Hero ─────────────────────────────────────────────────────────────────
-   A little more life than the shared hero: a slow fixation sweep behind the
-   copy and an optional oversized ghost word. */
-.hero--bionic .hero__glow {
-  background:
-    radial-gradient(46% 58% at 8% 0%, var(--accent-soft), transparent 68%),
-    radial-gradient(38% 46% at 92% 12%, var(--accent-soft), transparent 72%);
-}
-
-.beam {
-  position: absolute;
-  inset: -40% -10% auto -10%;
-  z-index: -1;
-  height: 180%;
-  pointer-events: none;
-  background: linear-gradient(
-    104deg,
-    transparent 38%,
-    color-mix(in srgb, var(--accent) 16%, transparent) 50%,
-    transparent 62%
-  );
-  transform: translateX(-26%);
-  animation: beam 9s var(--ease) infinite;
-}
-
-@keyframes beam {
-  0%,
-  100% {
-    transform: translateX(-26%);
-  }
-  50% {
-    transform: translateX(26%);
-  }
-}
-
-.ghost {
-  position: absolute;
-  right: -0.06em;
-  bottom: -0.34em;
-  z-index: -1;
-  margin: 0;
-  color: var(--ink);
-  font-size: clamp(6rem, 20vw, 15rem);
-  font-weight: 700;
-  letter-spacing: -0.06em;
-  line-height: 0.8;
-  opacity: 0.035;
-  pointer-events: none;
-  user-select: none;
-}
-
-/* A rule that is half solid and half faint: the mark, as a divider. */
-.fxrule {
-  height: 1px;
-  border: 0;
-  margin: 0;
-  background: linear-gradient(
-    90deg,
-    var(--hairline-strong) 0 52%,
-    var(--hairline) 52% 100%
-  );
-}
-
-/* ── Demo ─────────────────────────────────────────────────────────────────
-   The live playground. Runs the same compiled algorithm the extension
-   ships, in the page, with no network. */
-.bdemo {
-  border: 1px solid var(--hairline);
-  border-radius: var(--r-lg);
-  background: var(--surface);
-  overflow: hidden;
-}
-
-.bdemo__head {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--s-3);
-  padding: var(--s-3) var(--s-4);
-  border-bottom: 1px solid var(--hairline);
-  background: var(--surface-2);
-}
-
-.bdemo__title {
-  margin: 0;
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
-  font-weight: 550;
-  letter-spacing: 0.02em;
-  color: var(--ink);
-}
-
-.bdemo__tools {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--s-3);
-  margin-left: auto;
-}
-
-.bdemo__body {
-  display: grid;
-  gap: 1px;
-  background: var(--hairline);
-}
-
-.bdemo__pane {
-  background: var(--canvas);
-  padding: var(--s-5);
-}
-
-.bdemo__label {
-  display: flex;
-  align-items: center;
-  gap: var(--s-2);
-  margin-bottom: var(--s-3);
-  font-family: var(--font-mono);
-  font-size: 0.6875rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--faint);
-}
-
-.bdemo__out {
-  margin: 0;
-  font-size: 1.0625rem;
-  line-height: 1.72;
-  color: var(--body);
-  overflow-wrap: anywhere;
-}
-
-.bdemo__out--doc {
-  font-size: 0.9375rem;
-  line-height: 1.8;
-}
-
-.bdemo__foot {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--s-3);
-  padding: var(--s-3) var(--s-4);
-  border-top: 1px solid var(--hairline);
-  background: var(--surface-2);
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
-  color: var(--mute);
-}
-
-.bdemo__stat {
-  font-variant-numeric: tabular-nums;
-}
-
-.bdemo__stat b {
-  color: var(--ink);
-  font-weight: 600;
-}
-
-/* ── Mode chips ───────────────────────────────────────────────────────────
-   Distinct from the shared .chip status pill: these are selectable. */
-.mchips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.mchip {
-  padding: 5px 11px;
-  border: 1px solid var(--hairline-strong);
-  border-radius: 999px;
-  background: var(--canvas);
-  color: var(--body);
-  font: inherit;
-  font-size: 0.8125rem;
-  font-weight: 550;
-  cursor: pointer;
-  transition: border-color var(--dur) var(--ease),
-    background var(--dur) var(--ease), color var(--dur) var(--ease);
-}
-
-.mchip:hover {
-  border-color: var(--ink);
-  color: var(--ink);
-}
-
-.mchip[aria-pressed="true"],
-.mchip--on {
-  border-color: transparent;
-  background: var(--accent);
-  color: var(--accent-ink);
-}
-
-/* ── Range control ────────────────────────────────────────────────────────
-   One readable slider across engines. */
-.rx {
-  display: flex;
-  align-items: center;
-  gap: var(--s-3);
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
-  color: var(--mute);
-}
-
-.rx input[type="range"] {
-  width: 132px;
-  height: 20px;
-  margin: 0;
-  accent-color: var(--accent);
-  cursor: pointer;
-}
-
-.rx output {
-  min-width: 2.5ch;
-  color: var(--ink);
-  font-variant-numeric: tabular-nums;
-  text-align: right;
-}
-
-.rx__name {
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  font-size: 0.6875rem;
-}
-
-/* ── Keycap ─────────────────────────────────────────────────────────────── */
-.keycap {
-  display: inline-flex;
-  align-items: center;
-  gap: 3px;
-  padding: 2px 7px;
-  border: 1px solid var(--hairline-strong);
-  border-bottom-width: 2px;
-  border-radius: var(--r-sm);
-  background: var(--surface);
-  color: var(--ink);
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
-  font-weight: 550;
-  white-space: nowrap;
-}
-
-/* ── Compare ──────────────────────────────────────────────────────────────
-   Drag the divider to see the same paragraph switched on and off. */
-.compare {
-  position: relative;
-  border: 1px solid var(--hairline);
-  border-radius: var(--r-md);
-  background: var(--canvas);
-  overflow: hidden;
-  cursor: ew-resize;
-  touch-action: none;
-  user-select: none;
-}
-
-.compare__text {
-  margin: 0;
-  padding: var(--s-5);
-  font-size: 1rem;
-  line-height: 1.7;
-  color: var(--body);
-}
-
-.compare__top {
-  position: absolute;
-  inset: 0;
-  background: var(--canvas);
-  /* Reveal by clipping a full-width layer, never by narrowing it. A narrowed
-     box re-wraps its own text, so the strip showed the whole paragraph
-     squeezed into it instead of the left slice of the same paragraph, with
-     the padding squeezed too. One custom property drives the whole thing. */
-  clip-path: inset(0 calc(100% - var(--p, 50%)) 0 0);
-  will-change: clip-path;
-}
-
-/* Same box as the layer underneath, so the two are always in register. */
-.compare__top .compare__text {
-  margin: 0;
-}
-
-.compare__knob {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: var(--p, 50%);
-  width: 2px;
-  margin-left: -1px;
-  background: var(--accent);
-  pointer-events: none;
-}
-
-/* The handle rides the divider. It used to sit at a fixed 50%. */
-.compare__grip {
-  left: var(--p, 50%);
-}
-
-/* Which side is which, so the strip explains itself. */
-.compare__tag {
-  position: absolute;
-  top: var(--s-3);
-  z-index: 2;
-  padding: 2px 9px;
-  border-radius: 999px;
-  background: var(--surface-2);
-  color: var(--mute);
-  font-family: var(--font-mono);
-  font-size: 0.6875rem;
-  letter-spacing: 0.07em;
-  text-transform: uppercase;
-  pointer-events: none;
-}
-
-.compare__tag--on {
-  left: var(--s-3);
-}
-
-.compare__tag--off {
-  right: var(--s-3);
-}
-
-/* A little headroom so the tags never sit on the first line. */
-.compare__text {
-  padding-top: calc(var(--s-5) + 16px);
-}
-
-.compare__knob::after {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 30px;
-  height: 30px;
-  border-radius: 999px;
-  background: var(--accent);
-  color: var(--accent-ink);
-  transform: translate(-50%, -50%);
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.18);
-}
-
-/* The handle is a 30px circle with a 16px glyph in it. It has to centre the
-   glyph itself: a block box leaves the svg at the top-left, which put the
-   arrows 7px off centre on both axes. */
-.compare__grip {
-  position: absolute;
-  top: 50%;
-  z-index: 1;
-  display: grid;
-  place-items: center;
-  width: 30px;
-  height: 30px;
-  transform: translate(-50%, -50%);
-  color: var(--accent-ink);
-  pointer-events: none;
-}
-
-.compare__grip .icon {
-  width: 17px;
-  height: 17px;
-  stroke-width: 2;
-}
-
-/* ── Reader ───────────────────────────────────────────────────────────────
-   A document mockup: what bionic-docs does to a PDF page or an EPUB chapter. */
-.reader {
-  border: 1px solid var(--hairline);
-  border-radius: var(--r-lg);
-  background: var(--surface-2);
-  overflow: hidden;
-}
-
-.reader__chrome {
-  display: flex;
-  align-items: center;
-  gap: var(--s-3);
-  padding: var(--s-2) var(--s-3);
-  border-bottom: 1px solid var(--hairline);
-  background: var(--surface);
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
-  color: var(--mute);
-}
-
-.reader__tabs {
-  display: flex;
-  gap: 4px;
-}
-
-.reader__tab {
-  padding: 3px 10px;
-  border: 1px solid transparent;
-  border-radius: var(--r-sm);
-  background: transparent;
-  color: var(--mute);
-  font: inherit;
-  font-weight: 550;
-  cursor: pointer;
-}
-
-.reader__tab[aria-selected="true"],
-.reader__tab--on {
-  border-color: var(--hairline);
-  background: var(--canvas);
-  color: var(--ink);
-}
-
-.reader__page {
-  min-height: 22rem;
-  max-height: 30rem;
-  margin: 0;
-  padding: var(--s-6) var(--s-6) var(--s-7);
-  background: var(--canvas);
-  overflow-y: auto;
-}
-
-.reader__title {
-  margin: 0 0 var(--s-4);
-  font-size: 1.0625rem;
-  font-weight: 600;
-  letter-spacing: -0.015em;
-  color: var(--ink);
-}
-
-.reader__page p {
-  margin: 0 0 var(--s-4);
-  font-size: 0.9375rem;
-  line-height: 1.85;
-  color: var(--body);
-  overflow-wrap: anywhere;
-}
-
-.reader__foot {
-  display: flex;
-  align-items: center;
-  gap: var(--s-3);
-  padding: var(--s-3) var(--s-4);
-  border-top: 1px solid var(--hairline);
-  background: var(--surface);
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
-  color: var(--mute);
-}
-
-.reader__foot .btn {
-  margin-left: auto;
-}
-
-/* ── Mode tiles ─────────────────────────────────────────────────────────── */
-.tiles {
-  display: grid;
-  gap: var(--s-4);
-  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.tile {
-  display: grid;
-  gap: var(--s-3);
-  align-content: start;
-  padding: var(--s-4);
-  border: 1px solid var(--hairline);
-  border-radius: var(--r-md);
-  background: var(--surface);
-  transition: border-color var(--dur) var(--ease),
-    transform var(--dur) var(--ease);
-}
-
-.tile:hover {
-  border-color: var(--hairline-strong);
-  transform: translateY(-1px);
-}
-
-.tile__name {
-  display: flex;
-  align-items: center;
-  gap: var(--s-2);
-  margin: 0;
-  font-size: 0.9375rem;
-  font-weight: 600;
-  color: var(--ink);
-}
-
-.tile__dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 999px;
-  background: var(--accent);
-}
-
-.tile__sample {
-  margin: 0;
-  padding: var(--s-3);
-  border: 1px solid var(--hairline);
-  border-radius: var(--r-sm);
-  background: var(--canvas);
-  font-size: 0.875rem;
-  line-height: 1.6;
-  color: var(--body);
-}
-
-.tile__note {
-  margin: 0;
-  font-size: 0.8125rem;
-  line-height: 1.55;
-  color: var(--mute);
-}
-
-/* ── Metrics ────────────────────────────────────────────────────────────── */
-.metrics {
-  display: grid;
-  gap: var(--s-4);
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.metric {
-  padding: var(--s-4);
-  border: 1px solid var(--hairline);
-  border-radius: var(--r-md);
-  background: var(--surface);
-}
-
-.metric__n {
-  display: block;
-  font-family: var(--font-mono);
-  font-size: 1.375rem;
-  font-weight: 600;
-  letter-spacing: -0.02em;
-  color: var(--ink);
-  font-variant-numeric: tabular-nums;
-}
-
-.metric__k {
-  display: block;
-  margin-top: 2px;
-  font-size: 0.8125rem;
-  color: var(--mute);
-}
-
-/* ── Reading progress ─────────────────────────────────────────────────────
-   A thin accent bar, because the product is about reading. */
-.progress {
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 40;
-  width: 0;
-  height: 2px;
-  background: var(--accent);
-  transition: width 80ms linear;
-}
-
-/* A single row of small proof points. */
-.flagline {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--s-2);
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-/* Two panes that behave like a document next to its output. */
-.duo {
-  display: grid;
-  gap: var(--s-4);
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-}
-
-@media (max-width: 860px) {
-  .duo {
-    grid-template-columns: minmax(0, 1fr);
-  }
-}
-
-@media (max-width: 520px) {
-  .bdemo__pane {
-    padding: var(--s-4);
-  }
-
-  .reader__page {
-    padding: var(--s-4);
-  }
-
-  .bionic--xl {
-    letter-spacing: -0.028em;
-  }
-}
-
 @media (prefers-reduced-motion: reduce) {
-  .beam {
-    animation: none;
-    opacity: 0.5;
-  }
-
-  .tile:hover {
-    transform: none;
-  }
-}
-
-/* ── Demo: source pane ────────────────────────────────────────────────────
-   The source side is a few lines of prose, not a form. Do not reserve the
-   shared textarea height, which leaves dead space beside the rendered pane. */
-.bdemo__pane .input {
-  min-height: 9.5rem;
-}
-
-.bdemo__pane textarea.input {
-  resize: vertical;
-}
-
-/* ── Proof chips under a call to action ───────────────────────────────────
-   .btn-row carries no bottom margin and .flagline resets its own, so an
-   adjacent pair collided. Give the row its own air. */
-.btn-row + .flagline {
-  margin-top: var(--s-4);
-}
-
-.flagline + .btn-row {
-  margin-top: var(--s-2);
-}
-
-/* ── Hero rhythm ──────────────────────────────────────────────────────────
-   The reset zeroes heading margins, so an eyebrow immediately before the
-   headline touched it. One step of air, hero only, so section heads that
-   already use a flex gap are untouched. */
-.hero .eyebrow + h1,
-.hero__inner .eyebrow + h1 {
-  margin-top: var(--s-3);
-}
-
-/* ── Footer ───────────────────────────────────────────────────────────────
-   The bottom of the page used to be banded: a full-bleed hairline at the end
-   of every section, another at the footer's top edge, and an abrupt step from
-   the page canvas to the footer surface at each one. Stacked together that
-   reads as stripes, not as a closing section.
-
-   Two changes make it continuous:
-   1. Every rule is a SOFT rule — the hairline fades out at both margins, so
-      no line ever runs edge to edge across the page.
-   2. The footer surface eases in over ~220px instead of starting at a hard
-      edge, and carries a pool of accent light behind the art. There is no
-      boundary to see, only a gradient.
-
-   The art band inside the footer has no border and no background of its own,
-   so the art and the footer are one composition. */
-.section + .section,
-.footer,
-.footer__meta {
-  border-image: linear-gradient(
-      90deg,
-      transparent 0,
-      var(--hairline) 16%,
-      var(--hairline) 84%,
-      transparent 100%
-    )
-    1;
-}
-
-.section + .section,
-.footer {
-  border-top: 1px solid transparent;
-}
-
-.footer__meta {
-  border-top: 1px solid transparent;
-}
-
-.footer {
-  padding-block: 0;
-  background-color: var(--canvas);
-  background-image:
-    radial-gradient(82% 118% at 50% -10%, var(--accent-soft), transparent 58%),
-    linear-gradient(180deg, transparent 0, var(--surface) 240px);
-  background-repeat: no-repeat;
-}
-
-.footer > .container {
-  padding-block: 0 var(--s-7);
-}
-
-.footer__inner {
-  padding-top: var(--s-6);
-}
-
-.footer__brand p:last-child {
-  max-width: 34ch;
-  text-wrap: pretty;
-}
-
-.footer__meta {
-  margin-top: var(--s-7);
-}
-
-/* ── Cards ────────────────────────────────────────────────────────────────
-   .card is a plain block and .card p carries no margin, so two paragraphs in
-   one card ran together. Only the run between paragraphs is spaced; a card
-   that uses .stack for its rhythm is left alone because that adds its own. */
-.card p + p {
-  margin-top: var(--s-3);
-}
-
-/* ── Compare: the handle answers the hand ─────────────────────────────────
-   It lifts under the pointer and compresses while you are actually dragging,
-   which is what makes a drag feel connected rather than abstract. */
-.compare__knob::after {
-  transition: transform var(--dur) var(--ease);
-}
-
-.compare:hover .compare__knob::after,
-.compare:focus-visible .compare__knob::after {
-  transform: translate(-50%, -50%) scale(1.08);
-}
-
-.compare.is-dragging .compare__knob::after {
-  transform: translate(-50%, -50%) scale(0.94);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .compare__knob::after {
-    transition: none;
-  }
-}
-
-/* ── FAQ ──────────────────────────────────────────────────────────────────
-   An answer written as a plain <p> inside <details> had no inset at all —
-   only the .faq__body class carried the padding, and the markup does not use
-   it — so the text sat flush against the card edge. And the toggle was a bare
-   glyph; it is a control, so it gets a ring and a hover. */
-.faq details > p,
-.faq details > ul {
-  padding: 0 var(--s-5) var(--s-4);
-  color: var(--mute);
-  font-size: 0.9375rem;
-}
-
-.faq details > ul {
-  padding-left: calc(var(--s-5) + 1.1em);
-}
-
-.faq summary {
-  transition: background var(--dur) var(--ease);
-}
-
-.faq summary:hover {
-  background: var(--surface);
-}
-
-.faq summary::after {
-  content: "";
-  float: right;
-  width: 18px;
-  height: 18px;
-  margin-top: 1px;
-  border: 1px solid var(--hairline-strong);
-  border-radius: 999px;
-  background-image: linear-gradient(var(--mute), var(--mute)),
-    linear-gradient(var(--mute), var(--mute));
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: 8px 1.5px, 1.5px 8px;
-  transition: background-size var(--dur) var(--ease),
-    border-color var(--dur) var(--ease);
-}
-
-.faq details[open] summary::after {
-  content: "";
-  border-color: var(--accent);
-  background-image: linear-gradient(var(--accent), var(--accent)),
-    linear-gradient(var(--accent), var(--accent));
-  background-size: 8px 1.5px, 1.5px 0;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .faq summary,
-  .faq summary::after {
-    transition: none;
-  }
-}
-
-/* ── Hero meta bar ────────────────────────────────────────────────────────
-   The line above the headline is product facts, not a caption. Loose
-   uppercase text undersells it; a pill with a glyph and hairline dividers
-   between the facts reads as a designed element. */
-.metabar {
-  display: inline-flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--s-3);
-  margin: 0;
-  padding: 6px 14px 6px 12px;
-  border: 1px solid var(--hairline);
-  border-radius: 999px;
-  background: var(--surface);
-  color: var(--mute);
-  font-family: var(--font-mono);
-  font-size: 0.6875rem;
-  font-weight: 500;
-  letter-spacing: 0.09em;
-  text-transform: uppercase;
-}
-
-.metabar__item {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  white-space: nowrap;
-}
-
-.metabar__item--accent {
-  color: var(--accent);
-}
-
-.metabar__sep {
-  width: 1px;
-  height: 13px;
-  background: var(--hairline-strong);
-}
-
-.metabar .icon {
-  width: 14px;
-  height: 14px;
-  stroke-width: 1.8;
-}
-
-.hero__inner .metabar + h1 {
-  margin-top: var(--s-4);
-}
-
-@media (max-width: 600px) {
-  .metabar {
-    gap: var(--s-2);
-    border-radius: var(--r-md);
-  }
-
-  .metabar__sep {
-    display: none;
-  }
-}
-
-/* ── Page transitions ─────────────────────────────────────────────────────
-   Moving between pages used to be a hard cut, and my first attempt at
-   smoothing it faded this page to nothing before navigating — which meant a
-   blank frame while the next page loaded. That is worse than the cut.
-
-   The right mechanism is the cross-document View Transition API, which is
-   what a framework router gives you: the browser keeps the page you are on
-   painted while the next one loads, then cross-fades between the two
-   snapshots. Nothing is ever blank and nothing is delayed. Browsers without
-   it simply navigate as they always did, which is still never blank.
-
-   Everything here is CSS; there is no navigation JavaScript left at all. */
-@view-transition {
-  navigation: auto;
-}
-
-::view-transition-old(root),
-::view-transition-new(root) {
-  animation-duration: 260ms;
-  animation-timing-function: var(--ease);
-  /* Explicit, so a browser that defaults this to an additive blend cannot
-     wash the page out on the way through. */
-  mix-blend-mode: normal;
-}
-
-/* Anchors glide rather than jump. */
-@media (prefers-reduced-motion: no-preference) {
-  html {
-    scroll-behavior: smooth;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  ::view-transition-old(root),
-  ::view-transition-new(root) {
-    animation: none;
-  }
-
   html {
     scroll-behavior: auto;
   }
 }
-
-/* ── Current page in the top nav ──────────────────────────────────────────
-   The docs sidebar already marks the current page; the top nav did not, so
-   after a client-side navigation there was nothing telling you where you
-   were. Both use aria-current, which is also what a screen reader wants. */
-.nav__links a[aria-current="page"] {
-  color: var(--ink);
+body {
+  margin: 0;
+  background: var(--bp-canvas);
+  color: var(--bp-body);
+  font: 16px/1.65 var(--sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  transition: background var(--ease), color var(--ease);
+}
+h1,
+h2,
+h3,
+h4 {
+  color: var(--bp-ink);
+  line-height: 1.12;
+  margin: 0;
+  letter-spacing: -0.022em;
+}
+p {
+  margin: 0;
+}
+a {
+  color: var(--bp-accent);
+  text-decoration: none;
+}
+a:hover {
   text-decoration: underline;
-  text-decoration-color: var(--accent);
-  text-decoration-thickness: 2px;
-  text-underline-offset: 6px;
+}
+code,
+kbd {
+  font: 0.86em var(--mono);
+  background: var(--bp-canvas-soft);
+  border: 1px solid var(--bp-hairline);
+  border-radius: 6px;
+  padding: 0.12em 0.4em;
+  color: var(--bp-ink);
+}
+ul,
+ol {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+::selection {
+  background: var(--bp-accent-soft);
+  color: var(--bp-ink);
+}
+:focus-visible {
+  outline: 2px solid var(--bp-accent);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+.skip-link {
+  position: absolute;
+  left: -999px;
+  top: 8px;
+  background: var(--bp-accent);
+  color: #fff;
+  padding: 8px 14px;
+  border-radius: var(--r-ctl);
+  z-index: 99;
+}
+.skip-link:focus {
+  left: 8px;
 }
 
-/* ── Theme picker ─────────────────────────────────────────────────────────
-   Three states rather than two: follow the system, or force light or dark.
-   Icon-only, because at this size the glyphs are unambiguous and the header
-   already carries enough words. The glyphs are drawn in the same hand as the
-   rest of the set — 1.6px stroke, round caps and joins, with the sun's rays
-   left slightly uneven so they read as drawn rather than generated. */
+/* Layout rules below use display:flex and display:grid, which would otherwise
+   beat the hidden attribute. */
+[hidden] {
+  display: none !important;
+}
+
+/* ============ type helpers ============ */
+.muted {
+  color: var(--bp-mute);
+}
+.grad-text {
+  background: var(--bp-grad);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+.eyebrow {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--bp-mute);
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.eyebrow b {
+  color: var(--bp-accent);
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+.eyebrow::after {
+  content: "";
+  flex: 1;
+  max-width: 44px;
+  height: 1px;
+  background: var(--bp-hairline);
+}
+.lede {
+  font-size: 1.02rem;
+  max-width: 62ch;
+}
+.prose {
+  max-width: 68ch;
+}
+.prose p + p {
+  margin-top: 14px;
+}
+.prose h3 {
+  font-size: 1.05rem;
+  margin: 30px 0 8px;
+}
+
+/* ============ fixation ============ */
+.bionic b,
+b.bp-head {
+  font-weight: var(--fx-weight);
+  color: var(--bp-ink);
+}
+.bionic i,
+span.bp-tail {
+  font-style: normal;
+  font-weight: inherit;
+  opacity: 1;
+}
+.bionic--dim i,
+.bionic--dim span.bp-tail {
+  opacity: var(--fx-rest);
+}
+.bionic--xl {
+  font-size: 1.35rem;
+  line-height: 1.6;
+}
+.bionic--lg {
+  font-size: 1.12rem;
+  line-height: 1.72;
+}
+
+/*
+ * Emphasis off. Not "400": every run goes back to the weight it would have had
+ * anyway, which is what it inherits. Resetting only the wrapped runs left a
+ * one-letter word — never split, so never wrapped — sitting heavy in a heading.
+ */
+html[data-fixation="off"] b.bp-head,
+html[data-fixation="off"] .bionic b {
+  font-weight: inherit;
+  color: inherit;
+}
+html[data-fixation="off"] span.bp-tail,
+html[data-fixation="off"] .bionic i {
+  font-weight: inherit;
+  opacity: 1;
+}
+
+/* ============ buttons & chips ============ */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font: 600 0.95rem var(--sans);
+  padding: 12px 24px;
+  border-radius: var(--r-pill);
+  border: 1px solid transparent;
+  cursor: pointer;
+  min-height: 46px;
+  white-space: nowrap;
+  transition: transform var(--ease), box-shadow var(--ease),
+    background var(--ease), border-color var(--ease), color var(--ease),
+    filter var(--ease);
+}
+.btn:hover {
+  text-decoration: none;
+}
+.btn:active {
+  transform: scale(0.97);
+}
+.btn .icon {
+  transition: transform var(--ease);
+}
+.btn--primary {
+  background: var(--bp-ink);
+  color: var(--bp-canvas);
+  box-shadow: var(--shadow-sm);
+}
+.btn--primary:hover {
+  box-shadow: var(--shadow-md);
+}
+.btn--primary:hover .icon {
+  transform: translateX(3px);
+}
+.btn--accent {
+  background: var(--bp-grad);
+  color: #fff;
+  box-shadow: 0 4px 16px rgb(79 70 229 / 28%);
+}
+.btn--accent:hover {
+  filter: brightness(1.08);
+  box-shadow: 0 8px 24px rgb(79 70 229 / 34%);
+}
+[data-theme="dark"] .btn--accent {
+  color: #0c0e12;
+}
+.btn--outline {
+  background: var(--bp-canvas);
+  color: var(--bp-ink);
+  border-color: var(--bp-hairline);
+  box-shadow: var(--shadow-sm);
+}
+.btn--outline:hover {
+  border-color: var(--bp-accent);
+  color: var(--bp-accent);
+}
+.btn--ghost {
+  background: transparent;
+  color: var(--bp-body);
+  border-color: transparent;
+  padding: 8px 12px;
+  min-height: 38px;
+  border-radius: var(--r-pill);
+}
+.btn--ghost:hover {
+  color: var(--bp-ink);
+  background: var(--bp-canvas-soft);
+}
+.btn-row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.chip {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--bp-mute);
+  border: 1px solid var(--bp-hairline);
+  border-radius: var(--r-pill);
+  padding: 6px 14px;
+  background: var(--bp-canvas);
+  transition: border-color var(--ease), color var(--ease),
+    transform var(--ease-spring);
+}
+.chip:hover {
+  border-color: var(--bp-accent);
+  color: var(--bp-accent);
+  transform: translateY(-2px);
+}
+.icon {
+  width: 1.1em;
+  height: 1.1em;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  flex: none;
+}
+
+/* ============ fields ============ */
+input[type="range"] {
+  accent-color: var(--bp-accent);
+  cursor: pointer;
+  height: 4px;
+}
+.switch {
+  position: relative;
+  width: 40px;
+  height: 22px;
+  flex: none;
+  cursor: pointer;
+}
+.switch input {
+  position: absolute;
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  cursor: pointer;
+}
+.switch__track {
+  position: absolute;
+  inset: 0;
+  border-radius: var(--r-pill);
+  background: var(--bp-hairline);
+  transition: background var(--ease);
+  pointer-events: none;
+}
+.switch__thumb {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--ease-spring);
+  pointer-events: none;
+}
+.switch input:checked ~ .switch__track {
+  background: var(--bp-grad);
+}
+.switch input:checked ~ .switch__thumb {
+  transform: translateX(18px);
+}
+.switch input:focus-visible ~ .switch__track {
+  outline: 2px solid var(--bp-accent);
+  outline-offset: 2px;
+}
+.key {
+  display: inline-grid;
+  place-items: center;
+  min-width: 46px;
+  height: 46px;
+  padding: 0 14px;
+  border-radius: 11px;
+  font: 700 0.86rem var(--mono);
+  color: var(--bp-ink);
+  background: linear-gradient(180deg, var(--bp-canvas) 0%, var(--bp-canvas-soft) 100%);
+  border: 1px solid var(--bp-hairline);
+  border-bottom-width: 3px;
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--ease-spring), border-color var(--ease),
+    color var(--ease);
+}
+.key--accent {
+  background: var(--bp-grad);
+  color: #fff;
+  border-color: transparent;
+  border-bottom-color: color-mix(in srgb, var(--bp-accent) 70%, #000);
+}
+[data-theme="dark"] .key--accent {
+  color: #0c0e12;
+}
+.keys {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 6px 0 24px;
+  flex-wrap: wrap;
+}
+.keys__plus {
+  color: var(--bp-mute);
+  font-weight: 700;
+}
+
+/* ============ theme picker ============ */
 .theme-pick {
   display: inline-flex;
   align-items: center;
   gap: 2px;
-  padding: 2px;
-  border: 1px solid var(--hairline);
-  border-radius: 999px;
-  background: var(--surface);
+  padding: 3px;
+  border: 1px solid var(--bp-hairline);
+  border-radius: var(--r-pill);
+  background: var(--bp-canvas);
 }
-
 .theme-pick__btn {
-  display: grid;
-  place-items: center;
-  width: 32px;
-  height: 30px;
-  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 26px;
   border: 0;
-  border-radius: 999px;
+  border-radius: var(--r-pill);
   background: transparent;
-  color: var(--mute);
+  color: var(--bp-mute);
   cursor: pointer;
-  transition: background var(--dur) var(--ease), color var(--dur) var(--ease);
+  transition: color var(--ease), background var(--ease);
 }
-
 .theme-pick__btn:hover {
-  color: var(--ink);
+  color: var(--bp-ink);
 }
-
 .theme-pick__btn[aria-checked="true"] {
-  background: var(--accent);
-  color: var(--accent-ink);
+  background: var(--bp-accent-soft);
+  color: var(--bp-accent);
 }
-
-.theme-pick .icon {
+.theme-pick__btn .icon {
   width: 15px;
   height: 15px;
 }
-
-@media (max-width: 600px) {
-  .theme-pick__btn {
-    width: 36px;
-    height: 32px;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .theme-pick__btn {
-    transition: none;
-  }
-}
-
-/* ── The emphasis switch ──────────────────────────────────────────────────
-   This used to be a floating button pinned to the bottom-right corner, over
-   the page, draggable, always in the way. It is a control, so it belongs with
-   the other controls, in the nav where it is reachable on every page.
-
-   The icon is the product rather than a symbol for it: two "words", each with
-   a heavy leading part and a light remainder. Filled rects, not strokes, so
-   the weight difference survives being drawn 16px wide. */
-.nav__fix {
-  display: grid;
-  place-items: center;
-  width: 34px;
-  height: 34px;
-  padding: 0;
-  border: 1px solid var(--hairline);
-  border-radius: 999px;
-  background: var(--surface);
-  color: var(--ink);
-  cursor: pointer;
-  transition: background var(--dur) var(--ease), color var(--dur) var(--ease),
-    border-color var(--dur) var(--ease);
-}
-
-.nav__fix:hover {
-  border-color: var(--hairline-strong);
-}
-
-.nav__fix .fixmark {
-  width: 17px;
-  height: 17px;
-}
-
-.nav__fix .fixmark rect {
-  fill: currentColor;
-  stroke: none;
-}
-
-/* Off is not just dimmer: the leading parts drop to the weight of the rest,
-   which is exactly what happens to the text. */
-.nav__fix[aria-checked="false"] {
-  color: var(--mute);
-  background: transparent;
-}
-
-.nav__fix[aria-checked="false"] .fixmark rect:nth-child(1),
-.nav__fix[aria-checked="false"] .fixmark rect:nth-child(3) {
-  opacity: 0.32;
-}
-
-@media (max-width: 600px) {
-  .nav__fix {
-    width: 36px;
-    height: 32px;
-  }
+.theme-pick__label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
 }

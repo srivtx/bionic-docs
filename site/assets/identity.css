@@ -1,153 +1,103 @@
-/* bionic-docs — identity.
-   The shared bionic system lives in theme.css. This file is what makes *this*
-   site itself and not its sibling: a teal ink, a paper stack that drifts
-   behind the headline, a reading highlight that descends the title instead of
-   a caret crossing it, and a page that turns when you flip the reader.
-   bionic-page uses indigo, a writing caret and a floating control — no
-   element is shared between the two identities. */
+/*
+ * bionic-docs — identity and tool-specific components.
+ *
+ * The shared system lives in theme.css and lens.css, identical to the sibling
+ * site. This file is what makes this one itself: a teal ink, a reading
+ * highlight that descends the headline instead of a caret crossing it, and the
+ * reader, which is the part of this site that no other site has.
+ */
 
+/* ---- the ink ---------------------------------------------------------- */
 :root {
-  --accent: #0f766e;
-  --accent-ink: #ffffff;
-  /* Paper tint, used only here so the two sites never read as one tool. */
-  --paper: #f7f7f5;
-  --folio: #0f766e;
+  --bp-accent: #0f766e;
+  --bp-accent-2: #14b8a6;
+  --bp-accent-soft: #e2f4f2;
+  --bp-grad: linear-gradient(120deg, #0f766e, #14b8a6);
 }
-
 [data-theme="dark"] {
-  --accent: #2dd4bf;
-  --accent-ink: #0a0a0a;
-  --paper: #131316;
-  --folio: #2dd4bf;
+  --bp-accent: #2dd4bf;
+  --bp-accent-2: #5eead4;
+  --bp-accent-soft: #0f2724;
 }
-
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --accent: #2dd4bf;
-    --accent-ink: #0a0a0a;
-    --paper: #131316;
-    --folio: #2dd4bf;
+    --bp-accent: #2dd4bf;
+    --bp-accent-2: #5eead4;
+    --bp-accent-soft: #0f2724;
   }
 }
-
-/* ── Hero: a stack of paper, and a highlight that reads down it ───────────
-   The headline exists twice: muted and unfixed underneath, fixed on top,
-   revealed top to bottom by a highlight bar that sweeps down the block the
-   way a reader's attention moves down a page. */
-.hero--docs .hero__glow {
-  background:
-    radial-gradient(54% 60% at 10% 0%, var(--accent-soft), transparent 68%),
-    radial-gradient(36% 42% at 84% 84%, color-mix(in srgb, var(--accent) 7%, transparent), transparent 72%);
+[data-theme="dark"] .btn--accent,
+[data-theme="dark"] .key--accent {
+  color: #08211e;
+}
+.btn--accent {
+  box-shadow: 0 4px 16px rgb(15 118 110 / 26%);
+}
+.nav__fix .fixmark .fx-a {
+  fill: var(--bp-accent);
 }
 
-.sheets {
-  position: absolute;
-  inset: 0;
-  z-index: -2;
-  pointer-events: none;
-}
-
-.sheet {
-  position: absolute;
-  border: 1px solid var(--hairline);
-  border-radius: var(--r-lg);
-  background: var(--surface);
-  animation: docs-drift 14s var(--ease) infinite alternate;
-}
-
-.sheet--1 {
-  top: 14%;
-  right: 6%;
-  width: min(34vw, 380px);
-  height: min(46vh, 330px);
-  transform: rotate(-2.1deg);
-  opacity: 0.8;
-  box-shadow: 0 18px 38px rgba(0, 0, 0, 0.1);
-}
-
-.sheet--2 {
-  top: 22%;
-  right: 10%;
-  width: min(30vw, 330px);
-  height: min(40vh, 280px);
-  transform: rotate(1.4deg);
-  opacity: 1;
-  box-shadow: 0 18px 38px rgba(0, 0, 0, 0.1);
-  animation-delay: -4s;
-  animation-duration: 18s;
-}
-
-.sheet--3 {
-  top: 30%;
-  right: 4%;
-  width: min(26vw, 280px);
-  height: min(34vh, 236px);
-  transform: rotate(3.2deg);
-  opacity: 0.65;
-  box-shadow: 0 18px 38px rgba(0, 0, 0, 0.1);
-  animation-delay: -8s;
-  animation-duration: 22s;
-}
-
-/* Faint ruled lines, so a sheet reads as a page rather than a card. */
-.sheet::after {
-  content: "";
-  position: absolute;
-  inset: 16% 12%;
-  background-image: repeating-linear-gradient(
-    to bottom,
-    var(--hairline) 0 1px,
-    transparent 1px 14px
-  );
-  opacity: 0.75;
-}
-
-@keyframes docs-drift {
-  from {
-    translate: 0 -10px;
-  }
-  to {
-    translate: 0 10px;
-  }
-}
-
-/* ── Hero headline: the emphasis is read in ───────────────────────────────
-   This used to be two stacked copies revealed by a clip, which forced them to
-   share metrics — and the only way to emphasise a head without changing its
-   advance width is an outline. A 1px outline at headline size is invisible, so
-   the animation read as a colour sweep and you could not see the emphasis
-   arrive at all.
-
-   There is one copy now. The head is genuinely heavier, so the shape changes
-   as the highlight passes and the line takes its final measure as it goes.
-
-   The emphasis is drawn on 400, not on the h1's own 600. Two reasons. The head
-   has to be heavier than what is around it, and 600 against 600 is not heavier
-   — the highlight would cross the line without the shape changing. And "off"
-   has to mean off: on a 600 base, switching the emphasis off would restore
-   600 and make the headline HEAVIER than leaving it on. */
+/* ---- the headline: a highlight that reads down it ---------------------
+   The anchor weight arrives with the highlight rather than before it, so the
+   emphasis looks like something being read, not something being typed. */
 .hero__title {
   position: relative;
-  display: block;
-  font-weight: 400;
 }
-
-.hero__title-fix {
-  display: block;
-}
-
 .hero__title .bp-head {
   font-weight: var(--fx-hero);
 }
-
-/* The head starts thin and thickens in reading order, one step per head,
-   timed to land with the highlight as it descends the title. */
-.hero__title.is-reading .bp-head {
-  animation: bp-weight 420ms var(--ease) both;
-  animation-delay: calc(var(--i, 0) * 55ms);
+.hero__title-fix {
+  display: inline;
 }
-
-@keyframes bp-weight {
+.hero__title .bp-tail,
+.hero__title i {
+  opacity: 1;
+}
+.hero__highlight {
+  position: absolute;
+  left: -14px;
+  right: -14px;
+  top: -4px;
+  height: calc(100% + 8px);
+  border-radius: 12px;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(-115%);
+  background: linear-gradient(
+    180deg,
+    transparent,
+    color-mix(in srgb, var(--bp-accent) 10%, transparent) 30%,
+    color-mix(in srgb, var(--bp-accent) 15%, transparent) 50%,
+    color-mix(in srgb, var(--bp-accent) 10%, transparent) 70%,
+    transparent
+  );
+}
+@media (prefers-reduced-motion: no-preference) {
+  .hero__title.is-reading .hero__highlight {
+    animation: docs-sweep var(--read, 1.9s) var(--ease-out) both;
+  }
+  .hero__title.is-reading .bp-head {
+    animation: docs-fix var(--read, 1.9s) var(--ease-out) both;
+    animation-delay: calc(var(--i, 0) * 70ms);
+  }
+}
+@keyframes docs-sweep {
+  0% {
+    transform: translateY(-115%);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(115%);
+    opacity: 0;
+  }
+}
+@keyframes docs-fix {
   from {
     font-weight: 400;
   }
@@ -155,277 +105,203 @@
     font-weight: var(--fx-hero);
   }
 }
-
-.hero__title.is-read .bp-head {
+.hero__title.is-reading .bp-head {
   font-weight: var(--fx-hero);
 }
 
-.hero__highlight {
-  position: absolute;
-  left: -3%;
-  right: -3%;
-  top: 0;
-  height: 22px;
-  border-radius: 999px;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    color-mix(in srgb, var(--accent) 34%, transparent) 22%,
-    color-mix(in srgb, var(--accent) 34%, transparent) 78%,
-    transparent
-  );
-  filter: blur(6px);
+/*
+ * Emphasis off. Written at the same depth as the rules above so it outranks
+ * them: an animation is cancelled rather than countered.
+ */
+html[data-fixation="off"] .hero__title .bp-head,
+html[data-fixation="off"] .hero__title.is-reading .bp-head,
+html[data-fixation="off"] .hero__title .bp-tail,
+html[data-fixation="off"] .hero__title i {
+  animation: none;
+  font-weight: inherit;
+  color: inherit;
+  opacity: 1;
+}
+html[data-fixation="off"] .hero__highlight {
+  animation: none;
   opacity: 0;
 }
 
-.hero__title.is-reading .hero__highlight {
-  animation: docs-highlight var(--read, 2.6s) var(--ease) both;
-}
-
-.hero__title.is-read .hero__highlight {
-  display: none;
-}
-
-@keyframes docs-highlight {
-  from {
-    transform: translateY(0);
-    opacity: 0.9;
-  }
-  to {
-    transform: translateY(var(--hl-travel, 100%));
-    opacity: 0;
-  }
-}
-
-/* A folio marker, the way a printed page carries its number. */
-.folio {
-  margin: 0 0 var(--s-3);
-  font-family: var(--font-mono);
-  font-size: 0.6875rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--folio);
-}
-
-/* ── Page turn ────────────────────────────────────────────────────────────
-   Flipping the reader turns the page rather than swapping it. */
-.reader__page {
-  transform-origin: left center;
-}
-
-.reader__page--turning {
-  animation: docs-turn 420ms var(--ease);
-}
-
-@keyframes docs-turn {
-  from {
-    transform: perspective(1400px) rotateY(-9deg) translateX(-6px);
-    opacity: 0.25;
-  }
-  to {
-    transform: none;
-    opacity: 1;
-  }
-}
-
-/* ── Generative art ───────────────────────────────────────────────────────
-   Canvas drawn by assets/art.js: a stack of document edges with a reading
-   band moving through it, grain and all. */
-.art {
-  display: block;
-  width: 100%;
-}
-
-
-
-@media (max-width: 900px) {
-  .sheet--1,
-  .sheet--3 {
-    opacity: 0.55;
-  }
-
-  .sheets {
-    right: -20%;
-  }
-}
-
-@media (max-width: 520px) {
-  
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .hero__title.is-reading .bp-head {
-    animation: none;
-  }
-
-  .hero__highlight,
-  .sheet {
-    animation: none;
-  }
-
-  .reader__page--turning {
-    animation: none;
-  }
-}
-
-/* The faded remainder is what makes the emphasis legible as emphasis, rather
-   than as an ordinary bold sentence. */
-.hero__title .bp-tail,
-.hero__title i {
-  opacity: 0.45;
-}
-
-/* ── Off means off ────────────────────────────────────────────────────────
-   Switching the emphasis off removes it from everything the page renders,
-   everywhere it appears: the headline, the samples, the demo, the reader. The
-   text returns to the weight and opacity it would have had anyway — which is
-   `inherit`, not 400.
-
-   That difference is the whole point of this rule. Splitting a word needs at
-   least two letters, so a one-letter word is never wrapped: `a` and `I` stay
-   bare text nodes. In a heading they inherit its 600 rather than the 400 the
-   wrapped runs were reset to, and end up the heaviest thing in the line —
-   emphasis off everywhere except one letter. Inheriting makes the run uniform
-   again, at the weight the element actually has. */
-html[data-fixation="off"] .bionic b,
-html[data-fixation="off"] b.bp-head {
-  font-weight: inherit;
-}
-
-html[data-fixation="off"] .bionic i,
-html[data-fixation="off"] span.bp-tail {
-  font-weight: inherit;
-  opacity: 1;
-}
-
-/* ── With emphasis off, the headline is a headline ────────────────────────
-   The nav switch can switch the emphasis off, and that has to include the
-   wave: an animation outranks a plain declaration, so it is cancelled rather
-   than countered. */
-html[data-fixation="off"] .hero__title.is-reading .bp-head,
-html[data-fixation="off"] .hero__title .bp-head {
-  animation: none;
-  font-weight: inherit;
-}
-
-html[data-fixation="off"] .hero__title .bp-tail {
-  font-weight: inherit;
-  opacity: 1;
-}
-
-/* ── Footer art: the open spread ─────────────────────────────────────────
-   Two pages meeting at a spine, the first line of each already fixed, so the
-   art is the product applied to a document rather than a picture of a book. */
-.art--spread {
-  position: relative;
-  display: grid;
-  place-items: center;
-  height: clamp(160px, 22vw, 252px);
+/* ---- the reader -------------------------------------------------------
+   One card: a chrome bar with the document tabs, a page of text set in the
+   serif the extension is for, and a footer with the position and the controls. */
+.reader {
+  border: 1px solid var(--bp-hairline);
+  border-radius: var(--r-card);
+  background: var(--bp-canvas);
+  box-shadow: var(--shadow-md);
   overflow: hidden;
 }
-
-.spread {
-  position: relative;
-  width: clamp(236px, 33vw, 420px);
-  aspect-ratio: 16 / 9;
-  animation: spread-float 12s var(--ease) infinite alternate;
-}
-
-.spread__page {
-  position: absolute;
-  top: 0;
-  bottom: 0;
+.reader__chrome {
   display: flex;
-  flex-direction: column;
-  gap: 13px;
-  width: 50%;
-  padding: 22px 18px;
-  border: 1px solid var(--hairline-strong);
-  background: var(--surface-2);
-  box-shadow: 0 16px 34px rgba(0, 0, 0, 0.12);
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding: 12px 18px;
+  border-bottom: 1px solid var(--bp-hairline);
+  background: var(--bp-canvas-soft);
 }
-
-.spread__page--left {
-  left: 0;
-  border-radius: 3px 0 0 5px;
-  transform: perspective(1000px) rotateY(7deg);
-  transform-origin: right center;
+.reader__tabs {
+  display: flex;
+  gap: 6px;
 }
-
-.spread__page--right {
-  right: 0;
-  border-radius: 0 5px 5px 0;
-  transform: perspective(1000px) rotateY(-7deg);
-  transform-origin: left center;
+.reader__tab {
+  font: 600 0.8rem var(--sans);
+  color: var(--bp-body);
+  background: var(--bp-canvas);
+  border: 1px solid var(--bp-hairline);
+  border-radius: var(--r-pill);
+  padding: 7px 15px;
+  cursor: pointer;
+  transition: border-color var(--ease), color var(--ease),
+    background var(--ease);
 }
-
-.spread__spine {
-  position: absolute;
-  left: 50%;
-  top: -3%;
-  bottom: -3%;
-  z-index: 1;
-  width: 2px;
-  margin-left: -1px;
-  background: var(--hairline-strong);
+.reader__tab:hover {
+  border-color: var(--bp-accent);
+  color: var(--bp-accent);
 }
-
-.spread__line {
-  height: 3px;
-  border-radius: 2px;
-  background: var(--mute);
-  opacity: 0.34;
+.reader__tab--on {
+  background: var(--bp-grad);
+  border-color: transparent;
+  color: #fff;
+  box-shadow: 0 3px 10px rgb(15 118 110 / 24%);
 }
-
-.spread__line--short {
-  width: 54%;
+[data-theme="dark"] .reader__tab--on {
+  color: #08211e;
 }
-
-/* The product, on the page: a fixation head and a faded remainder. */
-.spread__line--fixed {
-  background: linear-gradient(
-    90deg,
-    var(--ink) 0 36%,
-    color-mix(in srgb, var(--mute) 42%, transparent) 36% 100%
-  );
-  opacity: 1;
+.reader__file {
+  font: 600 0.73rem var(--mono);
+  color: var(--bp-mute);
+  margin-left: auto;
 }
-
-.spread__ribbon {
-  position: absolute;
-  left: 50%;
-  top: -16px;
-  z-index: 2;
-  width: 15px;
-  height: 52px;
-  margin-left: -8px;
-  background: var(--accent);
-  clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 82%, 0 100%);
-  transform-origin: top center;
-  animation: spread-ribbon 6.5s var(--ease) infinite alternate;
+.reader__page {
+  padding: 34px 40px 38px;
+  min-height: 250px;
+  font-family: var(--serif);
+  font-size: 1.06rem;
+  line-height: 1.85;
+  color: var(--bp-body);
+  background: var(--bp-canvas);
 }
-
-@keyframes spread-float {
+@media (max-width: 640px) {
+  .reader__page {
+    padding: 24px 20px 28px;
+  }
+}
+.reader__page p + p {
+  margin-top: 14px;
+}
+.reader__title {
+  font-family: var(--sans);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--bp-mute);
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--bp-hairline);
+}
+/* A scanned page has no text layer; say so rather than showing nothing. */
+.reader__page .muted {
+  font-family: var(--sans);
+  font-size: 0.9rem;
+}
+.pdf-page,
+.pdf-line,
+.epub-chapter {
+  margin: 0;
+}
+.epub-title {
+  font-family: var(--sans);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--bp-ink);
+  margin-bottom: 12px;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .reader__page--turning {
+    animation: page-turn 460ms var(--ease-out) both;
+  }
+}
+@keyframes page-turn {
   from {
-    transform: translateY(-4px);
+    opacity: 0;
+    transform: translateX(10px);
   }
   to {
-    transform: translateY(4px);
+    opacity: 1;
+    transform: none;
   }
 }
-
-@keyframes spread-ribbon {
-  from {
-    transform: rotate(-2.5deg);
-  }
-  to {
-    transform: rotate(3deg);
-  }
+.reader__foot {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding: 12px 18px;
+  border-top: 1px solid var(--bp-hairline);
+  background: var(--bp-canvas-soft);
+}
+.reader__foot .btn {
+  padding: 7px 15px;
+  min-height: 34px;
+  font-size: 0.84rem;
+}
+.reader__position {
+  font: 600 0.8rem var(--mono);
+  color: var(--bp-mute);
+  margin-right: auto;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .spread,
-  .spread__ribbon {
-    animation: none;
-  }
+/* The card in the hero reads out the page, where the sibling site has a slider. */
+.readcard__ctrl-value {
+  font: 700 0.82rem var(--mono);
+  color: var(--bp-ink);
+  margin-left: auto;
+  font-variant-numeric: tabular-nums;
+}
+
+/* The two document tiles in the rail. */
+.rcard__tile--pdf {
+  background: linear-gradient(150deg, #fca5a5, #dc2626);
+  color: #fff;
+}
+.rcard__tile--epub {
+  background: linear-gradient(150deg, #5eead4, #0f766e);
+  color: #fff;
+}
+.rcard__tile--pdf .mark,
+.rcard__tile--epub .mark {
+  width: 18px;
+  height: 18px;
+}
+
+/* ---- small utilities used by the reader and the terminal -------------- */
+.mono {
+  font-family: var(--mono);
+}
+.tnum {
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---- the footer wordmark ---------------------------------------------- */
+.footer__mark b,
+.footer__mark .bp-head {
+  font-weight: 800;
+  color: var(--bp-ink);
+}
+.footer__mark .bp-tail,
+.footer__mark i {
+  font-weight: 800;
+  color: var(--bp-hairline);
+}
+[data-theme="dark"] .footer__mark .bp-tail,
+[data-theme="dark"] .footer__mark i {
+  color: #262b35;
 }

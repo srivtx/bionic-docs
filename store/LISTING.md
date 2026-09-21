@@ -8,7 +8,7 @@
 - **Category:** Productivity (Chrome Web Store) · Accessibility (Firefox Add-ons)
 - **Language:** English
 - **Homepage:** `site/index.html` → https://srivtx.github.io/bionic-docs/
-- **Privacy policy:** `site/privacy.html` → https://srivtx.github.io/bionic-docs/privacy.html
+- **Privacy policy:** the `#privacy` section → https://srivtx.github.io/bionic-docs/#privacy
 
 ## Full description
 
@@ -97,7 +97,7 @@ affiliated with or endorsed by it.
 ## Still missing before submission
 
 - Host the homepage and privacy policy and paste both URLs into the listing
-  (`site/index.html`, `site/privacy.html`).
+  (the one page, `site/index.html`).
 - A Chrome Web Store developer account with a verified contact email and
   2-step verification enabled.
 - Upload `store/screenshots/01-pdf-reader.png`, `02-epub-reader.png`,

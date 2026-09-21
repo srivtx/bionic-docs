@@ -44,7 +44,7 @@ All of these must pass. CI runs the first four on every push.
 1. Add the id to `ModeId` and an entry to `MODES` in `src/shared/types.ts`.
 2. Implement the branch in `src/core/algorithm.ts` and add algorithm tests.
 3. Style it in `src/content/styles.ts` if it needs CSS.
-4. Update the site mode table in `site/index.html` and `site/how-to.html`.
+4. Update the mode table in `site/index.html`.
 
 ## Style
 

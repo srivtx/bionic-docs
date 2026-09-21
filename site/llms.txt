@@ -1,17 +1,24 @@
 # bionic-docs
 
-> Read PDF and EPUB with bionic fixation, entirely on-device. No upload, no account, no tracking, no remote code.
+> Read PDF and EPUB with bionic fixation. A document is parsed on your machine and the leading letters of every word are emphasized. No upload, no account, no remote code.
 
-A Manifest V3 extension for Chrome and Firefox. PDFs are parsed with a locally bundled PDF.js and reflowed into a clean reading column; EPUBs are unzipped locally and rendered chapter by chapter with the same fixation emphasis. The document never leaves your device.
+A Manifest V3 extension for Chrome, Edge and Firefox. A PDF's text layer is extracted with a bundled PDF.js and rebuilt into lines; an EPUB is unzipped in memory, its chapters sanitized, and its spine and table of contents read. Both paths end in the same fixation step, so the algorithm never has to know what a PDF is.
 
-## Pages
+## Page
 
-- [bionic-docs](https://srivtx.github.io/bionic-docs/): Read PDF and EPUB with bionic fixation, entirely on-device. No upload, no account, no tracking, no remote code.
-- [Architecture](https://srivtx.github.io/bionic-docs/architecture.html): The bionic-docs module map and invariants, and the sourced prior-art comparison: the 100K-user incumbent posts page text to its own API, and the only store product that handles files is cloud, paid, and Chromium-only.
-- [FAQ](https://srivtx.github.io/bionic-docs/faq.html): Answers about bionic-docs: license and affiliation, scanned PDFs, whether files are uploaded, why a PDF reads as plain text, Firefox support, file handling, and offline use.
-- [Formats](https://srivtx.github.io/bionic-docs/formats.html): How bionic-docs handles PDF and EPUB: PDF.js text extraction and line reconstruction, fflate unzip with OPF, spine and TOC parsing, sanitized chapter markup, and the shared fixation step.
-- [How-to](https://srivtx.github.io/bionic-docs/how-to.html): Install bionic-docs unpacked in Chrome, Edge, and Firefox, open a document from the popup or by keyboard, and use the reader toolbar, mode control, and page or chapter navigation.
-- [Privacy](https://srivtx.github.io/bionic-docs/privacy.html): The bionic-docs threat model in plain language: no network requests for content, one fetch for the document you opened, parsing in the extension page, nothing leaving the device, and the anti-network test gate.
+Everything is on one page, with a section for each part:
+
+- [The reader](https://srivtx.github.io/bionic-docs/#reader): the compiled algorithm running over the repository's own fixture text, with page and chapter navigation and an on/off switch.
+- [Before / after](https://srivtx.github.io/bionic-docs/#compare-section): the same page with a divider you can drag between the two versions.
+- [Formats](https://srivtx.github.io/bionic-docs/#formats): the PDF and EPUB paths in detail — line reconstruction, unzip, OPF, spine, TOC, and the sanitizing rules.
+- [Reading modes](https://srivtx.github.io/bionic-docs/#modes): the five modes — Half, Classic, Vowel anchor, Low distraction, Custom rule — and what each one emphasizes.
+- [How it works](https://srivtx.github.io/bionic-docs/#how): sniff the magic bytes, parse or unzip, then emphasize reversibly.
+- [Architecture](https://srivtx.github.io/bionic-docs/#architecture): the module map and the invariants the build enforces — on-device, no remote code, sanitize before render.
+- [Limits](https://srivtx.github.io/bionic-docs/#safe): scanned PDFs, reflowed layout, minimal EPUB rendering, and what it does handle.
+- [Numbers](https://srivtx.github.io/bionic-docs/#numbers): test count, e2e checks, manifest entries, modes, and uploads.
+- [Privacy](https://srivtx.github.io/bionic-docs/#privacy): no network requests for content, one fetch for the document you opened, parsing in the extension page, and the anti-network test gate.
+- [Install](https://srivtx.github.io/bionic-docs/#install): build both targets from one source tree.
+- [FAQ](https://srivtx.github.io/bionic-docs/#faq): license and affiliation, scanned PDFs, uploads, reflowed text, Firefox support, file handling, and offline use.
 
 ## Source
 
