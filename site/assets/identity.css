@@ -1,243 +1,164 @@
-/*
- * bionic-docs — identity and tool-specific components.
- *
- * The shared system lives in theme.css and lens.css, identical to the sibling
- * site. This file is what makes this one itself: a teal ink, a reading
- * highlight that descends the headline instead of a caret crossing it, and the
- * reader, which is the part of this site that no other site has.
- */
+/* ============================================================================
+   Bionic Docs — identity layer
+   Same press as Bionic Page, different front page: teal ink, an asymmetric
+   hero with a document sheet instead of the centred masthead, and the reader.
+   ========================================================================== */
 
-/* ---- the ink ---------------------------------------------------------- */
 :root {
-  --bp-accent: #0f766e;
-  --bp-accent-2: #14b8a6;
-  --bp-accent-soft: #e2f4f2;
-  --bp-grad: linear-gradient(120deg, #0f766e, #14b8a6);
+  --accent: #0e6e63;
+  --accent-ink: #0a5449;
+  --accent-bright: #2dd4bf;
+  --accent-soft: rgba(14, 110, 99, 0.09);
+  --on-accent: #f3faf7;
 }
 [data-theme="dark"] {
-  --bp-accent: #2dd4bf;
-  --bp-accent-2: #5eead4;
-  --bp-accent-soft: #0f2724;
+  --accent: #35cfba;
+  --accent-ink: #6fe3d2;
+  --accent-bright: #35cfba;
+  --accent-soft: rgba(53, 207, 186, 0.12);
+  --on-accent: #0a1a15;
 }
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --bp-accent: #2dd4bf;
-    --bp-accent-2: #5eead4;
-    --bp-accent-soft: #0f2724;
-  }
+
+/* ------------------------------------------------------------- docs hero */
+.hero__inner {
+  display: grid;
+  grid-template-columns: 1.04fr 0.96fr;
+  gap: 64px;
+  align-items: center;
 }
-[data-theme="dark"] .btn--accent,
-[data-theme="dark"] .key--accent {
-  color: #08211e;
+.hero__title { max-width: 13ch; }
+.hero__lede { max-width: 50ch; margin: 26px 0 34px; }
+.hero .flagline { margin-top: 30px; }
+@media (max-width: 940px) {
+  .hero__inner { grid-template-columns: 1fr; gap: 52px; }
+  .hero__title { max-width: 16ch; }
 }
-.btn--accent {
-  box-shadow: 0 4px 16px rgb(15 118 110 / 26%);
-}
-/* ---- the headline: a highlight that reads down it ---------------------
-   The anchor weight arrives with the highlight rather than before it, so the
-   emphasis looks like something being read, not something being typed. */
-.hero__title {
+
+/* ------------------------------------------------------- document sheet */
+.doccard {
   position: relative;
+  transform: rotate(1.3deg);
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--r-m);
+  box-shadow: var(--shadow-3);
+  padding: 24px 30px 20px;
 }
-.hero__highlight {
+.doccard::before {
+  content: "";
   position: absolute;
-  left: -14px;
-  right: -14px;
-  top: -4px;
-  height: calc(100% + 8px);
-  border-radius: 12px;
-  pointer-events: none;
-  opacity: 0;
-  transform: translateY(-115%);
-  background: linear-gradient(
-    180deg,
-    transparent,
-    color-mix(in srgb, var(--bp-accent) 10%, transparent) 30%,
-    color-mix(in srgb, var(--bp-accent) 15%, transparent) 50%,
-    color-mix(in srgb, var(--bp-accent) 10%, transparent) 70%,
-    transparent
-  );
+  inset: 0;
+  z-index: -1;
+  transform: rotate(-2.7deg) translate(6px, 8px);
+  background: var(--paper-2);
+  border: 1px solid var(--line);
+  border-radius: var(--r-m);
 }
-@media (prefers-reduced-motion: no-preference) {
-  .hero__title.is-reading .hero__highlight {
-    animation: docs-sweep var(--read, 1.9s) var(--ease-out) both;
-  }
+.doccard__bar {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 12px;
+  margin-bottom: 18px;
 }
-@keyframes docs-sweep {
-  0% {
-    transform: translateY(-115%);
-    opacity: 0;
-  }
-  10% {
-    opacity: 1;
-  }
-  90% {
-    opacity: 1;
-  }
-  100% {
-    transform: translateY(115%);
-    opacity: 0;
-  }
+.doccard__dot { width: 9px; height: 9px; border-radius: 50%; border: 1.3px solid var(--line-strong); }
+.doccard__file { margin-left: auto; font-family: var(--mono); font-size: 0.74rem; color: var(--mute); }
+.doccard__body { font-family: var(--serif); font-size: 1.04rem; line-height: 1.68; }
+.doccard__body p + p { margin-top: 0.85em; }
+.doccard__foot {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 18px;
+  border-top: 1px solid var(--line);
+  padding-top: 11px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  color: var(--mute);
 }
-/* ---- the reader -------------------------------------------------------
-   One card: a chrome bar with the document tabs, a page of text set in the
-   serif the extension is for, and a footer with the position and the controls. */
+@media (max-width: 640px) { .doccard { transform: rotate(0.6deg); } }
+
+/* ---------------------------------------------------------------- reader */
 .reader {
-  border: 1px solid var(--bp-hairline);
-  border-radius: var(--r-card);
-  background: var(--bp-canvas);
-  box-shadow: var(--shadow-md);
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--r-l);
+  box-shadow: var(--shadow-2);
   overflow: hidden;
 }
 .reader__chrome {
   display: flex;
   align-items: center;
-  gap: 16px;
   flex-wrap: wrap;
-  padding: 12px 18px;
-  border-bottom: 1px solid var(--bp-hairline);
-  background: var(--bp-canvas-soft);
+  gap: 10px 18px;
+  padding: 0 26px;
+  border-bottom: 1px solid var(--line);
 }
-.reader__tabs {
-  display: flex;
-  gap: 6px;
-}
+.reader__tabs { display: flex; }
 .reader__tab {
-  font: 600 0.8rem var(--sans);
-  color: var(--bp-body);
-  background: var(--bp-canvas);
-  border: 1px solid var(--bp-hairline);
-  border-radius: var(--r-pill);
-  padding: 7px 15px;
-  cursor: pointer;
-  transition: border-color var(--ease), color var(--ease),
-    background var(--ease);
+  padding: 16px 4px;
+  margin-right: 24px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--mute);
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  transition: color 0.16s ease, border-color 0.16s ease;
 }
-.reader__tab:hover {
-  border-color: var(--bp-accent);
-  color: var(--bp-accent);
-}
-.reader__tab--on {
-  background: var(--bp-grad);
-  border-color: transparent;
-  color: #fff;
-  box-shadow: 0 3px 10px rgb(15 118 110 / 24%);
-}
-[data-theme="dark"] .reader__tab--on {
-  color: #08211e;
-}
-.reader__file {
-  font: 600 0.73rem var(--mono);
-  color: var(--bp-mute);
-  margin-left: auto;
+.reader__tab:hover { color: var(--ink); }
+.reader__tab--on { color: var(--accent); border-bottom-color: var(--accent); }
+.reader__modes { margin-left: auto; padding-block: 10px; }
+.reader__stage {
+  background: var(--paper-2);
+  padding: 36px 40px;
+  display: flex;
+  justify-content: center;
 }
 .reader__page {
-  padding: 34px 40px 38px;
-  min-height: 250px;
-  font-family: var(--serif);
-  font-size: 1.06rem;
-  line-height: 1.85;
-  color: var(--bp-body);
-  background: var(--bp-canvas);
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  box-shadow: var(--shadow-2);
+  width: min(720px, 100%);
+  min-height: 400px;
+  padding: 50px 56px 34px;
+  display: flex;
+  flex-direction: column;
 }
-@media (max-width: 640px) {
-  .reader__page {
-    padding: 24px 20px 28px;
-  }
-}
-.reader__page p + p {
-  margin-top: 14px;
-}
-.reader__title {
-  font-family: var(--sans);
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--bp-mute);
-  margin-bottom: 16px;
-  padding-bottom: 12px;
-  border-bottom: 1px solid var(--bp-hairline);
-}
-/* A scanned page has no text layer; say so rather than showing nothing. */
-.reader__page .muted {
-  font-family: var(--sans);
-  font-size: 0.9rem;
-}
-.pdf-page,
-.pdf-line,
-.epub-chapter {
-  margin: 0;
-}
-.epub-title {
-  font-family: var(--sans);
-  font-size: 1rem;
-  font-weight: 700;
-  color: var(--bp-ink);
-  margin-bottom: 12px;
-}
-@media (prefers-reduced-motion: no-preference) {
-  .reader__page--turning {
-    animation: page-turn 460ms var(--ease-out) both;
-  }
-}
-@keyframes page-turn {
-  from {
-    opacity: 0;
-    transform: translateX(10px);
-  }
-  to {
-    opacity: 1;
-    transform: none;
-  }
+.reader__doctitle { font-size: 1.55rem; letter-spacing: -0.01em; margin-bottom: 20px; }
+.reader__page .bionic { font-family: var(--serif); font-size: 1.06rem; line-height: 1.74; color: var(--body); }
+.reader__page p + p { margin-top: 0.95em; }
+.reader__pagenum {
+  margin-top: auto;
+  padding-top: 26px;
+  text-align: center;
+  font-family: var(--mono);
+  font-size: 0.74rem;
+  color: var(--mute);
 }
 .reader__foot {
   display: flex;
   align-items: center;
-  gap: 10px;
   flex-wrap: wrap;
-  padding: 12px 18px;
-  border-top: 1px solid var(--bp-hairline);
-  background: var(--bp-canvas-soft);
-}
-.reader__foot .btn {
-  padding: 7px 15px;
-  min-height: 34px;
-  font-size: 0.84rem;
+  gap: 10px;
+  padding: 13px 26px;
+  border-top: 1px solid var(--line);
 }
 .reader__position {
-  font: 600 0.8rem var(--mono);
-  color: var(--bp-mute);
   margin-right: auto;
-}
-
-/* The card in the hero reads out the page, where the sibling site has a slider. */
-.readcard__ctrl-value {
-  font: 700 0.82rem var(--mono);
-  color: var(--bp-ink);
-  margin-left: auto;
-  font-variant-numeric: tabular-nums;
-}
-
-/* The two document tiles in the rail. */
-.rcard__tile--pdf {
-  background: linear-gradient(150deg, #fca5a5, #dc2626);
-  color: #fff;
-}
-.rcard__tile--epub {
-  background: linear-gradient(150deg, #5eead4, #0f766e);
-  color: #fff;
-}
-.rcard__tile--pdf .mark,
-.rcard__tile--epub .mark {
-  width: 18px;
-  height: 18px;
-}
-
-/* ---- small utilities used by the reader and the terminal -------------- */
-.mono {
   font-family: var(--mono);
-}
-.tnum {
+  font-size: 0.78rem;
+  color: var(--ink);
   font-variant-numeric: tabular-nums;
+}
+.btn--sm { padding: 8px 15px; font-size: 0.83rem; }
+.btn[disabled] { opacity: 0.38; pointer-events: none; }
+.duo--after-term { margin-top: 26px; }
+@media (max-width: 640px) {
+  .reader__stage { padding: 22px 14px; }
+  .reader__page { padding: 32px 24px 24px; min-height: 0; }
+  .reader__modes { margin-left: 0; }
 }
