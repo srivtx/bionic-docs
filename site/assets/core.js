@@ -153,6 +153,7 @@ var BionicCore = (() => {
     return Math.ceil(fraction * letters);
   }
   var MAX_TOKEN_LETTERS = 40;
+  var NEUTRAL_INTENSITY = 0.5;
   var URL_RE = /^[a-z][a-z0-9+.-]*:\/\//i;
   var EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   function isUnbreakableToken(word, letters) {
@@ -174,25 +175,27 @@ var BionicCore = (() => {
     }
     const bypassesMin = options.mode === "rules" || options.mode === "half";
     if (!bypassesMin && letters < options.minWordLength) return 0;
-    let n;
+    let base;
     switch (options.mode) {
       case "half":
-        n = letters < 2 ? 0 : Math.ceil(letters / 2);
+        base = letters < 2 ? 0 : Math.ceil(letters / 2);
         break;
       case "vowel": {
         const cap = Math.ceil(letters / 2) + 1;
-        n = Math.min(vowelGroupLength(core, vowelSet(options.customVowels)), cap);
+        base = Math.min(vowelGroupLength(core, vowelSet(options.customVowels)), cap);
         break;
       }
       case "rules":
-        n = ruleLength(letters, spec ?? parseRule(DEFAULT_RULE));
+        base = ruleLength(letters, spec ?? parseRule(DEFAULT_RULE));
         break;
       case "dim":
       case "classic":
       default:
-        n = Math.max(1, Math.ceil(letters * options.intensity));
+        base = letters * NEUTRAL_INTENSITY;
         break;
     }
+    const factor = options.intensity / NEUTRAL_INTENSITY;
+    const n = base > 0 ? Math.max(1, Math.round(base * factor)) : 0;
     if (!Number.isFinite(n) || n <= 0) return 0;
     return Math.min(Math.floor(n), letters);
   }

@@ -4,544 +4,559 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Bionic Docs — read PDF and EPUB with bionic fixation</title>
-<meta name="description" content="bionic-docs is a Manifest V3 extension for Chrome, Edge and Firefox that opens a PDF or EPUB, extracts its text locally, and emphasizes the leading letters of every word. No upload, no account, no remote code.">
+<meta name="description" content="Bionic Docs is a Manifest V3 extension for Chrome, Edge and Firefox. It opens a PDF or EPUB on your machine, keeps every PDF page as it was printed, and emphasizes the leading letters of every word. No upload, no account, no remote code.">
 <meta name="color-scheme" content="light dark">
 <script>
-try{var t=localStorage.getItem("bionic-docs-theme");if(t==="dark"||t==="light"){document.documentElement.setAttribute("data-theme",t);}}catch(e){}
+try{var t=localStorage.getItem("bionic-docs-theme");if(t!=="dark"&&t!=="light"){t=window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";}document.documentElement.setAttribute("data-theme",t);}catch(e){}
 </script>
 <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2032%2032%27%3E%3Crect%20width%3D%2732%27%20height%3D%2732%27%20rx%3D%277%27%20fill%3D%27%230e6e63%27%2F%3E%3Cg%20transform%3D%27translate(5%204)%27%20fill%3D%27none%27%20stroke%3D%27%23ffffff%27%20stroke-width%3D%272.2%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%22M2%203.4h12.6a2%202%200%200%201%202%202V20a2%202%200%200%201-2%202H2z%22%3E%3C%2Fpath%3E%20%3Cpath%20d%3D%22M4.6%208.2h9%22%3E%3C%2Fpath%3E%20%3Cpath%20d%3D%22M4.6%2012.4h5.4%22%20stroke-opacity%3D%22.45%22%3E%3C%2Fpath%3E%3C%2Fg%3E%3C%2Fsvg%3E">
-<meta name="theme-color" content="#f8f6f1" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#16130d" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#f5f7f6" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#090d0c" media="(prefers-color-scheme: dark)">
 <meta property="og:title" content="Bionic Docs — read PDF and EPUB with bionic fixation">
-<meta property="og:description" content="A Chrome and Firefox extension that reads a PDF or EPUB locally and emphasizes the leading letters of every word. No upload, no account, no remote code.">
+<meta property="og:description" content="A Chrome and Firefox extension that opens a PDF or EPUB locally, keeps every page as printed, and emphasizes the leading letters of every word. No upload, no account, no remote code.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://srivtx.github.io/bionic-docs/index.html">
 <meta property="og:image" content="https://srivtx.github.io/bionic-docs/assets/og.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Bionic Docs — a page of text with emphasized word openings">
+<meta property="og:image:alt" content="Bionic Docs — a document page with emphasized word openings">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Bionic Docs — read PDF and EPUB with bionic fixation">
-<meta name="twitter:description" content="A Chrome and Firefox extension that reads a PDF or EPUB locally and emphasizes the leading letters of every word. No upload, no account, no remote code.">
+<meta name="twitter:description" content="A Chrome and Firefox extension that opens a PDF or EPUB locally, keeps every page as printed, and emphasizes the leading letters of every word. No upload, no account, no remote code.">
 <meta name="twitter:image" content="https://srivtx.github.io/bionic-docs/assets/og.png">
 <link rel="canonical" href="https://srivtx.github.io/bionic-docs/index.html">
-<link rel="stylesheet" href="assets/theme.css?v=dbcbfeadfd">
-<link rel="stylesheet" href="assets/lens.css?v=dbcbfeadfd">
-<link rel="stylesheet" href="assets/identity.css?v=dbcbfeadfd">
+<link rel="preload" href="assets/fonts/geist-latin.woff2?v=0" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="assets/theme.css?v=e9177265d2">
+<link rel="stylesheet" href="assets/lens.css?v=e9177265d2">
+<link rel="stylesheet" href="assets/identity.css?v=e9177265d2">
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
-<div class="grain" aria-hidden="true"></div>
 
-<header class="masthead">
-  <div class="masthead__inner">
-    <a class="brand" href="#top" aria-label="Bionic Docs home">
-      <span class="brand__mark" aria-hidden="true"><svg class="icon" viewBox="0 0 24 24"><path d="M3 4.2h13.4a2 2 0 0 1 2 2V20a2 2 0 0 1-2 2H3z"></path><path d="M5.6 9h9.2"></path><path d="M5.6 13.2h5.6" stroke-opacity=".45"></path></svg></span>
-      Bionic&nbsp;Docs <span class="brand__tag">by svx</span>
+<header class="masthead" id="masthead">
+  <div class="container masthead__inner">
+    <a class="brand" href="#top" aria-label="Bionic Docs, back to top">
+      <span class="brand__mark" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 4.2h13.4a2 2 0 0 1 2 2V20a2 2 0 0 1-2 2H3z"></path><path d="M5.6 9h9.2"></path><path d="M5.6 13.2h5.6" stroke-opacity=".45"></path></svg></span>
+      <span class="brand__name"><b>Bi</b>onic <b>Do</b>cs</span>
     </a>
-    <nav class="masthead__links" aria-label="Sections">
-      <a href="#reader">Reader</a>
-      <a href="#formats">Formats</a>
-      <a href="#modes">Modes</a>
-      <a href="#how">How it works</a>
-      <a href="#architecture">Architecture</a>
-      <a href="#faq">FAQ</a>
+    <nav class="nav" aria-label="Sections">
+      <a class="nav__link" href="#reader">Reader</a>
+      <a class="nav__link" href="#features">Features</a>
+      <a class="nav__link" href="#modes">Modes</a>
+      <a class="nav__link" href="#how">How it works</a>
+      <a class="nav__link" href="#privacy">Privacy</a>
+      <a class="nav__link" href="#faq">FAQ</a>
     </nav>
     <div class="masthead__actions">
-      <a class="masthead__gh" href="https://github.com/srivtx/bionic-docs" aria-label="GitHub repository">
+      <a class="icon-btn icon-btn--text" href="https://github.com/srivtx/bionic-docs" aria-label="Bionic Docs on GitHub">
         <svg class="icon icon--fill" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.55v-2.15c-3.2.7-3.87-1.36-3.87-1.36-.52-1.33-1.28-1.68-1.28-1.68-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.23-1.28-5.23-5.68 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11.1 11.1 0 0 1 5.8 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.41-2.69 5.38-5.25 5.67.41.35.78 1.05.78 2.12v3.15c0 .3.21.67.8.55A10.52 10.52 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5Z"/></svg>
         <span>GitHub</span>
       </a>
-      <button type="button" class="theme-toggle" id="theme-toggle" aria-pressed="false">
+      <button type="button" class="icon-btn icon-btn--text theme-toggle" id="theme-toggle" aria-pressed="false">
         <svg class="icon theme-toggle__sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg>
         <svg class="icon theme-toggle__moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path></svg>
         <span id="theme-toggle-text">Dark</span>
       </button>
-      <button type="button" class="nav-toggle" id="nav-toggle" aria-expanded="false" aria-controls="mobile-nav" aria-label="Open navigation">
-        <svg class="icon" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"></path></svg>
+      <button type="button" class="icon-btn nav-toggle" id="nav-toggle" aria-expanded="false" aria-controls="mobile-nav" aria-label="Open navigation">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"></path></svg>
       </button>
     </div>
   </div>
   <nav class="mobile-nav" id="mobile-nav" aria-label="Sections">
     <a href="#reader">Reader</a>
-    <a href="#formats">Formats</a>
+    <a href="#features">Features</a>
     <a href="#modes">Modes</a>
     <a href="#how">How it works</a>
-    <a href="#architecture">Architecture</a>
+    <a href="#privacy">Privacy</a>
+    <a href="#install">Install</a>
     <a href="#faq">FAQ</a>
   </nav>
 </header>
 
 <main id="main">
 
-  <!-- ================= hero ================= -->
+  <!-- ============================================================ hero -->
   <section class="hero" id="top" aria-labelledby="hero-title">
-    <div class="container">
-      <div class="hero__inner">
-        <div>
-          <p class="hero__kicker" data-reveal><span class="hero__kicker-rule" aria-hidden="true"></span>A local reader for PDF and EPUB</p>
-          <h1 id="hero-title" class="bionic hero__title" data-bionic-sample="half">Read PDF and EPUB with bionic fixation.</h1>
-          <p class="hero__lede" data-reveal>A document you open is parsed inside the extension page and the leading letters of every word are emphasized. Nothing is uploaded, there is no account, and no remote code runs — the PDF and EPUB parsers are bundled into the package.</p>
-          <div class="btn-row" data-reveal>
-            <a class="btn btn--accent" href="#reader">Try the reader <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6"></path></svg></a>
-            <a class="btn btn--outline" href="#install">Build it from source</a>
-          </div>
-          <ul class="flagline" data-reveal>
-            <li>PDF + EPUB</li>
-            <li>No upload</li>
-            <li>No account</li>
-            <li>159 tests</li>
-          </ul>
+    <div class="hero__glow" aria-hidden="true"></div>
+    <div class="container hero__grid">
+      <div class="hero__copy">
+        <a class="pill" href="#features"><span class="pill__tag">New</span><span>Pages as printed, fitted to your window</span><svg class="icon icon--sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"></path></svg></a>
+        <h1 id="hero-title" class="bionic hero__title" data-bionic-sample="half">Read PDF and EPUB with bionic fixation.</h1>
+        <p class="hero__lede">Open a document and every page looks the way it was printed, with its figures, colours and layout. Only now the leading letters of each word carry the weight. It all happens inside the extension, so nothing is uploaded.</p>
+        <div class="btn-row">
+          <a class="btn btn--primary" href="#reader">Try the reader<svg class="icon icon--sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6"></path></svg></a>
+          <a class="btn btn--ghost" href="#install">Install from source</a>
         </div>
-        <div class="doccard" data-reveal>
-          <div class="doccard__bar"><span class="doccard__dot"></span><span class="doccard__dot"></span><span class="doccard__dot"></span><span class="doccard__file">fixtures/sample.pdf</span></div>
-          <div class="doccard__body bionic">
-            <p data-bionic-sample="half">Bionic reading works in PDF documents. The leading letters of every word are emphasized and the rest of the word is left alone.</p>
-            <p data-bionic-sample="half">Chapters are reflowed and PDF pages keep their layout, then the same fixation step runs over the text nodes — on your machine, never on a server.</p>
-          </div>
-          <div class="doccard__foot"><span>Page 1 of 2</span><span>No upload · no account</span></div>
-        </div>
+        <ul class="checks" aria-label="Guarantees">
+          <li><svg class="icon icon--sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.2 4.2L19 7"></path></svg>No upload</li>
+          <li><svg class="icon icon--sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.2 4.2L19 7"></path></svg>No account</li>
+          <li><svg class="icon icon--sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.2 4.2L19 7"></path></svg>No remote code</li>
+        </ul>
       </div>
-    </div>
-  </section>
 
-  <!-- ================= dateline ================= -->
-  <div class="dateline" data-reveal>
-    <div class="container">
-      <p><b>PDF</b> pages as drawn · <b>EPUB</b> unzipped in memory · <b>Chrome 116+</b> · <b>Firefox 140+</b> · <b>Edge</b></p>
-      <p>Zero uploads · Manifest V3 · No remote code · Sanitized chapters · MIT · 159 tests across 8 files</p>
-    </div>
-  </div>
-
-  <!-- ================= 01 reader ================= -->
-  <section class="section" id="reader" aria-labelledby="reader-title">
-    <div class="container">
-      <div class="section__head" data-reveal>
-        <p class="folio"><span class="folio__no">01</span><span class="folio__name">The reader</span><span class="folio__rule" aria-hidden="true"></span></p>
-        <h2 id="reader-title">Try the reader</h2>
-        <p class="section__stand">The same compiled fixation algorithm the extension ships runs in this page. Switch documents, flip pages and chapters, and turn the effect off and on. The text is taken from the repository&#8217;s own fixtures.</p>
-      </div>
-      <div class="reader" id="reader-el" data-reveal>
-        <div class="reader__chrome">
-          <div class="reader__tabs" role="tablist" aria-label="Sample documents">
-            <button type="button" class="reader__tab reader__tab--on" role="tab" id="tab-pdf" aria-selected="true" aria-controls="reader-stage">sample.pdf</button>
-            <button type="button" class="reader__tab" role="tab" id="tab-epub" aria-selected="false" aria-controls="reader-stage">sample.epub</button>
+      <div class="hero__art" aria-hidden="true">
+        <div class="window">
+          <div class="window__bar">
+            <span class="window__dots"><span></span><span></span><span></span></span>
+            <span class="window__file">annual-report.pdf</span>
+            <span class="window__chip">Half</span>
           </div>
-          <div class="reader__modes"><div class="seg" id="reader-modes" role="group" aria-label="Reading mode"></div></div>
-        </div>
-        <div class="reader__stage" id="reader-stage" role="tabpanel" aria-labelledby="tab-pdf">
-          <div class="reader__page">
-            <h3 class="reader__doctitle" id="reader-doctitle">sample.pdf</h3>
-            <div class="bionic" id="reader-content"></div>
-            <p class="reader__pagenum" id="reader-pagenum">1 / 2</p>
+          <div class="window__body">
+            <div class="sheet">
+              <div class="sheet__head"><span>Section 2</span><span>Page 14</span></div>
+              <p class="sheet__title bionic" data-bionic-sample="half">Reading on screen</p>
+              <p class="sheet__text bionic" data-bionic-sample="half">Readers move through a page in short jumps, resting on a word for a moment before the next. A heavier opening gives each jump somewhere to land.</p>
+              <figure class="figure">
+                <svg class="figure__chart" viewBox="0 0 240 92">
+                  <path class="figure__grid" d="M0 91h240M0 61h240M0 31h240"></path>
+                  <rect class="figure__bar" x="14" y="44" width="26" height="47" rx="3"></rect>
+                  <rect class="figure__bar" x="58" y="28" width="26" height="63" rx="3"></rect>
+                  <rect class="figure__bar figure__bar--hi" x="102" y="12" width="26" height="79" rx="3"></rect>
+                  <rect class="figure__bar" x="146" y="36" width="26" height="55" rx="3"></rect>
+                  <rect class="figure__bar" x="190" y="22" width="26" height="69" rx="3"></rect>
+                  <path class="figure__line" d="M27 40 L71 24 L115 8 L159 32 L203 18"></path>
+                </svg>
+                <figcaption class="figure__cap bionic" data-bionic-sample="half">Figure 3. The chart stays exactly where it was drawn.</figcaption>
+              </figure>
+              <p class="sheet__text bionic" data-bionic-sample="half">The text is laid over the page in the same place, at the same width, so columns and captions keep their shape.</p>
+            </div>
+            <div class="zoombar">
+              <span class="zoombar__btn">−</span>
+              <span class="zoombar__value">Fit page</span>
+              <span class="zoombar__btn">+</span>
+            </div>
           </div>
         </div>
-        <div class="reader__foot">
-          <span class="reader__position" id="reader-position" aria-live="polite">Page 1 of 2</span>
-          <button type="button" class="btn btn--ghost btn--sm" id="reader-prev" aria-label="Previous page">&#8249; Prev</button>
-          <button type="button" class="btn btn--ghost btn--sm" id="reader-next" aria-label="Next page">Next &#8250;</button>
-          <button type="button" class="btn btn--outline btn--sm" id="reader-toggle" aria-pressed="true">Fixation on</button>
+        <div class="float-card float-card--privacy">
+          <span class="float-card__icon"><svg class="icon icon--sm" viewBox="0 0 24 24"><path d="M12 3l7 3v5.5c0 4.4-3 7.9-7 9.5-4-1.6-7-5.1-7-9.5V6z"></path><path d="M9 12l2 2 4-4"></path></svg></span>
+          <span><b>0 bytes</b> uploaded</span>
         </div>
-      </div>
-      <p class="note" data-reveal>The repository&#8217;s PDF fixture is a single page, so the second demo page is clearly-labelled representative prose; the first page and both EPUB chapters are the extracted fixture text verbatim.</p>
-    </div>
-  </section>
-
-  <!-- ================= 02 compare ================= -->
-  <section class="section" id="compare-section" aria-labelledby="compare-title">
-    <div class="container">
-      <div class="section__head" data-reveal>
-        <p class="folio"><span class="folio__no">02</span><span class="folio__name">Before / after</span><span class="folio__rule" aria-hidden="true"></span></p>
-        <h2 id="compare-title">The same page, switched on</h2>
-        <p class="section__stand">Drag the divider — or focus it and use the arrow keys — to sweep between the two versions.</p>
-      </div>
-      <div class="compare" id="compare" role="slider" tabindex="0" aria-label="Reveal the bionic version of the page" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50" aria-valuetext="50% bionic, 50% as written" aria-orientation="horizontal" data-reveal>
-        <div class="compare__layer">
-          <p class="compare__text">The reader extracts the text layer of a document and rebuilds its lines, so the emphasis lands on ordinary text nodes whatever the original format was.</p>
-        </div>
-        <div class="compare__top" id="compare-top" aria-hidden="true">
-          <div class="compare__layer">
-            <p class="compare__text bionic" data-bionic-sample="half">The reader extracts the text layer of a document and rebuilds its lines, so the emphasis lands on ordinary text nodes whatever the original format was.</p>
-          </div>
-        </div>
-        <span class="compare__tag compare__tag--on" aria-hidden="true">bionic</span>
-        <span class="compare__tag compare__tag--off" aria-hidden="true">as written</span>
-        <span class="compare__rule" id="compare-rule" aria-hidden="true"></span>
-        <span class="compare__handle" id="compare-handle" aria-hidden="true"><svg class="icon" viewBox="0 0 24 24"><path d="M9 7l-5 5 5 5M15 7l5 5-5 5"></path></svg></span>
-        <span class="compare__pct" id="compare-pct" aria-hidden="true">50%</span>
-      </div>
-    </div>
-  </section>
-
-  <!-- ================= 03 formats ================= -->
-  <section class="section" id="formats" aria-labelledby="formats-title">
-    <div class="container">
-      <div class="section__head" data-reveal>
-        <p class="folio"><span class="folio__no">03</span><span class="folio__name">Formats</span><span class="folio__rule" aria-hidden="true"></span></p>
-        <h2 id="formats-title">Two paths, one fixation step</h2>
-        <p class="section__stand">A document is sniffed by its first bytes and sent down one of two paths. Both end with plain text in text nodes, so the emphasis step is format-agnostic.</p>
-      </div>
-      <div class="duo">
-        <article class="panel" data-reveal>
-          <h3><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h14v16H5z"></path><path d="M8 8h8M8 12h5"></path></svg>PDF</h3>
-          <p class="panel__sub">Recognised when the first four bytes are <code>%PDF</code>.</p>
-          <ul class="list">
-            <li><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h10"></path></svg><span>The locally bundled PDF.js reads the text layer with <code>isEvalSupported: false</code> and <code>useSystemFonts: true</code>. Content streams are never executed.</span></li>
-            <li><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h7"></path></svg><span><code>src/pdf/lines.ts</code> groups text items into lines: a new line starts on <code>hasEOL</code> or a vertical jump, whitespace runs collapse, and items are joined with a space only when neither side has one. It has no PDF.js import, so it is unit-tested directly.</span></li>
-            <li><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"></circle><path d="M12 8.2v3.8l2.6 2.6"></path></svg><span>One section per page as <code>.pdf-page</code>, one paragraph per line as <code>.pdf-line</code>. A page with no text layer renders empty rather than guessed at.</span></li>
-          </ul>
-        </article>
-        <article class="panel" data-reveal>
-          <h3><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V2H6.5A2.5 2.5 0 0 0 4 4.5z"></path><path d="M8 6.5h8"></path></svg>EPUB</h3>
-          <p class="panel__sub">Recognised when the first two bytes are <code>PK</code>.</p>
-          <ul class="list">
-            <li><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h10"></path></svg><span>Unzipped in memory with fflate. Nothing is written to disk and nothing is fetched. <code>container.xml</code> gives the OPF rootfile; the OPF gives the title, manifest and spine order.</span></li>
-            <li><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h7"></path></svg><span>The table of contents comes from the EPUB3 navigation document, or the EPUB2 NCX when there is none.</span></li>
-            <li><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"></circle><path d="M12 8.2v3.8l2.6 2.6"></path></svg><span>Each chapter is sanitized before insertion: <code>script</code>, <code>style</code>, <code>iframe</code>, <code>object</code>, <code>embed</code>, <code>link</code>, <code>meta</code> and <code>base</code> are removed, every <code>on*</code> attribute is removed, and <code>javascript:</code> URLs are stripped.</span></li>
-          </ul>
-        </article>
-      </div>
-    </div>
-  </section>
-
-  <!-- ================= 04 modes ================= -->
-  <section class="section" id="modes" aria-labelledby="modes-title">
-    <div class="container">
-      <div class="section__head" data-reveal>
-        <p class="folio"><span class="folio__no">04</span><span class="folio__name">Five reading modes</span><span class="folio__rule" aria-hidden="true"></span></p>
-        <h2 id="modes-title">Each mode anchors a different part of the word</h2>
-        <p class="section__stand">Every sample below is rendered by the same code the extension runs, so the demo and the extension agree word for word.</p>
-      </div>
-      <div class="specimen" data-reveal>
-        <div class="specimen__row">
-          <span class="specimen__no">M1</span>
-          <span class="specimen__name">Half</span>
-          <p class="specimen__sample bionic" data-bionic-sample="half">Bionic reading works in PDF documents.</p>
-          <p class="specimen__note">Bold the first half of each word, rounded up. The shipped default.</p>
-        </div>
-        <div class="specimen__row">
-          <span class="specimen__no">M2</span>
-          <span class="specimen__name">Classic</span>
-          <p class="specimen__sample bionic" data-bionic-sample="classic" data-bionic-intensity="0.5">Bionic reading works in PDF documents.</p>
-          <p class="specimen__note">Bold a share of each word set by intensity, which scales every mode.</p>
-        </div>
-        <div class="specimen__row">
-          <span class="specimen__no">M3</span>
-          <span class="specimen__name">Vowel anchor</span>
-          <p class="specimen__sample bionic" data-bionic-sample="vowel">Bionic reading works in PDF documents.</p>
-          <p class="specimen__note">Bold up to the first vowel group, capped at half the word plus one. Suited to many languages.</p>
-        </div>
-        <div class="specimen__row">
-          <span class="specimen__no">M4</span>
-          <span class="specimen__name">Low distraction</span>
-          <p class="specimen__sample bionic" data-bionic-sample="dim">Bionic reading works in PDF documents.</p>
-          <p class="specimen__note">Bold the prefix and fade the remainder, 72% by default.</p>
-        </div>
-        <div class="specimen__row">
-          <span class="specimen__no">M5</span>
-          <span class="specimen__name">Custom rule</span>
-          <p class="specimen__sample bionic" data-bionic-sample="rules">Bionic reading works in PDF documents.</p>
-          <p class="specimen__note">Per-length character counts plus a fraction for longer words, from the rule string <code>0 1 1 2 0.4</code>.</p>
+        <div class="float-card float-card--epub">
+          <span class="float-card__icon"><svg class="icon icon--sm" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V3H6.5A2.5 2.5 0 0 0 4 5.5z"></path><path d="M8 7h8"></path></svg></span>
+          <span>EPUB · Chapter 2 of 9</span>
         </div>
       </div>
     </div>
-  </section>
 
-  <!-- ================= 05 how it works ================= -->
-  <section class="section" id="how" aria-labelledby="how-title">
     <div class="container">
-      <div class="section__head" data-reveal>
-        <p class="folio"><span class="folio__no">05</span><span class="folio__name">How it works</span><span class="folio__rule" aria-hidden="true"></span></p>
-        <h2 id="how-title">Sniff, parse, emphasize</h2>
-        <p class="section__stand">Three moves, all of them on your machine. The reader page is the only place a document is ever parsed.</p>
-      </div>
-      <div class="steps">
-        <article class="step" data-reveal>
-          <span class="step__no" aria-hidden="true">1.</span>
-          <h3>Sniff the bytes</h3>
-          <p>The first bytes decide the path: <code>%PDF</code> goes to the PDF parser, <code>PK</code> to the EPUB parser. A file you drop is read from disk with the File API.</p>
-        </article>
-        <article class="step" data-reveal>
-          <span class="step__no" aria-hidden="true">2.</span>
-          <h3>Parse or unzip</h3>
-          <p>A PDF&#8217;s text layer is rebuilt into lines with the bundled PDF.js. An EPUB is unzipped in memory and each chapter is sanitized before it is rendered.</p>
-        </article>
-        <article class="step" data-reveal>
-          <span class="step__no" aria-hidden="true">3.</span>
-          <h3>Emphasize, reversibly</h3>
-          <p>The chosen mode bolds the leading letters of every word. Changing the mode or intensity re-renders the chapter, and processed nodes are tracked in a <code>WeakSet</code> so it stays idempotent.</p>
-        </article>
-      </div>
-    </div>
-  </section>
-
-  <!-- ================= 06 architecture ================= -->
-  <section class="section" id="architecture" aria-labelledby="architecture-title">
-    <div class="container">
-      <div class="section__head" data-reveal>
-        <p class="folio"><span class="folio__no">06</span><span class="folio__name">Architecture</span><span class="folio__rule" aria-hidden="true"></span></p>
-        <h2 id="architecture-title">What runs, and where the bytes go</h2>
-        <p class="section__stand">The interesting constraints here are not performance but provenance: which code runs, and where a document&#8217;s bytes are allowed to travel.</p>
-      </div>
-      <div class="term" data-reveal>
-        <div class="term__bar">
-          <span class="term__dot"></span><span class="term__dot"></span><span class="term__dot"></span>
-          <span class="term__title">module map — bionic-docs</span>
-        </div>
-        <div class="term__body">
-          <div class="term__line c"><span class="prompt">#</span><span>support, then the parsers, then the surfaces</span></div>
-          <div class="term__line"><span class="prompt">$</span><span>src/shared/     types, cross-browser shim, storage</span></div>
-          <div class="term__line"><span class="prompt">$</span><span>src/core/       pure fixation algorithm — DOM-free, tested</span></div>
-          <div class="term__line"><span class="prompt">$</span><span>src/pdf/        lines.ts (pure) + pdf.ts (PDF.js render)</span></div>
-          <div class="term__line"><span class="prompt">$</span><span>src/epub/       parse.ts (unzip, OPF, TOC, sanitize) + epub.ts</span></div>
-          <div class="term__line"><span class="prompt">$</span><span>src/reader/     the document reader page</span></div>
-          <div class="term__line"><span class="prompt">$</span><span>src/popup/      open a document, quick settings</span></div>
-          <div class="term__line"><span class="prompt">$</span><span>src/options/    full settings, live preview, import/export</span></div>
-          <div class="term__line"><span class="prompt">$</span><span>src/background/ open-current command and message handling</span></div>
-        </div>
-      </div>
-      <div class="duo duo--after-term" data-reveal>
-        <article class="panel">
-          <h3><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6z"></path><path d="M9 12l2 2 4-4"></path></svg>Invariants the build enforces</h3>
-          <ul class="list">
-            <li><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6"></path></svg><span><b>On-device.</b> The only network call loads the document you opened. A security test fails the build if <code>fetch</code>, <code>eval</code>, <code>new Function</code>, <code>document.write</code>, remote URLs, <code>XMLHttpRequest</code> or <code>WebSocket</code> appear anywhere in <code>src/</code> except that one fetch.</span></li>
-            <li><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6"></path></svg><span><b>No remote code.</b> PDF.js, fflate and the application are bundled; the manifest declares no external scripts.</span></li>
-            <li><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6"></path></svg><span><b>Sanitize before render.</b> EPUB chapters are cleaned before insertion, not after.</span></li>
-            <li><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6"></path></svg><span><b>One manifest source.</b> <code>scripts/manifest.mjs</code> feeds the build and is asserted by a test.</span></li>
-          </ul>
-        </article>
-        <article class="panel">
-          <h3><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h10"></path></svg>The core contract</h3>
-          <ul class="list">
-            <li><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6"></path></svg><span>Every format-specific path ends at the same frozen interface, so the fixation algorithm is written once and has no idea what a PDF is.</span></li>
-            <li><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6"></path></svg><span>PDF text is treated as plain text and placed into new text nodes; the original layout is not reproduced and not trusted.</span></li>
-            <li><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6"></path></svg><span><code>src/pdf/lines.ts</code> imports nothing from PDF.js, so line reconstruction is unit-tested directly.</span></li>
-            <li><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6"></path></svg><span>The popup never parses anything: it asks the background page to open the reader, and parsing happens only there.</span></li>
-          </ul>
-        </article>
-      </div>
-    </div>
-  </section>
-
-  <!-- ================= 07 limits ================= -->
-  <section class="section" id="safe" aria-labelledby="safe-title">
-    <div class="container">
-      <div class="section__head" data-reveal>
-        <p class="folio"><span class="folio__no">07</span><span class="folio__name">Limits</span><span class="folio__rule" aria-hidden="true"></span></p>
-        <h2 id="safe-title">What it does not do</h2>
-        <p class="section__stand">The limitations are part of the contract, not footnotes.</p>
-      </div>
-      <div class="duo">
-        <article class="panel panel--recessed" data-reveal>
-          <h3><svg class="icon icon--mute" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M5.8 5.8l12.4 12.4"></path></svg>Out of scope</h3>
-          <ul class="ticks">
-            <li>Scanned PDFs have no text layer and show as plain page images. OCR is out of scope in this version.</li>
-            <li>PDF text is drawn in the browser's own fonts, fitted to the original line widths, so letter shapes can differ from the embedded fonts.</li>
-            <li>EPUB rendering is intentionally minimal: no pagination and no book CSS beyond the sanitized chapter markup.</li>
-            <li>Closed shadow roots in a chapter cannot be reached, and are left alone.</li>
-          </ul>
-          <p>If a document has a real text layer, it works.</p>
-        </article>
-        <article class="panel" data-reveal>
-          <h3><svg class="icon icon--good" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6z"></path><path d="M9 12l2 2 4-4"></path></svg>What it does handle</h3>
-          <ul class="ticks">
-            <li>PDF and EPUB, sniffed by magic bytes rather than by file extension.</li>
-            <li>Multi-page PDFs and multi-chapter EPUBs, with the table of contents read from the navigation document or the NCX.</li>
-            <li>Resuming: the last page or chapter is remembered per document, keyed by a content fingerprint rather than a URL.</li>
-            <li>Keyboard-free reading: <code>Ctrl/Cmd + Shift + O</code> opens the current document at any time.</li>
-          </ul>
-          <p>Both engines build from one source tree, so they cannot drift apart.</p>
-        </article>
-      </div>
-    </div>
-  </section>
-
-  <!-- ================= 08 numbers ================= -->
-  <section class="section" id="numbers" aria-labelledby="numbers-title">
-    <div class="container">
-      <div class="section__head" data-reveal>
-        <p class="folio"><span class="folio__no">08</span><span class="folio__name">Measured, not estimated</span><span class="folio__rule" aria-hidden="true"></span></p>
-        <h2 id="numbers-title">Numbers from the repository</h2>
-        <p class="section__stand">Every figure here is from the repository&#8217;s own testing table, and a check fails the build if a page stops agreeing with it.</p>
-      </div>
-      <ul class="metrics" data-reveal>
-        <li class="metric"><span class="metric__n" data-count="159">0</span><span class="metric__k">tests across 8 files</span></li>
-        <li class="metric"><span class="metric__n" data-count="19" data-suffix="/19">0</span><span class="metric__k">e2e checks in real Chrome</span></li>
-        <li class="metric"><span class="metric__n" data-count="11">0</span><span class="metric__k">manifest entries per target</span></li>
-        <li class="metric"><span class="metric__n" data-count="5">0</span><span class="metric__k">reading modes</span></li>
-        <li class="metric"><span class="metric__n" data-count="0">0</span><span class="metric__k">uploads, ever</span></li>
+      <ul class="facts" aria-label="Project facts">
+        <li class="fact"><span class="fact__n">2</span><span class="fact__k">formats, PDF and EPUB</span></li>
+        <li class="fact"><span class="fact__n">5</span><span class="fact__k">reading modes</span></li>
+        <li class="fact"><span class="fact__n">160</span><span class="fact__k">tests across 8 files</span></li>
+        <li class="fact"><span class="fact__n">0</span><span class="fact__k">network requests for content</span></li>
       </ul>
     </div>
   </section>
 
-  <!-- ================= 09 privacy ================= -->
-  <section class="section" id="privacy" aria-labelledby="privacy-title">
+  <!-- ========================================================== reader -->
+  <section class="section" id="reader" aria-labelledby="reader-title">
     <div class="container">
-      <div class="section__head" data-reveal>
-        <p class="folio"><span class="folio__no">09</span><span class="folio__name">Privacy</span><span class="folio__rule" aria-hidden="true"></span></p>
-        <h2 id="privacy-title">There is no server.</h2>
+      <div class="section__head">
+        <p class="eyebrow">Live demo</p>
+        <h2 class="section__title" id="reader-title">Try the reader, right here</h2>
+        <p class="section__lede">This is the same compiled fixation code the extension ships, running in this page. Switch documents, turn pages, change the mode, or paste your own text.</p>
       </div>
-      <div class="prose" data-reveal>
-        <p>bionic-docs is a local reading aid for documents. The extension makes no network requests for content, has no analytics, and has no account. It does not keep your documents.</p>
-        <p><strong>What is stored.</strong> Two things, using the extension&#8217;s <code>storage</code> permission: your reading settings — mode, intensity, minimum word length, appearance — and the last page or chapter you were on for each document, so the reader can offer to resume. That remembered position is a page or chapter index keyed by a content fingerprint of the document (a hash of its length and bytes), not its URL. No document bytes and no document text are stored.</p>
-        <p><strong>What is read, and when.</strong> A file you choose or drop is read from disk with the File API and parsed in the extension page. The only <code>fetch</code> in the entire codebase loads a document URL you explicitly opened, such as a PDF already in a tab. Nothing is uploaded, and nothing is retained after you close the reader page: the bytes are read into memory, parsed, and released.</p>
-        <p><strong>Why it asks for host access.</strong> Opening a document at a URL and reading the current tab&#8217;s URL for the <code>open-current</code> command both need it. Page content is never read for any other reason.</p>
-        <p><strong>No remote code.</strong> PDF.js and fflate are bundled into the package; nothing is fetched or evaluated at runtime. PDF.js is constructed with <code>isEvalSupported: false</code>. EPUB chapters are sanitized before insertion: <code>script</code>, <code>style</code>, <code>iframe</code>, <code>object</code>, <code>embed</code>, <code>link</code>, <code>meta</code> and <code>base</code> are removed, every <code>on*</code> attribute is removed, and <code>javascript:</code> URLs are stripped from <code>href</code> and <code>src</code>.</p>
-        <p><strong>How to verify it.</strong> <code>tests/security.test.ts</code> fails the build if <code>fetch</code>, <code>eval</code>, <code>new Function</code>, <code>document.write</code>, <code>innerHTML</code> assignment, remote URLs, <code>XMLHttpRequest</code> or <code>WebSocket</code> appear anywhere in <code>src/</code>, except the single reader fetch. <code>src/shared/browser.ts</code> is the only module that touches the extension API namespace, and <code>scripts/manifest.mjs</code> is the single source of the permission list.</p>
-        <p><strong>Revoking access.</strong> Turning the extension off, disabling it, or removing it stops all processing immediately. Removing the extension deletes its stored settings and positions.</p>
+
+      <div class="reader" id="reader-el">
+        <aside class="reader__side" aria-label="Contents">
+          <p class="reader__side-title">Contents</p>
+          <ol class="reader__toc" id="reader-toc"></ol>
+          <div class="reader__side-foot">
+            <span class="kbd">←</span><span class="kbd">→</span><span>to turn pages</span>
+          </div>
+        </aside>
+
+        <div class="reader__main">
+          <div class="reader__bar">
+            <div class="seg" id="reader-docs" role="tablist" aria-label="Document">
+              <button type="button" class="seg__btn is-on" role="tab" id="tab-pdf" data-doc="pdf" aria-selected="true" aria-controls="reader-stage">sample.pdf</button>
+              <button type="button" class="seg__btn" role="tab" id="tab-epub" data-doc="epub" aria-selected="false" aria-controls="reader-stage">sample.epub</button>
+              <button type="button" class="seg__btn" role="tab" id="tab-own" data-doc="own" aria-selected="false" aria-controls="reader-stage">Your text</button>
+            </div>
+            <label class="toggle">
+              <input type="checkbox" class="toggle__input" id="reader-toggle" checked>
+              <span class="toggle__track" aria-hidden="true"><span class="toggle__thumb"></span></span>
+              <span class="toggle__label">Fixation</span>
+            </label>
+          </div>
+
+          <div class="reader__controls">
+            <div class="seg seg--modes" id="demo-modes" role="group" aria-label="Reading mode"></div>
+            <label class="range">
+              <span class="range__label">Intensity</span>
+              <input type="range" class="range__input" id="intensity" min="20" max="90" step="5" value="50">
+              <output class="range__value" id="intensity-value" for="intensity">50%</output>
+            </label>
+          </div>
+
+          <div class="reader__stage" id="reader-stage" role="tabpanel" aria-labelledby="tab-pdf">
+            <article class="reader__page">
+              <p class="reader__meta" id="reader-meta">fixtures/sample.pdf</p>
+              <h3 class="reader__title" id="reader-doctitle">sample.pdf</h3>
+              <label class="reader__own" id="reader-own" hidden>
+                <span class="visually-hidden">Your text</span>
+                <textarea class="reader__input" id="demo-input" rows="4" spellcheck="false">Paste a paragraph here and watch the leading letters of each word take the weight. Everything runs in this page; the text never leaves it.</textarea>
+              </label>
+              <div class="reader__text bionic" id="demo-out" aria-live="polite"></div>
+            </article>
+          </div>
+
+          <div class="reader__foot">
+            <button type="button" class="btn btn--ghost btn--sm" id="reader-prev" aria-label="Previous page"><svg class="icon icon--sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"></path></svg>Previous</button>
+            <span class="reader__position" id="reader-position" aria-live="polite">Page 1 of 2</span>
+            <button type="button" class="btn btn--ghost btn--sm" id="reader-next" aria-label="Next page">Next<svg class="icon icon--sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"></path></svg></button>
+          </div>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- ================= 10 install ================= -->
-  <section class="section" id="install" aria-labelledby="install-title">
-    <div class="container">
-      <div class="section__head" data-reveal>
-        <p class="folio"><span class="folio__no">10</span><span class="folio__name">Install</span><span class="folio__rule" aria-hidden="true"></span></p>
-        <h2 id="install-title">Build it from source</h2>
-        <p class="section__stand">Store listings are pending. Build both targets from one source tree, then load the unpacked extension.</p>
+  <!-- ========================================================= compare -->
+  <section class="section section--tint" id="compare-section" aria-labelledby="compare-title">
+    <div class="container compare-wrap">
+      <div class="section__head">
+        <p class="eyebrow">Before and after</p>
+        <h2 class="section__title" id="compare-title">The same page, switched on</h2>
+        <p class="section__lede">Drag the divider, or focus it and use the arrow keys. Left of the line is what the extension shows; right of it is the page as written.</p>
       </div>
-      <div class="term" data-reveal>
+      <div class="compare" id="compare" role="slider" tabindex="0" aria-label="Reveal the bionic version of the page" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50" aria-valuetext="50% bionic" aria-orientation="horizontal">
+        <div class="compare__layer compare__layer--plain" aria-hidden="true">
+          <p class="compare__text">A long report is mostly a test of attention. The eye keeps losing its place at the end of a line and has to hunt for the start of the next one. Giving every word a firm opening is a small change, but the page stops feeling like a wall of grey and starts to read like a path.</p>
+        </div>
+        <div class="compare__layer compare__layer--bionic" id="compare-top" aria-hidden="true">
+          <p class="compare__text bionic" data-bionic-sample="half">A long report is mostly a test of attention. The eye keeps losing its place at the end of a line and has to hunt for the start of the next one. Giving every word a firm opening is a small change, but the page stops feeling like a wall of grey and starts to read like a path.</p>
+        </div>
+        <span class="compare__tag compare__tag--left" aria-hidden="true">Bionic</span>
+        <span class="compare__tag compare__tag--right" aria-hidden="true">As written</span>
+        <span class="compare__rule" id="compare-rule" aria-hidden="true">
+          <span class="compare__handle"><svg class="icon icon--sm" viewBox="0 0 24 24"><path d="M9 7l-5 5 5 5M15 7l5 5-5 5"></path></svg></span>
+          <span class="compare__pct" id="compare-pct">50%</span>
+        </span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================================================== features -->
+  <section class="section" id="features" aria-labelledby="features-title">
+    <div class="container">
+      <div class="section__head">
+        <p class="eyebrow">What it does</p>
+        <h2 class="section__title" id="features-title">A reader that leaves your document alone</h2>
+        <p class="section__lede">Most bionic tools strip a PDF down to plain text. Bionic Docs keeps the page and puts the emphasis on top of it.</p>
+      </div>
+
+      <div class="bento">
+        <article class="tile tile--wide">
+          <div class="tile__copy">
+            <h3 class="tile__title">Pages as they were printed</h3>
+            <p class="tile__text">PDF.js draws each page to a canvas: images, diagrams, colours and all. The text is laid back over it in the same position and width, then emphasized, so columns, captions and equations keep their shape.</p>
+          </div>
+          <div class="tile__art art-layers" aria-hidden="true">
+            <div class="art-layers__sheet art-layers__sheet--canvas"><span class="art-layers__label">canvas</span><span class="art-layers__fig"></span><span class="art-layers__line"></span><span class="art-layers__line art-layers__line--short"></span></div>
+            <div class="art-layers__sheet art-layers__sheet--text"><span class="art-layers__label">text layer</span><span class="art-layers__word"><b>Re</b>ading</span><span class="art-layers__word"><b>o</b>n <b>scr</b>een</span></div>
+          </div>
+        </article>
+
+        <article class="tile">
+          <div class="tile__art art-zoom" aria-hidden="true">
+            <span class="art-zoom__btn">−</span>
+            <span class="art-zoom__menu"><span class="art-zoom__opt">Fit width</span><span class="art-zoom__opt art-zoom__opt--on">Fit page</span><span class="art-zoom__opt">125%</span></span>
+            <span class="art-zoom__btn">+</span>
+          </div>
+          <h3 class="tile__title">Fit page, fit width, 50 to 300%</h3>
+          <p class="tile__text">Pages open fitted to the window. Zoom keeps your place on the page, and <span class="kbd">+</span> <span class="kbd">−</span> <span class="kbd">0</span> work from the keyboard.</p>
+        </article>
+
+        <article class="tile">
+          <div class="tile__art art-toc" aria-hidden="true">
+            <span class="art-toc__row">1 · Arrival</span>
+            <span class="art-toc__row art-toc__row--on">2 · The harbour</span>
+            <span class="art-toc__row">3 · Letters home</span>
+          </div>
+          <h3 class="tile__title">EPUB, reflowed</h3>
+          <p class="tile__text">Books are unzipped in memory, their chapters sanitized and reflowed, and their own table of contents becomes the Contents panel.</p>
+        </article>
+
+        <article class="tile">
+          <div class="tile__art art-modes" aria-hidden="true">
+            <span class="art-modes__chip art-modes__chip--on">Half</span>
+            <span class="art-modes__chip">Classic</span>
+            <span class="art-modes__chip">Vowel anchor</span>
+            <span class="art-modes__chip">Low distraction</span>
+            <span class="art-modes__chip">Custom rule</span>
+          </div>
+          <h3 class="tile__title">Five reading modes</h3>
+          <p class="tile__text">The same fixation algorithm as its sibling, Bionic Page, with a live intensity control. Changes apply as you move the slider.</p>
+        </article>
+
+        <article class="tile">
+          <div class="tile__art art-resume" aria-hidden="true">
+            <span class="art-resume__text">Resume at page 42?</span>
+            <span class="art-resume__btn">Resume</span>
+          </div>
+          <h3 class="tile__title">Picks up where you left off</h3>
+          <p class="tile__text">Reopen a document and the reader offers your last page or chapter. It remembers the last 25 documents, on this device only.</p>
+        </article>
+
+        <article class="tile tile--wide tile--keys">
+          <div class="tile__copy">
+            <h3 class="tile__title">Made for the keyboard</h3>
+            <p class="tile__text">Turn pages, jump to either end, zoom and open the contents without reaching for the mouse. Menus are drawn by the extension and work with arrows, Enter and type-ahead.</p>
+          </div>
+          <div class="tile__art art-keys" aria-hidden="true">
+            <span class="art-keys__row"><span class="kbd kbd--lg">←</span><span class="kbd kbd--lg">→</span><span class="art-keys__label">pages</span></span>
+            <span class="art-keys__row"><span class="kbd kbd--lg">+</span><span class="kbd kbd--lg">−</span><span class="kbd kbd--lg">0</span><span class="art-keys__label">zoom</span></span>
+            <span class="art-keys__row"><span class="kbd kbd--lg">C</span><span class="art-keys__label">contents</span><span class="kbd kbd--lg">Home</span><span class="kbd kbd--lg">End</span></span>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================== modes -->
+  <section class="section section--tint" id="modes" aria-labelledby="modes-title">
+    <div class="container">
+      <div class="section__head">
+        <p class="eyebrow">Reading modes</p>
+        <h2 class="section__title" id="modes-title">Each mode anchors a different part of the word</h2>
+        <p class="section__lede">Every sample below is rendered live by the code the extension runs, so what you see here is what you get in a document.</p>
+      </div>
+      <div class="modes">
+        <article class="mode">
+          <div class="mode__head"><h3 class="mode__name">Half</h3><span class="mode__badge">Default</span></div>
+          <p class="mode__sample bionic" data-bionic-sample="half">Comprehension builds steadily through careful attention.</p>
+          <p class="mode__desc">The first half of each word, as in Bionic Reading.</p>
+        </article>
+        <article class="mode">
+          <div class="mode__head"><h3 class="mode__name">Classic</h3></div>
+          <p class="mode__sample bionic" data-bionic-sample="classic">Comprehension builds steadily through careful attention.</p>
+          <p class="mode__desc">A leading share of each word; intensity sets how much.</p>
+        </article>
+        <article class="mode">
+          <div class="mode__head"><h3 class="mode__name">Vowel anchor</h3></div>
+          <p class="mode__sample bionic" data-bionic-sample="vowel">Comprehension builds steadily through careful attention.</p>
+          <p class="mode__desc">Up to the first vowel group; suited to many languages.</p>
+        </article>
+        <article class="mode">
+          <div class="mode__head"><h3 class="mode__name">Low distraction</h3></div>
+          <p class="mode__sample bionic" data-bionic-sample="dim">Comprehension builds steadily through careful attention.</p>
+          <p class="mode__desc">The prefix stays, the rest of the word fades back.</p>
+        </article>
+        <article class="mode">
+          <div class="mode__head"><h3 class="mode__name">Custom rule</h3></div>
+          <p class="mode__sample bionic" data-bionic-sample="rules">Comprehension builds steadily through careful attention.</p>
+          <p class="mode__desc">Per-length letter counts, plus a fraction for long words.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================= how -->
+  <section class="section" id="how" aria-labelledby="how-title">
+    <div class="container">
+      <div class="section__head">
+        <p class="eyebrow">How it works</p>
+        <h2 class="section__title" id="how-title">Sniff, parse, emphasize</h2>
+        <p class="section__lede">Three steps, all inside the extension page. The document is never parsed anywhere else.</p>
+      </div>
+      <ol class="steps">
+        <li class="step">
+          <span class="step__no">01</span>
+          <h3 class="step__title">Sniff</h3>
+          <p class="step__text">The first bytes decide the path: <code>%PDF-</code> goes to PDF.js, a <code>PK</code> zip with an EPUB container goes to the book reader. File names are not trusted.</p>
+        </li>
+        <li class="step">
+          <span class="step__no">02</span>
+          <h3 class="step__title">Parse on device</h3>
+          <p class="step__text">A bundled PDF.js renders each page and reports where its text sits. An EPUB is unzipped with fflate; its OPF gives the spine, its nav or NCX the contents.</p>
+        </li>
+        <li class="step">
+          <span class="step__no">03</span>
+          <h3 class="step__title">Emphasize</h3>
+          <p class="step__text">The fixation step wraps each word's opening in <code>&lt;b&gt;</code>. It only touches text nodes, so a mode change repaints in place and the original bytes are never modified.</p>
+        </li>
+      </ol>
+
+      <div class="arch">
+        <div class="arch__head"><span class="arch__title">Module map</span><span class="mute mono">src/</span></div>
+        <div class="arch__grid">
+          <div class="arch__node"><span class="arch__path">popup / background</span><span class="arch__desc">opens <code>reader.html?src=…</code> for the current tab or a picked file</span></div>
+          <div class="arch__node arch__node--hi"><span class="arch__path">reader/reader.ts</span><span class="arch__desc">sniffs the bytes, owns the toolbar, zoom, contents and resume</span></div>
+          <div class="arch__node"><span class="arch__path">pdf/pdf.ts · layout.ts · zoom.ts</span><span class="arch__desc">canvas page, positioned text layer, fit and zoom maths</span></div>
+          <div class="arch__node"><span class="arch__path">epub/epub.ts</span><span class="arch__desc">unzip, OPF, spine, contents, sanitized chapters</span></div>
+          <div class="arch__node"><span class="arch__path">core/*</span><span class="arch__desc">the pure fixation algorithm, shared with Bionic Page and unit-tested</span></div>
+          <div class="arch__node"><span class="arch__path">shared/select.ts</span><span class="arch__desc">the designed menus over native selects, keyboard-accessible</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================= privacy -->
+  <section class="band" id="privacy" aria-labelledby="privacy-title">
+    <div class="container band__grid">
+      <div class="band__copy">
+        <p class="eyebrow eyebrow--band">Privacy</p>
+        <h2 class="band__title" id="privacy-title">There is no server.</h2>
+        <p class="band__text">Bionic Docs has nowhere to send your document. There is no backend, no analytics and no account, and a test fails the build if a network call appears anywhere in the source except the one that loads the file you opened.</p>
+        <ul class="band__list">
+          <li><svg class="icon icon--sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.2 4.2L19 7"></path></svg>PDF.js, its worker, cmaps and fonts are bundled</li>
+          <li><svg class="icon icon--sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.2 4.2L19 7"></path></svg>No <code>eval</code>, no remote scripts, a strict extension CSP</li>
+          <li><svg class="icon icon--sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.2 4.2L19 7"></path></svg>EPUB chapters are sanitized before they are shown</li>
+        </ul>
+      </div>
+      <div class="netlog" aria-label="What the reader's network log shows">
+        <div class="netlog__bar"><span>Network</span><span class="netlog__count">1 request</span></div>
+        <div class="netlog__row netlog__row--head"><span>Method</span><span>URL</span><span>Status</span></div>
+        <div class="netlog__row"><span class="netlog__method">GET</span><span class="netlog__url">file:///Users/you/papers/report.pdf</span><span class="netlog__ok">200</span></div>
+        <div class="netlog__empty">The document you opened. That is the only request.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================== limits -->
+  <section class="section" id="limits" aria-labelledby="limits-title">
+    <div class="container">
+      <div class="section__head">
+        <p class="eyebrow">Honest limits</p>
+        <h2 class="section__title" id="limits-title">What it does not do</h2>
+        <p class="section__lede">The limits are part of the contract, not footnotes.</p>
+      </div>
+      <div class="limits">
+        <div class="limit">
+          <h3 class="limit__title">Scanned PDFs</h3>
+          <p class="limit__text">A scan has no text layer, so the page is shown as the image it is, without emphasis. OCR is out of scope for now.</p>
+        </div>
+        <div class="limit">
+          <h3 class="limit__title">Embedded fonts</h3>
+          <p class="limit__text">Emphasized text is drawn in the browser's own fonts, stretched to the original width, so letter shapes can differ from the document's.</p>
+        </div>
+        <div class="limit">
+          <h3 class="limit__title">Special glyphs</h3>
+          <p class="limit__text">Text PDF.js paints inside transparency groups or as Type 3 glyphs keeps its original look and does not get the emphasis.</p>
+        </div>
+        <div class="limit">
+          <h3 class="limit__title">Book styling</h3>
+          <p class="limit__text">EPUB rendering is intentionally minimal: no pagination and no publisher CSS beyond the sanitized chapter markup.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================= install -->
+  <section class="section section--tint" id="install" aria-labelledby="install-title">
+    <div class="container install">
+      <div class="install__copy">
+        <p class="eyebrow">Install</p>
+        <h2 class="section__title" id="install-title">Build it from source</h2>
+        <p class="section__lede">Store listings are pending. One source tree builds both targets; load the one for your browser.</p>
+        <ol class="install__steps">
+          <li><span class="install__no">1</span><span>Run the four commands on the right. You need <a href="https://bun.sh">Bun</a>.</span></li>
+          <li><span class="install__no">2</span><span><b>Chrome or Edge:</b> open <code>chrome://extensions</code>, turn on Developer mode, choose Load unpacked and pick <code>dist/chrome</code>.</span></li>
+          <li><span class="install__no">3</span><span><b>Firefox 140+:</b> open <code>about:debugging</code>, This Firefox, Load Temporary Add-on, and pick <code>dist/firefox/manifest.json</code>.</span></li>
+        </ol>
+      </div>
+      <div class="term">
         <div class="term__bar">
-          <span class="term__dot"></span><span class="term__dot"></span><span class="term__dot"></span>
-          <span class="term__title">terminal — bionic-docs</span>
-          <button type="button" class="term__copy" id="term-copy">Copy all</button>
+          <span class="window__dots"><span></span><span></span><span></span></span>
+          <span class="term__title">zsh</span>
+          <button type="button" class="term__copy" id="term-copy">Copy</button>
         </div>
-        <div class="term__body">
-          <div class="term__line"><span class="prompt">$</span><span><span class="cmd">git</span> clone https://github.com/srivtx/bionic-docs</span></div>
-          <div class="term__line"><span class="prompt">$</span><span><span class="cmd">cd</span> bionic-docs <span class="flag">&amp;&amp;</span> <span class="cmd">bun</span> install</span></div>
-          <div class="term__line"><span class="prompt">$</span><span><span class="cmd">bun</span> run build</span></div>
-          <div class="term__line c"><span class="prompt">#</span><span>Chrome/Edge: chrome://extensions → Developer mode → Load unpacked → dist/chrome</span></div>
-          <div class="term__line c"><span class="prompt">#</span><span>Firefox: about:debugging → This Firefox → Load Temporary Add-on → dist/firefox/manifest.json</span></div>
-        </div>
+        <pre class="term__body" id="term-body"><span class="term__prompt">$</span> git clone https://github.com/srivtx/bionic-docs
+<span class="term__prompt">$</span> cd bionic-docs
+<span class="term__prompt">$</span> bun install
+<span class="term__prompt">$</span> bun run build
+<span class="term__out">built dist/chrome
+built dist/firefox</span></pre>
       </div>
-      <p class="note" data-reveal>Once built, press <kbd class="keycap">Ctrl/Cmd + Shift + O</kbd> to open the current document at any time. Requires Chrome 116 or newer, or Firefox 140 or newer — the Firefox floor is 140 because <code>data_collection_permissions</code> is only understood from that version. <a href="https://github.com/srivtx/bionic-docs/releases">Releases</a> are on GitHub.</p>
     </div>
   </section>
 
-  <!-- ================= 11 faq ================= -->
+  <!-- ============================================================= faq -->
   <section class="section" id="faq" aria-labelledby="faq-title">
-    <div class="container">
-      <div class="section__head" data-reveal>
-        <p class="folio"><span class="folio__no">11</span><span class="folio__name">FAQ</span><span class="folio__rule" aria-hidden="true"></span></p>
-        <h2 id="faq-title">Honest answers</h2>
-        <p class="section__stand">Short, direct answers. Where a claim has a limit, the limit is stated.</p>
+    <div class="container faq">
+      <div class="section__head">
+        <p class="eyebrow">FAQ</p>
+        <h2 class="section__title" id="faq-title">Questions, answered plainly</h2>
       </div>
-      <div class="qa" id="faq-list" data-reveal>
-        <div class="qa__item">
-          <button type="button" class="qa__q" aria-expanded="false">
-            <span class="qa__no" aria-hidden="true">Q1</span>
-            <span class="qa__q-text">Is it free and open source?</span>
-            <span class="qa__x" aria-hidden="true"><svg class="icon" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"></path></svg></span>
-          </button>
-          <div class="qa__a"><p class="qa__a-inner">Yes. bionic-docs is MIT licensed and the source is on GitHub. It is not affiliated with or endorsed by Bionic Reading GmbH.</p></div>
-        </div>
-        <div class="qa__item">
-          <button type="button" class="qa__q" aria-expanded="false">
-            <span class="qa__no" aria-hidden="true">Q2</span>
-            <span class="qa__q-text">Does it work on scanned PDFs?</span>
-            <span class="qa__x" aria-hidden="true"><svg class="icon" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"></path></svg></span>
-          </button>
-          <div class="qa__a"><p class="qa__a-inner">No. A scanned page is an image with no text layer, so there is nothing to extract and the page renders empty. OCR is out of scope in this version. If a document has a real text layer, it works.</p></div>
-        </div>
-        <div class="qa__item">
-          <button type="button" class="qa__q" aria-expanded="false">
-            <span class="qa__no" aria-hidden="true">Q3</span>
-            <span class="qa__q-text">Does it upload my files?</span>
-            <span class="qa__x" aria-hidden="true"><svg class="icon" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"></path></svg></span>
-          </button>
-          <div class="qa__a"><p class="qa__a-inner">No. There is no server and no analytics. Files are parsed in the extension page, and the only fetch in the codebase is the reader loading a document URL you explicitly opened.</p></div>
-        </div>
-        <div class="qa__item">
-          <button type="button" class="qa__q" aria-expanded="false">
-            <span class="qa__no" aria-hidden="true">Q4</span>
-            <span class="qa__q-text">Does a PDF keep its original page layout?</span>
-            <span class="qa__x" aria-hidden="true"><svg class="icon" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"></path></svg></span>
-          </button>
-          <div class="qa__a"><p class="qa__a-inner">Yes. Each page is drawn as the original, with its images, diagrams, colors and layout, and the text is placed over it at the original position with the emphasis applied. The trade is the letter shapes: text uses the browser's own fonts, stretched to each line's original width, so it can look slightly different from the document's embedded fonts.</p></div>
-        </div>
-        <div class="qa__item">
-          <button type="button" class="qa__q" aria-expanded="false">
-            <span class="qa__no" aria-hidden="true">Q5</span>
-            <span class="qa__q-text">What happens to my files?</span>
-            <span class="qa__x" aria-hidden="true"><svg class="icon" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"></path></svg></span>
-          </button>
-          <div class="qa__a"><p class="qa__a-inner">Nothing is kept after you close the reader. The bytes are read into memory, parsed in the extension page, and released when you close the reader page. Two things are persisted, using the extension&#8217;s storage permission: the reading settings, and the last page or chapter you were on for each document, so the reader can offer to resume. The remembered position is keyed by a content fingerprint of the document, not its URL, and no document bytes or text are stored.</p></div>
-        </div>
-        <div class="qa__item">
-          <button type="button" class="qa__q" aria-expanded="false">
-            <span class="qa__no" aria-hidden="true">Q6</span>
-            <span class="qa__q-text">Can I use it offline?</span>
-            <span class="qa__x" aria-hidden="true"><svg class="icon" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"></path></svg></span>
-          </button>
-          <div class="qa__a"><p class="qa__a-inner">Yes, by design. Nothing about reading, emphasis, or navigation needs the network. The only time the network is touched at all is when you ask it to open a document that already lives at a URL.</p></div>
-        </div>
-        <div class="qa__item">
-          <button type="button" class="qa__q" aria-expanded="false">
-            <span class="qa__no" aria-hidden="true">Q7</span>
-            <span class="qa__q-text">Does it work in Firefox?</span>
-            <span class="qa__x" aria-hidden="true"><svg class="icon" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"></path></svg></span>
-          </button>
-          <div class="qa__a"><p class="qa__a-inner">Yes, from Firefox 140. The manifest uses <code>data_collection_permissions</code>, which earlier versions do not understand. The Chrome build targets Chrome 116 and newer, and also loads in Edge.</p></div>
-        </div>
-        <div class="qa__item">
-          <button type="button" class="qa__q" aria-expanded="false">
-            <span class="qa__no" aria-hidden="true">Q8</span>
-            <span class="qa__q-text">Is it on the Chrome Web Store or addons.mozilla.org?</span>
-            <span class="qa__x" aria-hidden="true"><svg class="icon" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"></path></svg></span>
-          </button>
-          <div class="qa__a"><p class="qa__a-inner">Store listings are pending. For now you build both targets from source and load them unpacked; the install section has the steps.</p></div>
-        </div>
+      <div class="qa" id="faq-list">
+        <details class="qa__item">
+          <summary class="qa__q">Does my document get uploaded anywhere?<span class="qa__x" aria-hidden="true"></span></summary>
+          <p class="qa__a">No. The file is read and parsed inside the extension page. There is no server to send it to, and the source is checked by a test that fails on any other network call.</p>
+        </details>
+        <details class="qa__item">
+          <summary class="qa__q">Will the PDF still look like the PDF?<span class="qa__x" aria-hidden="true"></span></summary>
+          <p class="qa__a">Yes. Each page is drawn as it was printed, figures and colours included, and the emphasized text sits in the same place on top. Only the letter shapes of the emphasized text can differ, because the browser's fonts stand in for the embedded ones.</p>
+        </details>
+        <details class="qa__item">
+          <summary class="qa__q">Can I open PDFs from my computer?<span class="qa__x" aria-hidden="true"></span></summary>
+          <p class="qa__a">Yes. Use Open a file… in the popup, or drag a file onto the reader. To open <code>file://</code> PDFs that are already in a tab, allow file access for the extension in your browser's extension settings.</p>
+        </details>
+        <details class="qa__item">
+          <summary class="qa__q">Does it work offline?<span class="qa__x" aria-hidden="true"></span></summary>
+          <p class="qa__a">Yes. Everything it needs, PDF.js and its fonts included, is in the package. Nothing is fetched at run time.</p>
+        </details>
+        <details class="qa__item">
+          <summary class="qa__q">Why does Firefox need version 140?<span class="qa__x" aria-hidden="true"></span></summary>
+          <p class="qa__a">The manifest declares that the extension collects no data, and Firefox only understands that declaration from version 140.</p>
+        </details>
+        <details class="qa__item">
+          <summary class="qa__q">Is this Bionic Reading?<span class="qa__x" aria-hidden="true"></span></summary>
+          <p class="qa__a">No. It is an independent, MIT-licensed project that uses its own fixation algorithm, shared with its sibling Bionic Page. It is not affiliated with Bionic Reading GmbH.</p>
+        </details>
       </div>
     </div>
   </section>
 
+  <!-- ============================================================= cta -->
+  <section class="cta" aria-labelledby="cta-title">
+    <div class="container">
+      <div class="cta__card">
+        <h2 class="cta__title bionic" id="cta-title" data-bionic-sample="half">Your documents, easier to follow.</h2>
+        <p class="cta__text">Free, open source and on-device. Build it in a minute.</p>
+        <div class="btn-row btn-row--center">
+          <a class="btn btn--primary" href="#install">Install from source</a>
+          <a class="btn btn--ghost" href="https://github.com/srivtx/bionic-docs">View on GitHub</a>
+        </div>
+      </div>
+    </div>
+  </section>
 </main>
 
 <footer class="footer">
-  <div class="container">
-    <hr class="footer__rule">
-    <p class="footer__mark bionic" data-bionic-sample="dim" aria-label="Bionic Docs">Bionic Docs</p>
-    <div class="footer__cols">
-      <div class="footer__brand">
-        <p>Bionic Docs</p>
-        <p class="muted footer__tagline">PDF and EPUB, parsed on your machine. No upload, no account, no remote code.</p>
-      </div>
-      <nav aria-label="Project">
-        <h2>Project</h2>
-        <ul>
-          <li><a href="https://github.com/srivtx/bionic-docs">Repository</a></li>
-          <li><a href="https://github.com/srivtx/bionic-docs/releases">Releases</a></li>
-          <li><a href="https://github.com/srivtx/bionic-docs/issues">Issues</a></li>
-          <li><a href="https://github.com/srivtx/bionic-docs/blob/main/LICENSE">MIT license</a></li>
-        </ul>
-      </nav>
-      <nav aria-label="Docs">
-        <h2>Docs</h2>
-        <ul>
-          <li><a href="https://github.com/srivtx/bionic-docs/blob/main/docs/CONTRACTS.md">Contracts</a></li>
-          <li><a href="https://github.com/srivtx/bionic-docs/blob/main/docs/ARCHITECTURE.md">Architecture</a></li>
-          <li><a href="https://github.com/srivtx/bionic-docs/blob/main/docs/PRIOR-ART.md">Prior art</a></li>
-        </ul>
-      </nav>
-      <div>
-        <h2>Build</h2>
-        <ul>
-          <li>v0.1.0 · MIT</li>
-          <li>159 tests · 23/23 e2e</li>
-          <li>Chrome 116+ · Firefox 140+</li>
-          <li>No network requests for content</li>
-        </ul>
-      </div>
+  <div class="container footer__grid">
+    <div class="footer__brand">
+      <a class="brand" href="#top" aria-label="Bionic Docs, back to top">
+        <span class="brand__mark" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 4.2h13.4a2 2 0 0 1 2 2V20a2 2 0 0 1-2 2H3z"></path><path d="M5.6 9h9.2"></path><path d="M5.6 13.2h5.6" stroke-opacity=".45"></path></svg></span>
+        <span class="brand__name"><b>Bi</b>onic <b>Do</b>cs</span>
+      </a>
+      <p class="footer__note">Read PDF and EPUB with bionic fixation, entirely on-device. By svx.</p>
     </div>
-    <div class="footer__meta">
-      <p>by svx · MIT licensed · not affiliated with Bionic Reading GmbH</p>
-      <p>© 2026 Bionic Docs</p>
-    </div>
+    <nav class="footer__col" aria-label="Project">
+      <p class="footer__head">Project</p>
+      <a href="https://github.com/srivtx/bionic-docs">Repository</a>
+      <a href="https://github.com/srivtx/bionic-docs/releases">Releases</a>
+      <a href="https://github.com/srivtx/bionic-docs/blob/main/CHANGELOG.md">Changelog</a>
+      <a href="https://github.com/srivtx/bionic-docs/blob/main/SECURITY.md">Security</a>
+    </nav>
+    <nav class="footer__col" aria-label="Docs">
+      <p class="footer__head">Docs</p>
+      <a href="https://github.com/srivtx/bionic-docs/blob/main/README.md">README</a>
+      <a href="https://github.com/srivtx/bionic-docs/blob/main/docs/ARCHITECTURE.md">Architecture</a>
+      <a href="https://github.com/srivtx/bionic-docs/blob/main/docs/PRIOR-ART.md">Prior art</a>
+    </nav>
+    <nav class="footer__col" aria-label="Family">
+      <p class="footer__head">Sibling</p>
+      <a href="https://srivtx.github.io/bionic-page/">Bionic Page</a>
+      <span class="footer__small">The same fixation for any web page.</span>
+    </nav>
+  </div>
+  <div class="container footer__base">
+    <span>MIT licensed. Not affiliated with Bionic Reading GmbH.</span>
+    <a href="#top">Back to top</a>
   </div>
 </footer>
 
-<script src="assets/core.js?v=dbcbfeadfd"></script>
-<script src="assets/demo.js?v=dbcbfeadfd"></script>
+<script src="assets/core.js?v=e9177265d2"></script>
+<script src="assets/app.js?v=e9177265d2"></script>
 </body>
 </html>

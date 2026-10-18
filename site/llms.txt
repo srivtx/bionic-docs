@@ -1,27 +1,26 @@
 # bionic-docs
 
-> Read PDF and EPUB with bionic fixation. A document is parsed on your machine and the leading letters of every word are emphasized. No upload, no account, no remote code.
+> Read PDF and EPUB with bionic fixation. A document is opened on your machine, every PDF page is kept as it was printed, and the leading letters of every word are emphasized. No upload, no account, no remote code.
 
-A Manifest V3 extension for Chrome, Edge and Firefox. A PDF's text layer is extracted with a bundled PDF.js and rebuilt into lines; an EPUB is unzipped in memory, its chapters sanitized, and its spine and table of contents read. Both paths end in the same fixation step, so the algorithm never has to know what a PDF is.
+A Manifest V3 extension for Chrome, Edge and Firefox. A bundled PDF.js draws each PDF page to a canvas, so images, diagrams and colours stay, and lays a positioned text layer over it that gets the emphasis. Pages open fitted to the window and zoom from 50% to 300%. An EPUB is unzipped in memory, its chapters sanitized and reflowed, and its spine and table of contents read. Both paths end in the same fixation step, shared with the sibling extension Bionic Page.
 
 ## Page
 
 Everything is on one page, with a section for each part:
 
-- [The reader](https://srivtx.github.io/bionic-docs/#reader): the compiled algorithm running over the repository's own fixture text, with page and chapter navigation and an on/off switch.
-- [Before / after](https://srivtx.github.io/bionic-docs/#compare-section): the same page with a divider you can drag between the two versions.
-- [Formats](https://srivtx.github.io/bionic-docs/#formats): the PDF and EPUB paths in detail — line reconstruction, unzip, OPF, spine, TOC, and the sanitizing rules.
-- [Reading modes](https://srivtx.github.io/bionic-docs/#modes): the five modes — Half, Classic, Vowel anchor, Low distraction, Custom rule — and what each one emphasizes.
-- [How it works](https://srivtx.github.io/bionic-docs/#how): sniff the magic bytes, parse or unzip, then emphasize reversibly.
-- [Architecture](https://srivtx.github.io/bionic-docs/#architecture): the module map and the invariants the build enforces — on-device, no remote code, sanitize before render.
-- [Limits](https://srivtx.github.io/bionic-docs/#safe): scanned PDFs, substituted PDF fonts, minimal EPUB rendering, and what it does handle.
-- [Numbers](https://srivtx.github.io/bionic-docs/#numbers): test count, e2e checks, manifest entries, modes, and uploads.
-- [Privacy](https://srivtx.github.io/bionic-docs/#privacy): no network requests for content, one fetch for the document you opened, parsing in the extension page, and the anti-network test gate.
-- [Install](https://srivtx.github.io/bionic-docs/#install): build both targets from one source tree.
-- [FAQ](https://srivtx.github.io/bionic-docs/#faq): license and affiliation, scanned PDFs, uploads, PDF layout, Firefox support, file handling, and offline use.
+- [The reader](https://srivtx.github.io/bionic-docs/#reader): the compiled algorithm running over the repository's own fixture text, with a contents list, page and chapter navigation, the five modes, an intensity slider, an on/off switch, and a box for your own text.
+- [Before and after](https://srivtx.github.io/bionic-docs/#compare-section): the same paragraph with a divider you can drag or move with the arrow keys.
+- [Features](https://srivtx.github.io/bionic-docs/#features): pages as printed, fit and zoom, EPUB reflow, the five modes, resume, and keyboard control.
+- [Reading modes](https://srivtx.github.io/bionic-docs/#modes): Half, Classic, Vowel anchor, Low distraction and Custom rule, each rendered live.
+- [How it works](https://srivtx.github.io/bionic-docs/#how): sniff the first bytes, parse on device, emphasize text nodes; plus the module map.
+- [Privacy](https://srivtx.github.io/bionic-docs/#privacy): no server, one request for the document you opened, bundled parsers, and the anti-network test gate.
+- [Limits](https://srivtx.github.io/bionic-docs/#limits): scanned PDFs, embedded fonts, transparency groups and Type 3 glyphs, and minimal EPUB styling.
+- [Install](https://srivtx.github.io/bionic-docs/#install): build both targets from one source tree with Bun and load the unpacked extension.
+- [FAQ](https://srivtx.github.io/bionic-docs/#faq): uploads, PDF fidelity, local files, offline use, the Firefox version floor, and affiliation.
 
 ## Source
 
 - Repository: https://github.com/srivtx/bionic-docs
+- Sibling: https://srivtx.github.io/bionic-page/
 - License: MIT. Not affiliated with Bionic Reading GmbH.
 - By svx.

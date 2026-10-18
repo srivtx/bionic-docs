@@ -210,6 +210,26 @@ describe("algorithm: the ten core rules", () => {
     }
     expect(stripTags(bionicText("x", opt({})))).toBe("x");
   });
+
+  // Intensity is a multiplier on every mode, neutral at the default 0.5, as in
+  // Bionic Page. It used to be read only by classic and dim, so the slider did
+  // nothing in the default (half) mode.
+  test("intensity scales every mode and is neutral at 0.5", () => {
+    for (const mode of ALL_MODES) {
+      const low = boldLength("strength", opt({ mode, intensity: 0.25 }));
+      const mid = boldLength("strength", opt({ mode, intensity: 0.5 }));
+      const high = boldLength("strength", opt({ mode, intensity: 0.9 }));
+      expect(low).toBeLessThanOrEqual(mid);
+      expect(high).toBeGreaterThanOrEqual(mid);
+      expect(low < mid || high > mid).toBe(true);
+      expect(high).toBeLessThanOrEqual(8);
+    }
+    expect(boldLength("abcdefgh", opt({ mode: "half", intensity: 0.5 }))).toBe(4);
+    expect(boldLength("abcdefgh", opt({ mode: "half", intensity: 0.25 }))).toBe(2);
+    expect(boldLength("abcdefgh", opt({ mode: "half", intensity: 0.9 }))).toBe(7);
+    const rule = opt({ mode: "rules", rule: "0 1 1 2 0.4", minWordLength: 2 });
+    expect(boldLength("a", { ...rule, intensity: 0.9 })).toBe(0);
+  });
 });
 
 describe("languages: unicode, accents and affixes", () => {

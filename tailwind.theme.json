@@ -2,206 +2,77 @@
   "theme": {
     "extend": {
       "colors": {
-        "primary": "#0f766e",
-        "primary-dark": "#2dd4bf",
-        "accent": "#0f766e",
-        "accent-dark": "#2dd4bf",
-        "accent-2": "#14b8a6",
-        "accent-2-dark": "#5eead4",
-        "accent-soft": "#e2f4f2",
-        "accent-soft-dark": "#0f2724",
-        "accent-ink": "#ffffff",
-        "accent-ink-dark": "#08211e",
-        "ink": "#14161a",
-        "ink-dark": "#f4f5f7",
-        "body": "#3f4550",
-        "body-dark": "#c3c9d4",
-        "mute": "#6b7280",
-        "mute-dark": "#878fa0",
-        "canvas": "#fbfbf9",
-        "canvas-dark": "#0b0d11",
-        "canvas-soft": "#f4f4f0",
-        "canvas-soft-dark": "#13161c",
-        "hairline": "#e6e6df",
-        "hairline-dark": "#222734",
-        "success": "#0d9488",
-        "success-dark": "#34d399",
-        "term-bg": "#0d1117",
-        "term-bar": "#161b22",
-        "term-ink": "#c9d1d9",
-        "term-prompt": "#7ee787",
-        "term-dim": "#8b949e"
+        "bg": "#f5f7f6",
+        "bg-dark": "#090d0c",
+        "bg-2": "#edf1ef",
+        "bg-2-dark": "#0d1312",
+        "card": "#ffffff",
+        "card-dark": "#111817",
+        "sheet": "#ffffff",
+        "sheet-dark": "#151d1c",
+        "ink": "#0c1514",
+        "ink-dark": "#edf5f3",
+        "body": "#384543",
+        "body-dark": "#b6c4c0",
+        "mute": "#66736f",
+        "mute-dark": "#84938f",
+        "faint": "#93a09c",
+        "faint-dark": "#5e6c68",
+        "line": "#dde4e1",
+        "line-dark": "#1d2826",
+        "line-2": "#c9d3cf",
+        "line-2-dark": "#2a3735",
+        "accent": "#0e6e63",
+        "accent-dark": "#35cfba",
+        "accent-ink": "#0a5449",
+        "accent-ink-dark": "#6fe3d2",
+        "accent-bright": "#14b8a6",
+        "accent-bright-dark": "#35cfba",
+        "on-accent": "#ffffff",
+        "on-accent-dark": "#04140f",
+        "band": "#0b2723",
+        "band-dark": "#0d1d1b",
+        "band-2": "#0f332e",
+        "band-2-dark": "#112624",
+        "band-ink": "#e9f6f2",
+        "band-ink-dark": "#e9f6f2",
+        "band-mute": "#9fc1b9",
+        "band-mute-dark": "#8fb3ab",
+        "danger": "#b4231b",
+        "danger-dark": "#f2857c"
       },
       "fontFamily": {
-        "display": [
-          "Geist"
+        "sans": [
+          "Geist",
+          "ui-sans-serif",
+          "system-ui",
+          "sans-serif"
         ],
-        "h1": [
-          "Geist"
+        "mono": [
+          "Geist Mono",
+          "ui-monospace",
+          "monospace"
         ],
-        "h1-anchor": [
-          "Geist"
-        ],
-        "h2": [
-          "Geist"
-        ],
-        "h3": [
-          "Geist"
-        ],
-        "lede": [
-          "Geist"
-        ],
-        "body-md": [
-          "Geist"
-        ],
-        "body-sm": [
-          "Geist"
-        ],
-        "reading": [
-          "Georgia"
-        ],
-        "reading-lg": [
-          "Georgia"
-        ],
-        "eyebrow": [
-          "Geist"
-        ],
-        "label": [
-          "Geist"
-        ],
-        "metric": [
-          "Geist"
-        ],
-        "control": [
-          "Geist"
-        ],
-        "mono-sm": [
-          "Geist Mono"
-        ],
-        "mono-md": [
-          "Geist Mono"
-        ]
-      },
-      "fontSize": {
-        "display": [
-          "5.2rem",
-          {
-            "letterSpacing": "-0.04em",
-            "fontWeight": "800"
-          }
-        ],
-        "h1": [
-          "3.6rem",
-          {
-            "letterSpacing": "-0.032em",
-            "fontWeight": "400"
-          }
-        ],
-        "h2": [
-          "2.4rem",
-          {
-            "letterSpacing": "-0.028em",
-            "fontWeight": "600"
-          }
-        ],
-        "h3": [
-          "1.05rem",
-          {
-            "letterSpacing": "-0.022em",
-            "fontWeight": "600"
-          }
-        ],
-        "lede": [
-          "1.06rem",
-          {
-            "fontWeight": "400"
-          }
-        ],
-        "body-md": [
-          "1rem",
-          {
-            "fontWeight": "400"
-          }
-        ],
-        "body-sm": [
-          "0.92rem",
-          {
-            "fontWeight": "400"
-          }
-        ],
-        "reading": [
-          "1.06rem",
-          {
-            "fontWeight": "400"
-          }
-        ],
-        "reading-lg": [
-          "1.18rem",
-          {
-            "fontWeight": "400"
-          }
-        ],
-        "eyebrow": [
-          "0.7rem",
-          {
-            "letterSpacing": "0.18em",
-            "fontWeight": "700"
-          }
-        ],
-        "label": [
-          "0.72rem",
-          {
-            "letterSpacing": "0.12em",
-            "fontWeight": "700"
-          }
-        ],
-        "metric": [
-          "2.6rem",
-          {
-            "letterSpacing": "-0.03em",
-            "fontWeight": "800"
-          }
-        ],
-        "control": [
-          "0.95rem",
-          {
-            "fontWeight": "600"
-          }
-        ],
-        "mono-sm": [
-          "0.74rem",
-          {
-            "fontWeight": "600"
-          }
-        ],
-        "mono-md": [
-          "0.9rem",
-          {
-            "fontWeight": "400"
-          }
+        "serif": [
+          "Iowan Old Style",
+          "Charter",
+          "Georgia",
+          "serif"
         ]
       },
       "borderRadius": {
-        "xs": "6px",
-        "sm": "9px",
-        "md": "12px",
-        "lg": "20px",
-        "full": "999px"
+        "s": "8px",
+        "m": "12px",
+        "l": "18px",
+        "xl": "24px"
       },
-      "spacing": {
-        "s-1": "4px",
-        "s-2": "8px",
-        "s-3": "12px",
-        "s-4": "16px",
-        "s-5": "24px",
-        "s-6": "32px",
-        "s-7": "48px",
-        "s-8": "64px",
-        "s-9": "96px",
-        "container": "1120px",
-        "nav-height": "64px",
-        "section-y": "96px",
-        "section-y-tight": "56px"
+      "boxShadow": {
+        "1": "0 1px 2px rgba(12, 21, 20, 0.05)",
+        "2": "0 1px 2px rgba(12, 21, 20, 0.04), 0 8px 24px rgba(12, 21, 20, 0.06)",
+        "3": "0 2px 6px rgba(12, 21, 20, 0.05), 0 24px 60px rgba(12, 21, 20, 0.12)"
+      },
+      "maxWidth": {
+        "container": "1180px"
       }
     }
   }

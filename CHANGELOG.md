@@ -6,6 +6,21 @@ All notable changes to Bionic Docs.
 
 ### Changed
 
+- **A new website.** `site/` is redesigned from scratch. The hero shows a
+  reader window with a PDF page, chart and zoom bar. The first section is a
+  working reader with a contents sidebar, both fixtures, a box for your own
+  text, the five modes and intensity. A before/after divider keeps both
+  layers on identical lines. Further down: a feature grid, live mode samples,
+  how it works with a module map, a privacy band, honest limits, install
+  steps and an FAQ. It uses the bundled Geist faces, Docs' teal, and light
+  and dark themes. `assets/app.js` replaces `demo.js`. The social card is
+  regenerated in teal, and `DESIGN.md`, `tokens.json` and
+  `tailwind.theme.json` describe the new design.
+- **Intensity works in every mode.** It is now a multiplier that is neutral
+  at the default 0.5, as in Bionic Page. Before, it was read only by Classic
+  and Low distraction, so moving the slider in the default Half mode did
+  nothing. Default settings render exactly as before.
+
 - **PDF pages keep their original layout.** Each page is drawn as the original,
   with its images, diagrams, colors and positions, and the bionic emphasis is
   applied to the text placed over it at its original spot. Pages are drawn

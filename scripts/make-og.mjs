@@ -74,12 +74,18 @@ const CARDS = {
     tagline: "Turn any web page into a bionic reading page.",
     footnote: "Manifest V3 · Chrome + Firefox · no network",
     mark: MARK_PAGE,
+    accent: "#818cf8",
+    ground: "#0a0a0a",
+    line: "#232326",
   },
   "bionic-docs": {
     name: "bionic-docs",
-    tagline: "Read PDF and EPUB with bionic fixation, entirely on-device.",
+    tagline: "Read PDF and EPUB with bionic fixation. Nothing is uploaded.",
     footnote: "Manifest V3 · Chrome + Firefox · no upload",
     mark: MARK_DOCS,
+    accent: "#35cfba",
+    ground: "#090d0c",
+    line: "#1d2826",
   },
 };
 
@@ -88,6 +94,9 @@ const card = CARDS[repoName] ?? {
   tagline: "Read with bionic fixation.",
   footnote: "Manifest V3 · Chrome + Firefox",
   mark: MARK_PAGE,
+  accent: "#818cf8",
+  ground: "#0a0a0a",
+  line: "#232326",
 };
 
 const escapeHtml = (value) =>
@@ -133,7 +142,7 @@ const html = `<!doctype html>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   html, body { width: 1200px; height: 630px; }
   body {
-    background: #0a0a0a;
+    background: ${card.ground};
     color: #fafafa;
     font-family: "Geist", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     -webkit-font-smoothing: antialiased;
@@ -141,7 +150,7 @@ const html = `<!doctype html>
   .frame {
     position: absolute;
     inset: 24px;
-    border: 1px solid #232326;
+    border: 1px solid ${card.line};
     border-radius: 18px;
   }
   .content {
@@ -156,7 +165,7 @@ const html = `<!doctype html>
     width: 58px;
     height: 58px;
     border-radius: 15px;
-    background: #818cf8;
+    background: ${card.accent};
     display: flex;
     align-items: center;
     justify-content: center;

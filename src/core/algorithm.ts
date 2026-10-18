@@ -82,6 +82,10 @@ function ruleLength(letters: number, spec: RuleSpec): number {
  * bolding a whole sentence is worse than leaving it alone.
  */
 export const MAX_TOKEN_LETTERS = 40;
+/* The shipped default `intensity`. A setting of exactly this value is a no-op
+   multiplier, so defaults render identically in every mode. */
+const NEUTRAL_INTENSITY = 0.5;
+
 const URL_RE = /^[a-z][a-z0-9+.-]*:\/\//i;
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -112,25 +116,36 @@ export function boldLength(word: string, options: BionicOptions): number {
   const bypassesMin = options.mode === "rules" || options.mode === "half";
   if (!bypassesMin && letters < options.minWordLength) return 0;
 
-  let n: number;
+  /* The mode decides the shape of the emphasis; intensity decides how much of
+     it to apply. Every mode is expressed as a fraction of the word, so the
+     slider does something in all of them — it used to be read only by classic
+     and dim, which is why moving it in the default (half) mode looked broken. */
+  let base: number;
   switch (options.mode) {
     case "half":
-      n = letters < 2 ? 0 : Math.ceil(letters / 2);
+      base = letters < 2 ? 0 : Math.ceil(letters / 2);
       break;
     case "vowel": {
       const cap = Math.ceil(letters / 2) + 1;
-      n = Math.min(vowelGroupLength(core, vowelSet(options.customVowels)), cap);
+      base = Math.min(vowelGroupLength(core, vowelSet(options.customVowels)), cap);
       break;
     }
     case "rules":
-      n = ruleLength(letters, spec ?? parseRule(DEFAULT_RULE));
+      base = ruleLength(letters, spec ?? parseRule(DEFAULT_RULE));
       break;
     case "dim":
     case "classic":
     default:
-      n = Math.max(1, Math.ceil(letters * options.intensity));
+      base = letters * NEUTRAL_INTENSITY;
       break;
   }
+
+  /* Neutral at the shipped default, so 0.5 keeps every mode exactly as it was
+     and the slider only ever tightens or loosens from there. */
+  const factor = options.intensity / NEUTRAL_INTENSITY;
+  /* A mode may deliberately emphasise nothing (a rule's zero-length entry);
+     only floor at one letter when the mode asked for something. */
+  const n = base > 0 ? Math.max(1, Math.round(base * factor)) : 0;
 
   if (!Number.isFinite(n) || n <= 0) return 0;
   return Math.min(Math.floor(n), letters);

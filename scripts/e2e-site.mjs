@@ -3,7 +3,7 @@
  * Load every page of the site in a real browser and check it actually works.
  *
  * This exists because bionic-docs shipped with a single missing function
- * definition in demo.js: the whole IIFE threw a ReferenceError at load, so
+ * definition in its site script: the whole IIFE threw a ReferenceError at load, so
  * none of the page wiring ran — no hero emphasis, no samples, no demo, no
  * reader, no divider. Every other gate passed anyway. Tests covered the core
  * algorithm and the e2e suite drove the built extension, but nothing ever
