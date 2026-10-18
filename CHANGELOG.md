@@ -12,6 +12,17 @@ All notable changes to Bionic Docs.
   lazily as they scroll into view. The contents list still shows each page's
   first line. Text uses the browser's own fonts, fitted to the original line
   widths.
+- **Fit page, fit width and zoom.** PDF pages open fitted to the window, so a
+  whole page is in view. A floating zoom bar steps from 50% to 300% or picks
+  Fit page / Fit width; `+`, `−` and `0` do the same from the keyboard. The
+  reading spot is kept when zooming, and the choice is remembered. Only the
+  page canvas re-renders, so text stays sharp and aligned at every zoom.
+- **Designed menus.** The Mode and Zoom menus in the reader, popup and settings
+  open a designed, keyboard-accessible list instead of the browser's native
+  popup. The native select stays underneath as the source of truth.
+- **Its own mark.** The toolbar icon and the wordmarks now use the Bionic Docs
+  mark (a page on a teal tile, as on the site) instead of Bionic Page's, and
+  the extension pages use Docs' teal accent instead of the shared indigo.
 
 ## [0.1.0] — 2026-09-19
 

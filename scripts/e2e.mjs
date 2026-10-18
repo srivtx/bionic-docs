@@ -207,6 +207,77 @@ async function main() {
   });
   await sleep(400);
 
+  // Zoom: pages fit the window by default, the buttons scale them, and the
+  // text layer scales with the sheet.
+  const zoomState = () =>
+    rpc(sock, "Runtime.evaluate", {
+      expression: `JSON.stringify((() => {
+        const sheet = document.querySelector('.pdf-sheet');
+        const span = sheet?.querySelector('.pdf-text-layer span');
+        const rect = sheet?.getBoundingClientRect();
+        const bar = document.querySelector('.topbar')?.getBoundingClientRect();
+        return {
+          width: rect?.width ?? 0,
+          top: rect?.top ?? 0,
+          bottom: rect?.bottom ?? 0,
+          barBottom: bar?.bottom ?? 0,
+          inner: innerHeight,
+          zoomTop: document.getElementById('zoombar')?.getBoundingClientRect().top ?? innerHeight,
+          left: span && sheet ? span.offsetLeft / sheet.clientWidth : -1,
+          label: document.getElementById('zoom')?.selectedOptions[0]?.textContent ?? '',
+          zoombar: document.getElementById('zoombar')?.hidden === false
+        };
+      })())`,
+      returnByValue: true,
+    }).then((r) => JSON.parse(r?.result?.result?.value ?? "{}"));
+  await rpc(sock, "Runtime.evaluate", {
+    expression: "document.querySelector('.pdf-page')?.scrollIntoView({ behavior: 'instant', block: 'start' })",
+  });
+  await sleep(300);
+  const fitted = await zoomState();
+  results.push([
+    "PDF: the page fits between the top bar and the zoom bar by default",
+    fitted.zoombar &&
+      fitted.label === "Fit page" &&
+      fitted.top >= fitted.barBottom - 1 &&
+      fitted.bottom <= fitted.zoomTop + 1,
+  ]);
+  await rpc(sock, "Runtime.evaluate", { expression: "document.getElementById('zoomIn')?.click()" });
+  await sleep(500);
+  const zoomed = await zoomState();
+  results.push([
+    "PDF: zoom in enlarges the page and the text stays aligned",
+    zoomed.width > fitted.width + 4 && zoomed.label.endsWith("%") && Math.abs(zoomed.left - fitted.left) < 0.005,
+  ]);
+  const menu = await rpc(sock, "Runtime.evaluate", {
+    expression: `JSON.stringify((() => {
+      const wrap = document.getElementById('zoom')?.closest('.bp-select');
+      const button = wrap?.querySelector('.bp-select-button');
+      button?.click();
+      const list = wrap?.querySelector('.bp-select-list');
+      const open = list ? !list.hidden : false;
+      const options = list?.querySelectorAll('[role="option"]').length ?? 0;
+      const native = getComputedStyle(document.getElementById('zoom')).opacity;
+      const fit = Array.from(list?.querySelectorAll('[role="option"]') ?? []).find((o) => o.textContent === 'Fit page');
+      fit?.click();
+      return { open, options, native, closed: list ? list.hidden : false, modeDesigned: !!document.getElementById('mode')?.closest('.bp-select') };
+    })())`,
+    returnByValue: true,
+  });
+  let zoomMenu = {};
+  try {
+    zoomMenu = JSON.parse(menu?.result?.result?.value ?? "{}");
+  } catch {
+    zoomMenu = {};
+  }
+  await sleep(400);
+  const refitted = await zoomState();
+  results.push([
+    "PDF: menus are the designed control, not the native popup",
+    zoomMenu.open === true && zoomMenu.options === 14 && zoomMenu.native === "0" && zoomMenu.closed === true && zoomMenu.modeDesigned === true,
+  ]);
+  results.push(["PDF: choosing Fit page from the menu refits", Math.abs(refitted.width - fitted.width) < 1]);
+
   const shot = await rpc(sock, "Page.captureScreenshot", { format: "png" });
   if (shot?.result?.data) {
     await Bun.write("/tmp/bp-docs-pdf.png", Buffer.from(shot.result.data, "base64"));

@@ -7,10 +7,12 @@ applies the same reversible fixation transform used by its sibling project.
 
 ```
 src/
-  shared/     types, cross-browser shim, storage (no document parsing)
+  shared/     types, cross-browser shim, storage, select.ts/css (the designed
+              menu that replaces the native select popup on every page)
   core/       pure fixation algorithm (DOM-free, tested)
   pdf/        lines.ts (pure line reconstruction) + layout.ts (pure page geometry
-              and glyph matching) + pdf.ts (PDF.js canvas + text layer)
+              and glyph matching) + zoom.ts (pure fit/zoom maths)
+              + pdf.ts (PDF.js canvas + text layer)
   epub/       parse.ts (unzip, OPF, TOC, sanitize) + epub.ts (render + fixation)
   reader/     reader.html/css/ts — the document reader page
   popup/      toolbar popup: open a document, quick settings
@@ -44,7 +46,7 @@ reader
    remote/`javascript:` URLs removed) before insertion.
 4. **Deterministic text.** PDF text is treated as plain text and placed into
    new text nodes; PDF.js runs with `isEvalSupported: false`.
-5. **Pure geometry.** `src/pdf/lines.ts` and `src/pdf/layout.ts` have no PDF.js
+5. **Pure geometry.** `src/pdf/lines.ts`, `src/pdf/layout.ts` and `src/pdf/zoom.ts` have no PDF.js
    or DOM import, so line reconstruction, placement maths and glyph matching
    are unit-tested directly.
 5a. **No glyph is lost.** Only the main canvas context is patched to hold back

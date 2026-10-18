@@ -4,6 +4,7 @@ import type { BionicOptions } from "../core/algorithm";
 import { emphasize } from "../core/algorithm";
 import { fitScale, itemBox, itemGeometry, matchSamples, type ItemGeometry, type StyleLike } from "./layout";
 import { groupLines, type PdfTextItem } from "./lines";
+import { DEFAULT_ZOOM, effectiveScale, sheetWidth, type Size, type Zoom } from "./zoom";
 
 export { groupLines } from "./lines";
 export type { PdfTextItem } from "./lines";
@@ -13,7 +14,20 @@ export interface PdfHandle {
   /** First reconstructed line of every page, for the contents list. */
   firstLines(): Promise<string[]>;
   setOptions(options: BionicOptions): void;
+  /** Size every page for a zoom; canvases re-render if they would blur. */
+  setZoom(zoom: Zoom): void;
+  /** Re-measure the room the reader has (after a window resize). */
+  relayout(): void;
+  /** The scale (1 = 100%) a page is currently shown at. */
+  scaleOf(index: number): number;
   destroy(): void;
+}
+
+/** How pages are sized: a zoom, and the room the reader has for one page. */
+export interface PdfView {
+  zoom: Zoom;
+  /** CSS size of the viewing area below the reader's own chrome. */
+  viewport(): Size;
 }
 
 const HEAD_CLASS = "bp-head";
@@ -202,6 +216,7 @@ interface PageState {
   queued: boolean;
   wanted: boolean;
   inFar: boolean;
+  refreshing: boolean;
 }
 
 function isBlank(text: string): boolean {
@@ -498,6 +513,7 @@ export async function openPdf(
   data: ArrayBuffer | Uint8Array,
   container: HTMLElement,
   options: BionicOptions,
+  view?: PdfView,
 ): Promise<PdfHandle> {
   const doc = await pdfjsLib.getDocument({
     data: data instanceof Uint8Array ? data : new Uint8Array(data),
@@ -550,11 +566,39 @@ export async function openPdf(
       queued: false,
       wanted: false,
       inFar: false,
+      refreshing: false,
     };
     states.push(state);
     byElement.set(sheet, state);
     container.appendChild(section);
   }
+
+  let zoom: Zoom = view?.zoom ?? DEFAULT_ZOOM;
+  let room: Size = { width: 800, height: 600 };
+
+  /** Room for one sheet: the viewing area minus the page label above it. */
+  const measureRoom = (): void => {
+    if (!view) return;
+    try {
+      const area = view.viewport();
+      const label = states[0]?.section.querySelector<HTMLElement>(".pdf-page-label");
+      const labelSpace = label ? label.offsetHeight + 12 : 0;
+      room = { width: area.width, height: area.height - labelSpace };
+    } catch {
+      /* keep the last measurement */
+    }
+  };
+
+  const layoutSheets = (): void => {
+    if (!view) return;
+    for (const state of states) {
+      const width = sheetWidth(zoom, state, room);
+      state.sheet.style.width = `${width}px`;
+    }
+  };
+
+  measureRoom();
+  layoutSheets();
 
   const contentFor = (state: PageState): Promise<RawContent> => {
     if (!state.content) {
@@ -569,12 +613,17 @@ export async function openPdf(
     return state.content;
   };
 
-  const renderCanvas = async (state: PageState): Promise<{ canvas: HTMLCanvasElement | null; ctx: CanvasRenderingContext2D | null; samples: Sample[]; transform: number[] }> => {
-    const page = state.page!;
+  /** Canvas pixel width a page needs at its current CSS size. */
+  const targetCanvasWidth = (state: PageState): number => {
     const cssWidth = state.sheet.clientWidth || 800;
     const dpr = window.devicePixelRatio || 1;
     const scale = Math.min((cssWidth * dpr) / state.width, Math.sqrt(MAX_CANVAS_PIXELS / (state.width * state.height)));
-    const vp = page.getViewport({ scale: Math.max(0.1, scale) });
+    return Math.max(1, Math.floor(state.width * Math.max(0.1, scale)));
+  };
+
+  const renderCanvas = async (state: PageState): Promise<{ canvas: HTMLCanvasElement | null; ctx: CanvasRenderingContext2D | null; samples: Sample[]; transform: number[] }> => {
+    const page = state.page!;
+    const vp = page.getViewport({ scale: targetCanvasWidth(state) / state.width });
     const canvas = document.createElement("canvas");
     canvas.className = "pdf-canvas";
     canvas.width = Math.max(1, Math.floor(vp.width));
@@ -652,6 +701,43 @@ export async function openPdf(
     state.built = false;
   };
 
+  /**
+   * Re-draw only the canvas of a built page at its new size. The text layer is
+   * sized in container units, so it already follows the sheet; glyphs that no
+   * text run covers are replayed onto the new canvas exactly as on the first.
+   */
+  const refreshCanvas = async (state: PageState): Promise<void> => {
+    if (!state.built || !state.page || destroyed) return;
+    const drawn = await renderCanvas(state);
+    if (destroyed || !state.built || !drawn.canvas || !drawn.ctx) {
+      if (drawn.canvas) drawn.canvas.width = 0;
+      return;
+    }
+    let content: RawContent = { items: [], styles: {} };
+    try {
+      content = await contentFor(state);
+    } catch {
+      /* replay nothing */
+    }
+    if (destroyed || !state.built) {
+      drawn.canvas.width = 0;
+      return;
+    }
+    const runs = makeRuns(content, state.transform, drawn.transform);
+    const boxes = runs.map((run) => itemBox(run.geom, 0.25 * run.geom.fontHeight));
+    const match = matchSamples(boxes, drawn.samples.map((s) => ({ x: s.px, y: s.py })));
+    replaySamples(drawn.ctx, drawn.samples, match.unmatched);
+    const old = state.canvas;
+    if (old && old.parentNode) {
+      old.replaceWith(drawn.canvas);
+      old.width = 0;
+      old.height = 0;
+    } else {
+      state.sheet.insertBefore(drawn.canvas, state.layer);
+    }
+    state.canvas = drawn.canvas;
+  };
+
   let chain: Promise<void> = Promise.resolve();
   const enqueue = (state: PageState): void => {
     if (state.queued || state.built || destroyed) return;
@@ -664,6 +750,28 @@ export async function openPdf(
       .catch(() => {
         state.queued = false;
       });
+  };
+
+  const enqueueRefresh = (state: PageState): void => {
+    if (state.refreshing || !state.built || destroyed) return;
+    state.refreshing = true;
+    chain = chain
+      .then(async () => {
+        state.refreshing = false;
+        await refreshCanvas(state);
+      })
+      .catch(() => {
+        state.refreshing = false;
+      });
+  };
+
+  /** A canvas is stale when it is noticeably blurrier or much larger than needed. */
+  const refreshStale = (): void => {
+    for (const state of states) {
+      if (!state.built || !state.canvas) continue;
+      const target = targetCanvasWidth(state);
+      if (state.canvas.width < target * 0.87 || state.canvas.width > target * 1.6) enqueueRefresh(state);
+    }
   };
 
   let observers: { near: IntersectionObserver; far: IntersectionObserver } | null = null;
@@ -708,23 +816,12 @@ export async function openPdf(
     }
   }
 
-  const rebuildBuilt = (): void => {
-    for (const state of states) {
-      if (!state.built) continue;
-      evictPage(state);
-      state.wanted = true;
-      enqueue(state);
-    }
-  };
-
   let resizeTimer: ReturnType<typeof setTimeout> | null = null;
   let resizeObserver: ResizeObserver | null = null;
   const onResize = (): void => {
     resizeTimer = null;
     if (destroyed) return;
-    const dpr = window.devicePixelRatio || 1;
-    const stale = states.some((s) => s.built && s.canvas && s.sheet.clientWidth * dpr > s.canvas.width * 1.15);
-    if (stale) rebuildBuilt();
+    refreshStale();
   };
   try {
     if (typeof ResizeObserver !== "undefined") {
@@ -755,6 +852,22 @@ export async function openPdf(
         out.push(state.lines[0] ?? "");
       }
       return out;
+    },
+    setZoom(next: Zoom): void {
+      zoom = next;
+      measureRoom();
+      layoutSheets();
+      refreshStale();
+    },
+    relayout(): void {
+      measureRoom();
+      layoutSheets();
+      refreshStale();
+    },
+    scaleOf(index: number): number {
+      const state = states[index] ?? states[0];
+      if (!state) return 1;
+      return effectiveScale(zoom, state, room);
     },
     setOptions(options2: BionicOptions): void {
       current = options2;

@@ -6,8 +6,8 @@
   --canvas: #ffffff;
   --canvas-soft: #f7f7f4;
   --hairline: #e6e6e0;
-  --accent: #4f46e5;
-  --accent-soft: #eef0ff;
+  --accent: #0e6e63;
+  --accent-soft: #e7f2ef;
   --card-shadow: 0 6px 18px rgba(20, 22, 26, 0.06);
   --radius-control: 10px;
   --radius-card: 16px;
@@ -21,8 +21,8 @@
     --canvas: #0e1013;
     --canvas-soft: #16191e;
     --hairline: #252a31;
-    --accent: #8b8cf7;
-    --accent-soft: #1c2033;
+    --accent: #35cfba;
+    --accent-soft: #11302c;
     --card-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
   }
 }
@@ -60,11 +60,34 @@ body {
 }
 
 .wordmark {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
   margin: 0;
   font-size: 17px;
   font-weight: 400;
   letter-spacing: -0.01em;
   color: var(--mute);
+}
+
+.mark {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 1.4em;
+  height: 1.4em;
+  border-radius: 0.38em;
+  background: #0e6e63;
+}
+
+.mark svg {
+  width: 0.86em;
+  height: 0.86em;
+  fill: none;
+  stroke: #fff;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
 .wordmark b {

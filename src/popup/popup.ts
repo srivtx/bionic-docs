@@ -2,6 +2,7 @@ import { MODES, sanitizeSettings } from "../shared/types";
 import type { PageState, Settings } from "../shared/types";
 import { loadSettings, onSettingsChanged, saveSettings } from "../shared/storage";
 import { api, call } from "../shared/browser";
+import { enhanceSelects } from "../shared/select";
 
 function $<T extends HTMLElement = HTMLElement>(id: string): T | null {
   if (typeof document === "undefined") return null;
@@ -174,6 +175,7 @@ function bind(): void {
 
 async function init(): Promise<void> {
   populateModes();
+  enhanceSelects();
   bind();
   const loaded = await loadSettings();
   render(loaded);

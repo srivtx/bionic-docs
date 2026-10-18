@@ -243,6 +243,20 @@ describe("navIntent", () => {
     expect(navIntent({ key: "C" }, noFocus, false)).toBe("toggle-toc");
   });
 
+  test("maps + = - _ 0 to zoom", () => {
+    expect(navIntent({ key: "+" }, noFocus, false)).toBe("zoom-in");
+    expect(navIntent({ key: "=" }, noFocus, false)).toBe("zoom-in");
+    expect(navIntent({ key: "-" }, noFocus, false)).toBe("zoom-out");
+    expect(navIntent({ key: "_" }, noFocus, false)).toBe("zoom-out");
+    expect(navIntent({ key: "0" }, noFocus, false)).toBe("zoom-fit");
+  });
+
+  test("leaves ctrl/meta zoom to the browser", () => {
+    expect(navIntent({ key: "+", ctrlKey: true }, noFocus, false)).toBeNull();
+    expect(navIntent({ key: "-", metaKey: true }, noFocus, false)).toBeNull();
+    expect(navIntent({ key: "0", ctrlKey: true }, noFocus, false)).toBeNull();
+  });
+
   test("ignores ctrl, meta and alt combinations", () => {
     for (const mod of ["ctrlKey", "metaKey", "altKey"] as const) {
       expect(navIntent({ key: "ArrowRight", [mod]: true }, noFocus, false)).toBeNull();

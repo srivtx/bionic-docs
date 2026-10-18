@@ -5,6 +5,19 @@ import type { BionicOptions } from "../core/algorithm";
 import { openEpub, type EpubHandle } from "../epub/epub";
 import { decodeText, dirName, findFileKey, findOpfPath, parseOpf, resolveHref, unzipEpub } from "../epub/parse";
 import { openPdf, setPdfAssetBase, setPdfWorkerSrc, type PdfHandle } from "../pdf/pdf";
+import {
+  DEFAULT_ZOOM,
+  MAX_ZOOM,
+  MIN_ZOOM,
+  ZOOM_STEPS,
+  parseZoom,
+  stepZoom,
+  zoomLabel,
+  zoomValue,
+  type Size,
+  type Zoom,
+} from "../pdf/zoom";
+import { enhanceSelects } from "../shared/select";
 import { navIntent, type FocusLike } from "./keys";
 import {
   MAX_REMEMBERED,
@@ -19,6 +32,7 @@ import {
 import { epubTocEntries, pdfTocEntries, type PdfPageSummary, type TocItem } from "./toc";
 
 const POSITIONS_KEY = "bionic-docs:positions";
+const ZOOM_KEY = "bionic-docs:zoom";
 
 let settings: Settings = sanitizeSettings(DEFAULT_SETTINGS);
 let pdf: PdfHandle | null = null;
@@ -32,6 +46,8 @@ let pendingResume: StoredPosition | null = null;
 let hasNavigated = false;
 let currentPdfPage = 0;
 let lastBuffer: ArrayBuffer | null = null;
+
+let zoom: Zoom = DEFAULT_ZOOM;
 
 let tocOpen = false;
 let tocBuilt = false;
@@ -112,6 +128,7 @@ function destroyCurrent(): void {
   pdf = null;
   epub = null;
   kind = null;
+  setZoombar(false);
 }
 
 function updatePosition(): void {
@@ -331,6 +348,15 @@ function selectTocItem(target: number): void {
 
 // ── navigation ─────────────────────────────────────────────────────────────
 
+/** Height of the sticky top bar; pages scroll to just below it. */
+function topbarHeight(): number {
+  return document.querySelector<HTMLElement>(".topbar")?.offsetHeight ?? 0;
+}
+
+function syncTopbarHeight(): void {
+  document.documentElement.style.setProperty("--topbar-h", `${topbarHeight()}px`);
+}
+
 function goToPdfPage(index: number): void {
   const pages = Array.from(document.querySelectorAll<HTMLElement>(".pdf-page"));
   const page = pages[index];
@@ -357,7 +383,7 @@ function step(direction: 1 | -1): void {
   if (kind === "pdf") {
     const pages = Array.from(document.querySelectorAll<HTMLElement>(".pdf-page"));
     if (pages.length === 0) return;
-    const top = window.scrollY;
+    const top = window.scrollY + topbarHeight();
     let target = pages[0];
     for (const page of pages) {
       if (direction === 1 ? page.offsetTop > top + 8 : page.offsetTop < top - 8) {
@@ -407,6 +433,13 @@ function wireKeyboard(): void {
       $("tocToggle")?.focus();
       return;
     }
+    if (intent === "zoom-in" || intent === "zoom-out" || intent === "zoom-fit") {
+      if (kind !== "pdf") return;
+      event.preventDefault();
+      if (intent === "zoom-fit") applyZoom("fit-page");
+      else zoomStep(intent === "zoom-in" ? 1 : -1);
+      return;
+    }
     if (!kind) return;
     event.preventDefault();
     if (intent === "next" || intent === "prev") {
@@ -434,7 +467,7 @@ function wireScrollTracking(): void {
         if (kind !== "pdf") return;
         const pages = Array.from(document.querySelectorAll<HTMLElement>(".pdf-page"));
         if (pages.length === 0) return;
-        const top = window.scrollY;
+        const top = window.scrollY + topbarHeight();
         let index = 0;
         for (let i = 0; i < pages.length; i += 1) {
           if (pages[i]!.offsetTop <= top + 40) index = i;
@@ -450,6 +483,130 @@ function wireScrollTracking(): void {
     },
     { passive: true },
   );
+}
+
+// ── zoom ───────────────────────────────────────────────────────────────────
+
+/** Space the floating zoom bar takes at the bottom (its height plus its offset). */
+const ZOOMBAR_SPACE = 68;
+
+/**
+ * Room for one PDF page: the document column between the top bar and the
+ * zoom bar, so a fitted page is never covered by either.
+ */
+function pdfViewport(): Size {
+  const doc = $("doc");
+  let width = window.innerWidth;
+  if (doc) {
+    const style = getComputedStyle(doc);
+    width = doc.clientWidth - (parseFloat(style.paddingLeft) || 0) - (parseFloat(style.paddingRight) || 0);
+  }
+  return { width, height: window.innerHeight - topbarHeight() - ZOOMBAR_SPACE };
+}
+
+/** Index of the PDF page at the top of the view. */
+function pdfPageAtTop(): number {
+  const pages = Array.from(document.querySelectorAll<HTMLElement>(".pdf-page"));
+  const top = window.scrollY + topbarHeight();
+  let index = 0;
+  for (let i = 0; i < pages.length; i += 1) {
+    if (pages[i]!.offsetTop <= top + 40) index = i;
+    else break;
+  }
+  return index;
+}
+
+function populateZoom(): void {
+  const select = $select("zoom");
+  if (!select) return;
+  select.textContent = "";
+  const values: Zoom[] = ["fit-page", "fit-width", ...ZOOM_STEPS];
+  for (const value of values) {
+    const option = document.createElement("option");
+    option.value = zoomValue(value);
+    option.textContent = zoomLabel(value);
+    select.appendChild(option);
+  }
+}
+
+function syncZoomControls(): void {
+  const select = $select("zoom");
+  if (select) select.value = zoomValue(zoom);
+  const scale = kind === "pdf" && pdf ? pdf.scaleOf(currentPdfPage) : 1;
+  const out = $("zoomOut") as HTMLButtonElement | null;
+  const into = $("zoomIn") as HTMLButtonElement | null;
+  if (out) out.disabled = typeof zoom === "number" ? zoom <= MIN_ZOOM : scale <= MIN_ZOOM + 0.005;
+  if (into) into.disabled = typeof zoom === "number" ? zoom >= MAX_ZOOM : scale >= MAX_ZOOM - 0.005;
+}
+
+function setZoombar(visible: boolean): void {
+  const bar = $("zoombar");
+  if (bar) bar.hidden = !visible;
+}
+
+/**
+ * Apply a zoom and keep the reader on the same spot of the same page. Fitting
+ * the page snaps to the top of the current page so the whole page is in view.
+ */
+function applyZoom(next: Zoom): void {
+  zoom = next;
+  if (kind === "pdf" && pdf) {
+    const pages = Array.from(document.querySelectorAll<HTMLElement>(".pdf-page"));
+    const index = pdfPageAtTop();
+    const page = pages[index];
+    const header = topbarHeight();
+    const fraction = page && next !== "fit-page" ? (window.scrollY + header - page.offsetTop) / Math.max(1, page.offsetHeight) : 0;
+    pdf.setZoom(next);
+    if (page) {
+      const top = page.offsetTop - header + Math.max(0, fraction) * page.offsetHeight;
+      window.scrollTo({ top, behavior: "instant" as ScrollBehavior });
+    }
+    currentPdfPage = index;
+  }
+  syncZoomControls();
+  void writeZoom();
+}
+
+function zoomStep(direction: 1 | -1): void {
+  if (kind !== "pdf" || !pdf) return;
+  const scale = typeof zoom === "number" ? zoom : pdf.scaleOf(pdfPageAtTop());
+  applyZoom(stepZoom(scale, direction));
+}
+
+async function readZoom(): Promise<void> {
+  try {
+    zoom = parseZoom(await getLocal(ZOOM_KEY));
+  } catch {
+    zoom = DEFAULT_ZOOM;
+  }
+}
+
+async function writeZoom(): Promise<void> {
+  const area = storageArea();
+  if (degraded || !area) return;
+  try {
+    await call(area.set, area, { [ZOOM_KEY]: zoomValue(zoom) });
+  } catch {
+    /* best effort */
+  }
+}
+
+function wireZoom(): void {
+  $("zoomOut")?.addEventListener("click", () => zoomStep(-1));
+  $("zoomIn")?.addEventListener("click", () => zoomStep(1));
+  $select("zoom")?.addEventListener("change", () => applyZoom(parseZoom($select("zoom")?.value)));
+  let timer: number | null = null;
+  window.addEventListener("resize", () => {
+    if (timer !== null) window.clearTimeout(timer);
+    timer = window.setTimeout(() => {
+      timer = null;
+      syncTopbarHeight();
+      if (kind === "pdf" && pdf) {
+        pdf.relayout();
+        syncZoomControls();
+      }
+    }, 150);
+  });
 }
 
 // ── document loading ───────────────────────────────────────────────────────
@@ -478,7 +635,8 @@ async function openBuffer(buffer: ArrayBuffer, name: string): Promise<void> {
     if (detected === "pdf") {
       setPdfWorkerSrc(workerSrc());
       setPdfAssetBase(assetBase());
-      pdf = await openPdf(buffer, doc, toOptions(settings));
+      syncTopbarHeight();
+      pdf = await openPdf(buffer, doc, toOptions(settings), { zoom, viewport: pdfViewport });
       kind = "pdf";
     } else {
       epub = await openEpub(buffer, doc, toOptions(settings));
@@ -487,6 +645,8 @@ async function openBuffer(buffer: ArrayBuffer, name: string): Promise<void> {
     setDropzone(false);
     setStatus("");
     updatePosition();
+    setZoombar(kind === "pdf");
+    syncZoomControls();
 
     activeKey = identity;
     const stored = recallPosition(positionStore, identity);
@@ -563,7 +723,10 @@ async function updateSettings(patch: Partial<Settings>): Promise<void> {
 
 function wire(): void {
   populateModes();
+  populateZoom();
+  enhanceSelects();
   syncControls();
+  syncTopbarHeight();
 
   $("openFile")?.addEventListener("click", () => $input("file")?.click());
   $("pickFile")?.addEventListener("click", () => $input("file")?.click());
@@ -586,6 +749,7 @@ function wire(): void {
   $("tocToggle")?.addEventListener("click", () => toggleToc());
 
   wireResume();
+  wireZoom();
   wireKeyboard();
   wireScrollTracking();
   window.addEventListener("pagehide", () => persistCurrentPosition());
@@ -627,6 +791,8 @@ async function init(): Promise<void> {
     /* defaults are fine */
   }
   await readPositionStore();
+  await readZoom();
+  syncZoomControls();
 
   onSettingsChanged((next) => {
     settings = next;

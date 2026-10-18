@@ -13,7 +13,7 @@ tracking, no remote code.
 [![runtime](https://img.shields.io/badge/runtime-Bun-14151A?logo=bun&logoColor=white)](https://bun.sh)
 [![types](https://img.shields.io/badge/TypeScript-strict-3178C6?logo=typescript&logoColor=white)](tsconfig.json)
 [![manifest](https://img.shields.io/badge/Manifest-V3-4f46e5)](scripts/manifest.mjs)
-[![tests](https://img.shields.io/badge/tests-148-0f766e)](#testing)
+[![tests](https://img.shields.io/badge/tests-159-0f766e)](#testing)
 [![e2e](https://img.shields.io/badge/e2e-19%2F19-0f766e)](#testing)
 [![on-device](https://img.shields.io/badge/processing-on--device-0f766e)](#privacy)
 [![Firefox](https://img.shields.io/badge/Firefox-140%2B-FF7139?logo=firefoxbrowser&logoColor=white)](https://www.mozilla.org/firefox/)
@@ -72,9 +72,12 @@ bun run build
    with the `←`/`→` and `PageUp`/`PageDown` keys; `Home` and `End` jump to the
    first or last, and `C` toggles a collapsible **Contents** panel (a page list
    for a PDF, the document's own table of contents for an EPUB).
-4. Reopen a document you have read before and the reader offers to resume the
+4. PDF pages open fitted to the window. The zoom bar at the bottom steps from
+   50% to 300% or switches between **Fit page** and **Fit width**; `+`, `−` and
+   `0` (fit page) do the same from the keyboard.
+5. Reopen a document you have read before and the reader offers to resume the
    last page or chapter; it remembers up to 25 documents.
-5. Press `Ctrl`/`Cmd`+`Shift`+`O` to open the current document at any time.
+6. Press `Ctrl`/`Cmd`+`Shift`+`O` to open the current document at any time.
 
 ## Privacy
 
@@ -115,11 +118,11 @@ bun run lint:firefox  # web-ext lint
 
 | Gate | Result |
 |---|---|
-| `bun test` | 148 tests across 8 files |
+| `bun test` | 159 tests across 8 files |
 | `bunx tsc --noEmit` | clean (strict TypeScript) |
 | build + verify | both targets, 11 referenced entries present each |
 | `web-ext lint` | 0 errors (4 warnings from vendored PDF.js) |
-| `bun run e2e` | 19/19 in real Chrome — PDF pages and diagram, EPUB, fixation and navigation |
+| `bun run e2e` | 23/23 in real Chrome — PDF pages, diagram, zoom and menus, EPUB, fixation and navigation |
 
 The e2e test serves the built extension pages plus the generated fixtures and
 drives real Chrome over the DevTools protocol. It asserts that a PDF becomes a

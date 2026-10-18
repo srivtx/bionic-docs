@@ -14,6 +14,9 @@ export type NavIntent =
   | "last"
   | "toggle-toc"
   | "close-toc"
+  | "zoom-in"
+  | "zoom-out"
+  | "zoom-fit"
   | null;
 
 export interface KeyLike {
@@ -83,6 +86,14 @@ export function navIntent(
     case "c":
     case "C":
       return "toggle-toc";
+    case "+":
+    case "=":
+      return "zoom-in";
+    case "-":
+    case "_":
+      return "zoom-out";
+    case "0":
+      return "zoom-fit";
     default:
       return null;
   }

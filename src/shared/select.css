@@ -1,0 +1,150 @@
+/* The designed select (src/shared/select.ts). Shared by the reader, popup and
+   options pages; each page names its tokens differently, so every colour falls
+   back from the reader's --bp-* name to the popup/options name. */
+
+.bp-select {
+  --sel-ink: var(--bp-ink, var(--ink, #14161a));
+  --sel-mute: var(--bp-mute, var(--mute, #6b7280));
+  --sel-canvas: var(--bp-canvas, var(--canvas, #ffffff));
+  --sel-soft: var(--bp-canvas-soft, var(--canvas-soft, #f7f7f4));
+  --sel-line: var(--bp-hairline, var(--hairline, #e6e6e0));
+  --sel-accent: var(--bp-accent, var(--accent, #0e6e63));
+  --sel-accent-soft: var(--bp-accent-soft, var(--accent-soft, #e6f1ef));
+  position: relative;
+  display: inline-block;
+  vertical-align: middle;
+  font: inherit;
+}
+
+.bp-select-native {
+  position: absolute !important;
+  inset: 0;
+  width: 100% !important;
+  height: 100% !important;
+  margin: 0 !important;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.bp-select-button {
+  appearance: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  min-width: 128px;
+  max-width: 100%;
+  padding: 6px 9px 6px 11px;
+  border: 1px solid var(--sel-line);
+  border-radius: 9px;
+  background: var(--sel-canvas);
+  color: var(--sel-ink);
+  font: inherit;
+  font-size: 0.9em;
+  font-weight: 500;
+  line-height: 1.3;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 140ms ease, box-shadow 140ms ease;
+}
+.bp-select-button:hover { border-color: var(--sel-accent); }
+.bp-select-button:focus-visible {
+  outline: 2px solid var(--sel-accent);
+  outline-offset: 2px;
+}
+.bp-select.is-open .bp-select-button {
+  border-color: var(--sel-accent);
+  box-shadow: 0 0 0 3px var(--sel-accent-soft);
+}
+
+.bp-select-value {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.bp-select-chevron {
+  flex: none;
+  width: 7px;
+  height: 7px;
+  margin: 0 3px 3px;
+  border-right: 1.8px solid var(--sel-mute);
+  border-bottom: 1.8px solid var(--sel-mute);
+  border-radius: 0 0 1px 0;
+  transform: rotate(45deg);
+  transition: transform 140ms ease, margin 140ms ease;
+}
+.bp-select.is-open .bp-select-chevron { transform: rotate(225deg); margin: 3px 3px 0; }
+
+.bp-select-list {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  z-index: 20;
+  min-width: max(100%, 220px);
+  max-width: min(320px, calc(100vw - 24px));
+  max-height: min(60vh, 340px);
+  overflow: auto;
+  margin: 0;
+  padding: 5px;
+  list-style: none;
+  border: 1px solid var(--sel-line);
+  border-radius: 12px;
+  background: var(--sel-canvas);
+  color: var(--sel-ink);
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.16), 0 2px 6px rgba(0, 0, 0, 0.06);
+  animation: bp-select-in 120ms ease-out;
+}
+.bp-select-list[hidden] { display: none; }
+.bp-select.opens-up .bp-select-list { top: auto; bottom: calc(100% + 6px); }
+.bp-select.aligns-end .bp-select-list { left: auto; right: 0; }
+
+.bp-select-option {
+  display: grid;
+  grid-template-columns: 16px 1fr;
+  column-gap: 8px;
+  align-items: center;
+  padding: 7px 10px 7px 8px;
+  border-radius: 8px;
+  font-size: 0.9em;
+  line-height: 1.35;
+  cursor: pointer;
+  user-select: none;
+}
+.bp-select-option.is-active { background: var(--sel-accent-soft); }
+.bp-select-option[aria-disabled="true"] { opacity: 0.45; cursor: default; }
+
+.bp-select-check {
+  justify-self: center;
+  width: 5px;
+  height: 9px;
+  margin-bottom: 2px;
+  border-right: 2px solid var(--sel-accent);
+  border-bottom: 2px solid var(--sel-accent);
+  transform: rotate(45deg);
+  visibility: hidden;
+}
+.bp-select-option[aria-selected="true"] .bp-select-check { visibility: visible; }
+.bp-select-option[aria-selected="true"] .bp-select-option-label { font-weight: 600; }
+
+.bp-select-option-hint {
+  grid-column: 2;
+  margin-top: 1px;
+  color: var(--sel-mute);
+  font-size: 0.86em;
+  line-height: 1.35;
+}
+
+@keyframes bp-select-in {
+  from { opacity: 0; transform: translateY(-3px); }
+  to { opacity: 1; transform: none; }
+}
+.bp-select.opens-up .bp-select-list { animation-name: bp-select-up; }
+@keyframes bp-select-up {
+  from { opacity: 0; transform: translateY(3px); }
+  to { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bp-select-list { animation: none; }
+}

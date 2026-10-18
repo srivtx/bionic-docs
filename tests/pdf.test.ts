@@ -2,6 +2,17 @@ import { describe, expect, test } from "bun:test";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { groupLines, type PdfTextItem } from "../src/pdf/lines";
+import {
+  CSS_PER_POINT,
+  MAX_ZOOM,
+  MIN_ZOOM,
+  effectiveScale,
+  parseZoom,
+  sheetWidth,
+  stepZoom,
+  zoomLabel,
+  zoomValue,
+} from "../src/pdf/zoom";
 import { fitScale, itemBox, itemGeometry, matchSamples, multiplyTransform } from "../src/pdf/layout";
 
 const item = (str: string, y: number, extra: Partial<PdfTextItem> = {}): PdfTextItem => ({
@@ -219,5 +230,65 @@ describe("fixtures", () => {
     const bytes = readFileSync(join(root, "sample.epub"));
     expect(bytes[0]).toBe(0x50);
     expect(bytes[1]).toBe(0x4b);
+  });
+});
+
+describe("zoom", () => {
+  const letter = { width: 612, height: 792 };
+  const landscape = { width: 792, height: 612 };
+
+  test("fit page is limited by height for a portrait page on a wide screen", () => {
+    const width = sheetWidth("fit-page", letter, { width: 1400, height: 792 });
+    expect(width).toBe(612);
+  });
+
+  test("fit page is limited by width when the window is narrow", () => {
+    expect(sheetWidth("fit-page", letter, { width: 400, height: 2000 })).toBe(400);
+    expect(sheetWidth("fit-page", landscape, { width: 900, height: 2000 })).toBe(900);
+  });
+
+  test("fit width always uses the full width", () => {
+    expect(sheetWidth("fit-width", letter, { width: 1234.7, height: 300 })).toBe(1234);
+  });
+
+  test("a numeric zoom is actual size times the scale, clamped", () => {
+    expect(sheetWidth(1, letter, { width: 10, height: 10 })).toBe(Math.round(612 * CSS_PER_POINT));
+    expect(sheetWidth(2, letter, { width: 10, height: 10 })).toBe(Math.round(612 * CSS_PER_POINT * 2));
+    expect(sheetWidth(99, letter, { width: 10, height: 10 })).toBe(Math.round(612 * CSS_PER_POINT * MAX_ZOOM));
+  });
+
+  test("bad sizes fall back instead of producing zero or NaN", () => {
+    const width = sheetWidth("fit-page", { width: 0, height: NaN }, { width: -1, height: 0 });
+    expect(Number.isFinite(width)).toBe(true);
+    expect(width).toBeGreaterThan(0);
+  });
+
+  test("effective scale of fit modes is relative to actual size", () => {
+    const scale = effectiveScale("fit-width", letter, { width: 816, height: 100 });
+    expect(scale).toBeCloseTo(1, 5);
+  });
+
+  test("stepping moves to the next listed step and stops at the ends", () => {
+    expect(stepZoom(1, 1)).toBe(1.1);
+    expect(stepZoom(1, -1)).toBe(0.9);
+    expect(stepZoom(1.03, 1)).toBe(1.1);
+    expect(stepZoom(1.03, -1)).toBe(1);
+    expect(stepZoom(MAX_ZOOM, 1)).toBe(MAX_ZOOM);
+    expect(stepZoom(MIN_ZOOM, -1)).toBe(MIN_ZOOM);
+  });
+
+  test("parse and serialize round-trip, unknown values fall back to fit page", () => {
+    expect(parseZoom(zoomValue("fit-width"))).toBe("fit-width");
+    expect(parseZoom(zoomValue(1.25))).toBe(1.25);
+    expect(parseZoom("nonsense")).toBe("fit-page");
+    expect(parseZoom(undefined)).toBe("fit-page");
+    expect(parseZoom("-2")).toBe("fit-page");
+    expect(parseZoom(40)).toBe(MAX_ZOOM);
+  });
+
+  test("labels", () => {
+    expect(zoomLabel("fit-page")).toBe("Fit page");
+    expect(zoomLabel("fit-width")).toBe("Fit width");
+    expect(zoomLabel(1.25)).toBe("125%");
   });
 });

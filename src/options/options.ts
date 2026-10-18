@@ -2,6 +2,7 @@ import { DEFAULT_SETTINGS, MODES, sanitizeSettings } from "../shared/types";
 import type { Settings } from "../shared/types";
 import { loadSettings, onSettingsChanged, saveSettings } from "../shared/storage";
 import { api, call } from "../shared/browser";
+import { enhanceSelects } from "../shared/select";
 import { emphasize } from "../core/algorithm";
 import type { BionicOptions } from "../core/algorithm";
 
@@ -275,6 +276,7 @@ function bind(): void {
 
 async function init(): Promise<void> {
   populateModes();
+  enhanceSelects();
   bind();
   apply(await loadSettings());
 }

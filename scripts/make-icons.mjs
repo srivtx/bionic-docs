@@ -3,9 +3,11 @@
  * Generate the extension icons with zero dependencies.
  *
  * Draws the brand mark directly into RGBA pixel buffers and encodes them as
- * PNG (zlib + CRC32 are in the Node standard library). The motif is three
- * "words" where the leading part is bold white and the rest is the accent
- * colour — the product's idea rendered as an icon.
+ * PNG (zlib + CRC32 are in the Node standard library). The mark is the one
+ * the site uses for Bionic Docs: a teal tile holding a white page with one full
+ * line of text and one faded line. It deliberately differs from Bionic Page's
+ * ink tile with emphasized bars, so the two extensions are told apart in the
+ * toolbar.
  */
 import { deflateSync } from "node:zlib";
 import { mkdirSync, writeFileSync } from "node:fs";
@@ -15,10 +17,13 @@ import { fileURLToPath } from "node:url";
 const ROOT = dirname(fileURLToPath(import.meta.url));
 const OUT = join(ROOT, "..", "assets", "icons");
 
-const INK = [0x14, 0x16, 0x1a, 0xff];
-const HEAD = [0xff, 0xff, 0xff, 0xff];
-const TAIL = [0x8b, 0x8c, 0xf7, 0xff];
-const CLEAR = [0x00, 0x00, 0x00, 0x00];
+// The site's mark is drawn on a 32-unit grid (site/index.html favicon).
+const GRID = 32;
+const TILE = [0x0e, 0x6e, 0x63];
+const PAPER = [0xff, 0xff, 0xff];
+const TILE_RADIUS = 7;
+const STROKE = 2.2;
+const FADED = 0.45;
 
 const crcTable = (() => {
   const table = new Uint32Array(256);
@@ -69,51 +74,100 @@ function encodePng(width, height, rgba) {
   ]);
 }
 
-function set(rgba, size, x, y, color) {
-  if (x < 0 || y < 0 || x >= size || y >= size) return;
-  const i = (y * size + x) * 4;
-  rgba[i] = color[0];
-  rgba[i + 1] = color[1];
-  rgba[i + 2] = color[2];
-  rgba[i + 3] = color[3];
-}
-
-function insideRounded(x, y, size, radius) {
-  const r = radius;
-  const cx = Math.min(Math.max(x, r), size - 1 - r);
-  const cy = Math.min(Math.max(y, r), size - 1 - r);
-  const dx = x - cx;
-  const dy = y - cy;
-  return dx * dx + dy * dy <= r * r + 0.5;
-}
-
-function fillRect(rgba, size, x0, y0, x1, y1, color) {
-  for (let y = Math.floor(y0); y < Math.ceil(y1); y += 1) {
-    for (let x = Math.floor(x0); x < Math.ceil(x1); x += 1) set(rgba, size, x, y, color);
+/** Points along a quarter arc, for flattening the page's rounded corners. */
+function arc(cx, cy, r, from, to, steps = 8) {
+  const points = [];
+  for (let i = 0; i <= steps; i += 1) {
+    const t = from + ((to - from) * i) / steps;
+    points.push([cx + r * Math.cos(t), cy + r * Math.sin(t)]);
   }
+  return points;
+}
+
+// The page outline, offset by the mark's translate(5 4): flat left edge,
+// rounded right-hand corners.
+const PAGE = [
+  [7, 7.4],
+  [19.6, 7.4],
+  ...arc(19.6, 9.4, 2, -Math.PI / 2, 0),
+  [21.6, 24],
+  ...arc(19.6, 24, 2, 0, Math.PI / 2),
+  [7, 26],
+  [7, 7.4],
+];
+const LINE_FULL = [
+  [9.6, 12.2],
+  [18.6, 12.2],
+];
+const LINE_FADED = [
+  [9.6, 16.4],
+  [15, 16.4],
+];
+
+function segmentDistance(px, py, ax, ay, bx, by) {
+  const dx = bx - ax;
+  const dy = by - ay;
+  const len = dx * dx + dy * dy;
+  const t = len === 0 ? 0 : Math.max(0, Math.min(1, ((px - ax) * dx + (py - ay) * dy) / len));
+  return Math.hypot(px - (ax + t * dx), py - (ay + t * dy));
+}
+
+function nearPolyline(px, py, points, half) {
+  for (let i = 1; i < points.length; i += 1) {
+    const [ax, ay] = points[i - 1];
+    const [bx, by] = points[i];
+    if (segmentDistance(px, py, ax, ay, bx, by) <= half) return true;
+  }
+  return false;
+}
+
+function insideTile(px, py) {
+  const r = TILE_RADIUS;
+  const cx = Math.min(Math.max(px, r), GRID - r);
+  const cy = Math.min(Math.max(py, r), GRID - r);
+  return (px - cx) ** 2 + (py - cy) ** 2 <= r * r;
+}
+
+/** Colour and alpha of one point of the mark, in grid units. */
+function shade(px, py, half) {
+  if (!insideTile(px, py)) return null;
+  if (nearPolyline(px, py, PAGE, half) || nearPolyline(px, py, LINE_FULL, half)) return { color: PAPER, mix: 1 };
+  if (nearPolyline(px, py, LINE_FADED, half)) return { color: PAPER, mix: FADED };
+  return { color: TILE, mix: 0 };
 }
 
 function draw(size) {
   const rgba = Buffer.alloc(size * size * 4);
-  const radius = Math.max(2, Math.round(size * 0.22));
+  const unit = GRID / size;
+  // Thin strokes vanish at toolbar size, so the smallest icons draw them bolder.
+  const half = (STROKE * (size <= 16 ? 1.35 : size <= 32 ? 1.15 : 1)) / 2;
+  const samples = 6;
   for (let y = 0; y < size; y += 1) {
     for (let x = 0; x < size; x += 1) {
-      if (insideRounded(x, y, size, radius)) set(rgba, size, x, y, INK);
+      let r = 0;
+      let g = 0;
+      let b = 0;
+      let covered = 0;
+      for (let sy = 0; sy < samples; sy += 1) {
+        for (let sx = 0; sx < samples; sx += 1) {
+          const px = (x + (sx + 0.5) / samples) * unit;
+          const py = (y + (sy + 0.5) / samples) * unit;
+          const hit = shade(px, py, half);
+          if (!hit) continue;
+          covered += 1;
+          const m = hit.mix;
+          r += TILE[0] * (1 - m) + hit.color[0] * m;
+          g += TILE[1] * (1 - m) + hit.color[1] * m;
+          b += TILE[2] * (1 - m) + hit.color[2] * m;
+        }
+      }
+      const i = (y * size + x) * 4;
+      if (covered === 0) continue;
+      rgba[i] = Math.round(r / covered);
+      rgba[i + 1] = Math.round(g / covered);
+      rgba[i + 2] = Math.round(b / covered);
+      rgba[i + 3] = Math.round((255 * covered) / (samples * samples));
     }
-  }
-  const rows = size >= 48 ? 3 : 2;
-  const marginX = size * 0.2;
-  const usable = size - marginX * 2;
-  const barH = Math.max(1, Math.round(size * 0.075));
-  const gap = Math.max(1, Math.round(size * 0.11));
-  const blockH = rows * barH + (rows - 1) * gap;
-  let y = (size - blockH) / 2;
-  for (let r = 0; r < rows; r += 1) {
-    const full = usable * (r === 1 ? 1 : 0.82);
-    const headW = full * 0.46;
-    fillRect(rgba, size, marginX, y, marginX + headW, y + barH, HEAD);
-    fillRect(rgba, size, marginX + headW, y, marginX + full, y + barH, TAIL);
-    y += barH + gap;
   }
   return rgba;
 }
