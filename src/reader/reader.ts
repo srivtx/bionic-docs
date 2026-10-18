@@ -4,7 +4,7 @@ import { DEFAULT_SETTINGS, MODES, sanitizeSettings, type Settings } from "../sha
 import type { BionicOptions } from "../core/algorithm";
 import { openEpub, type EpubHandle } from "../epub/epub";
 import { decodeText, dirName, findFileKey, findOpfPath, parseOpf, resolveHref, unzipEpub } from "../epub/parse";
-import { openPdf, setPdfWorkerSrc, type PdfHandle } from "../pdf/pdf";
+import { openPdf, setPdfAssetBase, setPdfWorkerSrc, type PdfHandle } from "../pdf/pdf";
 import { navIntent, type FocusLike } from "./keys";
 import {
   MAX_REMEMBERED,
@@ -65,6 +65,15 @@ function workerSrc(): string {
     /* ignore */
   }
   return "pdf.worker.min.mjs";
+}
+
+function assetBase(): string {
+  try {
+    if (api?.runtime?.getURL) return api.runtime.getURL("");
+  } catch {
+    /* ignore */
+  }
+  return "";
 }
 
 function setStatus(text: string): void {
@@ -234,7 +243,7 @@ function toggleToc(): void {
 
 async function buildToc(): Promise<void> {
   if (kind === "pdf") {
-    tocItems = pdfTocEntries(collectPdfPages());
+    tocItems = pdfTocEntries(await collectPdfPages());
     return;
   }
   if (kind === "epub" && epub) {
@@ -244,13 +253,14 @@ async function buildToc(): Promise<void> {
   tocItems = [];
 }
 
-function collectPdfPages(): PdfPageSummary[] {
-  const sections = Array.from(document.querySelectorAll<HTMLElement>(".pdf-page"));
-  return sections.map((section, i) => {
-    const line = section.querySelector<HTMLElement>(".pdf-line:not(.pdf-empty)");
-    const page = Number(section.dataset.page ?? "") || i + 1;
-    return { page, firstLine: line?.textContent ?? "" };
-  });
+async function collectPdfPages(): Promise<PdfPageSummary[]> {
+  if (!pdf) return [];
+  try {
+    const lines = await pdf.firstLines();
+    return lines.map((firstLine, i) => ({ page: i + 1, firstLine }));
+  } catch {
+    return [];
+  }
 }
 
 async function epubChapterPaths(): Promise<string[]> {
@@ -467,6 +477,7 @@ async function openBuffer(buffer: ArrayBuffer, name: string): Promise<void> {
   try {
     if (detected === "pdf") {
       setPdfWorkerSrc(workerSrc());
+      setPdfAssetBase(assetBase());
       pdf = await openPdf(buffer, doc, toOptions(settings));
       kind = "pdf";
     } else {

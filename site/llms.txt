@@ -14,11 +14,11 @@ Everything is on one page, with a section for each part:
 - [Reading modes](https://srivtx.github.io/bionic-docs/#modes): the five modes — Half, Classic, Vowel anchor, Low distraction, Custom rule — and what each one emphasizes.
 - [How it works](https://srivtx.github.io/bionic-docs/#how): sniff the magic bytes, parse or unzip, then emphasize reversibly.
 - [Architecture](https://srivtx.github.io/bionic-docs/#architecture): the module map and the invariants the build enforces — on-device, no remote code, sanitize before render.
-- [Limits](https://srivtx.github.io/bionic-docs/#safe): scanned PDFs, reflowed layout, minimal EPUB rendering, and what it does handle.
+- [Limits](https://srivtx.github.io/bionic-docs/#safe): scanned PDFs, substituted PDF fonts, minimal EPUB rendering, and what it does handle.
 - [Numbers](https://srivtx.github.io/bionic-docs/#numbers): test count, e2e checks, manifest entries, modes, and uploads.
 - [Privacy](https://srivtx.github.io/bionic-docs/#privacy): no network requests for content, one fetch for the document you opened, parsing in the extension page, and the anti-network test gate.
 - [Install](https://srivtx.github.io/bionic-docs/#install): build both targets from one source tree.
-- [FAQ](https://srivtx.github.io/bionic-docs/#faq): license and affiliation, scanned PDFs, uploads, reflowed text, Firefox support, file handling, and offline use.
+- [FAQ](https://srivtx.github.io/bionic-docs/#faq): license and affiliation, scanned PDFs, uploads, PDF layout, Firefox support, file handling, and offline use.
 
 ## Source
 

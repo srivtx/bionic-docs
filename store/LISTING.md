@@ -16,8 +16,8 @@ Bionic Docs is a Manifest V3 extension for Chrome and Firefox that reads PDF and
 EPUB documents with bionic fixation emphasis, entirely on the device. There is
 no upload, no account, no tracking, and no remote code.
 
-It opens PDFs by extracting the text layer with a locally bundled PDF.js and
-reflowing it into a clean reading column. It opens EPUBs by unzipping them
+It opens PDFs with a locally bundled PDF.js and shows each page as the original
+page, with its layout, images and diagrams, and bionic emphasis on its text. It opens EPUBs by unzipping them
 locally, reading the spine and table of contents, and rendering each chapter. A
 document opened in the browser can be sent to the reader from the toolbar, and a
 PDF or EPUB can be dropped onto the reader page.
@@ -32,8 +32,8 @@ user explicitly opened; nothing is uploaded, and there is no server, analytics,
 or account. The extension does not request `declarativeNetRequest`, `webRequest`,
 cookies, history, or downloads.
 
-Scanned PDFs have no text layer and render as empty pages; OCR is out of scope in
-this version. PDFs are shown as reflowed text rather than their original layout,
+Scanned PDFs have no text layer and show as plain page images; OCR is out of scope in
+this version. PDF text uses the browser's own fonts, fitted to the original line widths,
 and EPUB rendering is intentionally minimal. Local `file://` PDFs work when file
 access is enabled in the browser. The project is MIT-licensed and open source.
 

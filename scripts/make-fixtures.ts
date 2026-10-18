@@ -1,7 +1,7 @@
 #!/usr/bin/env bun
 /**
  * Generate the test fixtures used by the browser e2e and by manual checks:
- *   fixtures/sample.pdf   a minimal, valid one-page PDF with real text
+ *   fixtures/sample.pdf   a minimal, valid two-page PDF: real text, then a coloured diagram
  *   fixtures/sample.epub  a minimal valid EPUB with two chapters
  *
  * Everything is built in memory here; no external tools or network.
@@ -27,12 +27,24 @@ function buildPdf(): Uint8Array {
 
   const objects: string[] = [];
   objects.push("<< /Type /Catalog /Pages 2 0 R >>");
-  objects.push("<< /Type /Pages /Kids [3 0 R] /Count 1 >>");
+  objects.push("<< /Type /Pages /Kids [3 0 R 6 0 R] /Count 2 >>");
   objects.push(
     "<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Contents 4 0 R /Resources << /Font << /F1 5 0 R >> >> >>",
   );
   objects.push(`<< /Length ${content.length} >>\nstream\n${content}\nendstream`);
   objects.push("<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>");
+
+  // Page 2: a blue box with a line, a red label inside it and black text below.
+  const diagram = [
+    "0.2 0.4 0.9 rg 72 400 300 160 re f",
+    "0 0 0 RG 2 w 72 380 m 372 380 l S",
+    "BT /F1 18 Tf 1 0 0 rg 90 480 Td (Diagram label text) Tj ET",
+    "BT /F1 14 Tf 0 0 0 rg 72 340 Td (The text below the diagram stays where it was.) Tj ET",
+  ].join("\n");
+  objects.push(
+    "<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Contents 7 0 R /Resources << /Font << /F1 5 0 R >> >> >>",
+  );
+  objects.push(`<< /Length ${diagram.length} >>\nstream\n${diagram}\nendstream`);
 
   let pdf = "%PDF-1.4\n";
   const offsets: number[] = [];

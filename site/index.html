@@ -90,14 +90,14 @@ try{var t=localStorage.getItem("bionic-docs-theme");if(t==="dark"||t==="light"){
             <li>PDF + EPUB</li>
             <li>No upload</li>
             <li>No account</li>
-            <li>131 tests</li>
+            <li>148 tests</li>
           </ul>
         </div>
         <div class="doccard" data-reveal>
           <div class="doccard__bar"><span class="doccard__dot"></span><span class="doccard__dot"></span><span class="doccard__dot"></span><span class="doccard__file">fixtures/sample.pdf</span></div>
           <div class="doccard__body bionic">
             <p data-bionic-sample="half">Bionic reading works in PDF documents. The leading letters of every word are emphasized and the rest of the word is left alone.</p>
-            <p data-bionic-sample="half">Chapters and pages are reflowed, then the same fixation step runs over the text nodes — on your machine, never on a server.</p>
+            <p data-bionic-sample="half">Chapters are reflowed and PDF pages keep their layout, then the same fixation step runs over the text nodes — on your machine, never on a server.</p>
           </div>
           <div class="doccard__foot"><span>Page 1 of 2</span><span>No upload · no account</span></div>
         </div>
@@ -108,8 +108,8 @@ try{var t=localStorage.getItem("bionic-docs-theme");if(t==="dark"||t==="light"){
   <!-- ================= dateline ================= -->
   <div class="dateline" data-reveal>
     <div class="container">
-      <p><b>PDF</b> text layer, reflowed · <b>EPUB</b> unzipped in memory · <b>Chrome 116+</b> · <b>Firefox 140+</b> · <b>Edge</b></p>
-      <p>Zero uploads · Manifest V3 · No remote code · Sanitized chapters · MIT · 131 tests across 8 files</p>
+      <p><b>PDF</b> pages as drawn · <b>EPUB</b> unzipped in memory · <b>Chrome 116+</b> · <b>Firefox 140+</b> · <b>Edge</b></p>
+      <p>Zero uploads · Manifest V3 · No remote code · Sanitized chapters · MIT · 148 tests across 8 files</p>
     </div>
   </div>
 
@@ -335,8 +335,8 @@ try{var t=localStorage.getItem("bionic-docs-theme");if(t==="dark"||t==="light"){
         <article class="panel panel--recessed" data-reveal>
           <h3><svg class="icon icon--mute" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M5.8 5.8l12.4 12.4"></path></svg>Out of scope</h3>
           <ul class="ticks">
-            <li>Scanned PDFs have no text layer and render as empty pages. OCR is out of scope in this version.</li>
-            <li>The original layout is not reproduced. Complex multi-column or design-heavy pages read in extraction order.</li>
+            <li>Scanned PDFs have no text layer and show as plain page images. OCR is out of scope in this version.</li>
+            <li>PDF text is drawn in the browser's own fonts, fitted to the original line widths, so letter shapes can differ from the embedded fonts.</li>
             <li>EPUB rendering is intentionally minimal: no pagination and no book CSS beyond the sanitized chapter markup.</li>
             <li>Closed shadow roots in a chapter cannot be reached, and are left alone.</li>
           </ul>
@@ -365,8 +365,8 @@ try{var t=localStorage.getItem("bionic-docs-theme");if(t==="dark"||t==="light"){
         <p class="section__stand">Every figure here is from the repository&#8217;s own testing table, and a check fails the build if a page stops agreeing with it.</p>
       </div>
       <ul class="metrics" data-reveal>
-        <li class="metric"><span class="metric__n" data-count="131">0</span><span class="metric__k">tests across 8 files</span></li>
-        <li class="metric"><span class="metric__n" data-count="11" data-suffix="/11">0</span><span class="metric__k">e2e checks in real Chrome</span></li>
+        <li class="metric"><span class="metric__n" data-count="148">0</span><span class="metric__k">tests across 8 files</span></li>
+        <li class="metric"><span class="metric__n" data-count="19" data-suffix="/19">0</span><span class="metric__k">e2e checks in real Chrome</span></li>
         <li class="metric"><span class="metric__n" data-count="11">0</span><span class="metric__k">manifest entries per target</span></li>
         <li class="metric"><span class="metric__n" data-count="5">0</span><span class="metric__k">reading modes</span></li>
         <li class="metric"><span class="metric__n" data-count="0">0</span><span class="metric__k">uploads, ever</span></li>
@@ -455,10 +455,10 @@ try{var t=localStorage.getItem("bionic-docs-theme");if(t==="dark"||t==="light"){
         <div class="qa__item">
           <button type="button" class="qa__q" aria-expanded="false">
             <span class="qa__no" aria-hidden="true">Q4</span>
-            <span class="qa__q-text">Why does a PDF look like plain text instead of the original page?</span>
+            <span class="qa__q-text">Does a PDF keep its original page layout?</span>
             <span class="qa__x" aria-hidden="true"><svg class="icon" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"></path></svg></span>
           </button>
-          <div class="qa__a"><p class="qa__a-inner">PDFs are shown as reflowed text, not the original layout. The reader extracts the text layer and rebuilds lines, then emphasizes them. Complex multi-column or design-heavy pages read in extraction order, so columns can interleave and tables can lose alignment. That is the trade for applying fixation to the text.</p></div>
+          <div class="qa__a"><p class="qa__a-inner">Yes. Each page is drawn as the original, with its images, diagrams, colors and layout, and the text is placed over it at the original position with the emphasis applied. The trade is the letter shapes: text uses the browser's own fonts, stretched to each line's original width, so it can look slightly different from the document's embedded fonts.</p></div>
         </div>
         <div class="qa__item">
           <button type="button" class="qa__q" aria-expanded="false">
@@ -528,7 +528,7 @@ try{var t=localStorage.getItem("bionic-docs-theme");if(t==="dark"||t==="light"){
         <h2>Build</h2>
         <ul>
           <li>v0.1.0 · MIT</li>
-          <li>131 tests · 11/11 e2e</li>
+          <li>148 tests · 19/19 e2e</li>
           <li>Chrome 116+ · Firefox 140+</li>
           <li>No network requests for content</li>
         </ul>

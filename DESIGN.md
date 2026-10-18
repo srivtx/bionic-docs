@@ -535,7 +535,7 @@ token, so the two sites cannot drift apart by accident.
   where the head and the tail look alike is a broken page.
 - **Do** check the reading text in the serif at a real size, not just the UI.
 - **Don't** add uploads, accounts, analytics or telemetry — nothing leaves the
-  device, and the limitations (scanned PDFs, reflowed layout, Firefox 140+) are
+  device, and the limitations (scanned PDFs, substituted PDF fonts, Firefox 140+) are
   part of the contract, not footnotes.
 - **Do** respect `prefers-reduced-motion`: the descending highlight, the page
   turn, the rails and every reveal have a still fallback. The reveal animations

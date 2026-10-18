@@ -9,7 +9,8 @@ applies the same reversible fixation transform used by its sibling project.
 src/
   shared/     types, cross-browser shim, storage (no document parsing)
   core/       pure fixation algorithm (DOM-free, tested)
-  pdf/        lines.ts (pure line reconstruction) + pdf.ts (PDF.js + render)
+  pdf/        lines.ts (pure line reconstruction) + layout.ts (pure page geometry
+              and glyph matching) + pdf.ts (PDF.js canvas + text layer)
   epub/       parse.ts (unzip, OPF, TOC, sanitize) + epub.ts (render + fixation)
   reader/     reader.html/css/ts — the document reader page
   popup/      toolbar popup: open a document, quick settings
@@ -23,7 +24,10 @@ src/
 popup ──open-current──▶ background ──▶ reader.html?src=<url>
 reader
   ├─ sniff magic bytes: %PDF → pdf.ts ;  PK → epub.ts
-  ├─ pdf.ts:  PDF.js getTextContent → lines.ts groupLines → fixation
+  ├─ pdf.ts:  per page: PDF.js draws a canvas with the glyphs held back,
+  │           getTextContent → layout.ts places each run over the canvas
+  │           at its original spot → fixation → runs fitted to original width
+  │           (lines.ts groupLines only feeds the contents list)
   └─ epub.ts: fflate.unzip → container.xml → OPF (title/spine/nav|ncx)
               → sanitizeChapter → fixation
 ```
@@ -40,8 +44,14 @@ reader
    remote/`javascript:` URLs removed) before insertion.
 4. **Deterministic text.** PDF text is treated as plain text and placed into
    new text nodes; PDF.js runs with `isEvalSupported: false`.
-5. **Pure line reconstruction.** `src/pdf/lines.ts` has no PDF.js import, so it
-   is unit-tested directly.
+5. **Pure geometry.** `src/pdf/lines.ts` and `src/pdf/layout.ts` have no PDF.js
+   or DOM import, so line reconstruction, placement maths and glyph matching
+   are unit-tested directly.
+5a. **No glyph is lost.** Only the main canvas context is patched to hold back
+   `fillText`/`strokeText`; text inside PDF.js scratch canvases, Type 3 and
+   pattern-filled text is painted by PDF.js as usual. A held-back glyph that
+   matches no text run is replayed onto the canvas, and a run that matched no
+   glyph is kept transparent, so nothing is dropped or drawn twice.
 6. **One manifest source.** `scripts/manifest.mjs` feeds `build.mjs` and is
    asserted by `tests/manifest.test.ts`.
 

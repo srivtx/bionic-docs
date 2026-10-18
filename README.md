@@ -13,8 +13,8 @@ tracking, no remote code.
 [![runtime](https://img.shields.io/badge/runtime-Bun-14151A?logo=bun&logoColor=white)](https://bun.sh)
 [![types](https://img.shields.io/badge/TypeScript-strict-3178C6?logo=typescript&logoColor=white)](tsconfig.json)
 [![manifest](https://img.shields.io/badge/Manifest-V3-4f46e5)](scripts/manifest.mjs)
-[![tests](https://img.shields.io/badge/tests-131-0f766e)](#testing)
-[![e2e](https://img.shields.io/badge/e2e-11%2F11-0f766e)](#testing)
+[![tests](https://img.shields.io/badge/tests-148-0f766e)](#testing)
+[![e2e](https://img.shields.io/badge/e2e-19%2F19-0f766e)](#testing)
 [![on-device](https://img.shields.io/badge/processing-on--device-0f766e)](#privacy)
 [![Firefox](https://img.shields.io/badge/Firefox-140%2B-FF7139?logo=firefoxbrowser&logoColor=white)](https://www.mozilla.org/firefox/)
 [![Chrome](https://img.shields.io/badge/Chrome-116%2B-4285F4?logo=googlechrome&logoColor=white)](https://www.google.com/chrome/)
@@ -36,8 +36,9 @@ files is cloud, paid, and Chromium-only).
 
 ## What it does
 
-- Opens **PDF** files by extracting the text layer with a locally bundled
-  PDF.js and reflowing it into a clean reading column with fixation emphasis.
+- Opens **PDF** files with a locally bundled PDF.js and shows every page as the
+  original page, with its layout, images and diagrams, and with fixation
+  emphasis applied to its text.
 - Opens **EPUB** files by unzipping them locally, reading the spine and table
   of contents, and rendering each chapter with the same emphasis.
 - Reuses the fixation algorithm from its sibling, with five modes: Classic,
@@ -114,11 +115,11 @@ bun run lint:firefox  # web-ext lint
 
 | Gate | Result |
 |---|---|
-| `bun test` | 131 tests across 8 files |
+| `bun test` | 148 tests across 8 files |
 | `bunx tsc --noEmit` | clean (strict TypeScript) |
 | build + verify | both targets, 11 referenced entries present each |
 | `web-ext lint` | 0 errors (4 warnings from vendored PDF.js) |
-| `bun run e2e` | 11/11 in real Chrome — PDF and EPUB, fixation and navigation |
+| `bun run e2e` | 19/19 in real Chrome — PDF pages and diagram, EPUB, fixation and navigation |
 
 The e2e test serves the built extension pages plus the generated fixtures and
 drives real Chrome over the DevTools protocol. It asserts that a PDF becomes a
@@ -127,10 +128,12 @@ that an EPUB renders a chapter, exposes its title, and advances to chapter two.
 
 ## Limitations
 
-- **Scanned PDFs** have no text layer; they render as empty pages. OCR is out
-  of scope in this version.
-- PDFs are shown as **reflowed text**, not the original layout. Complex
-  multi-column or design-heavy pages read in extraction order.
+- **Scanned PDFs** have no text layer; the scanned page is shown as an image
+  with no emphasis. OCR is out of scope in this version.
+- PDF text is drawn in the browser's own fonts, stretched to each line's
+  original width, so letter shapes can differ from the document's embedded
+  fonts. Text that PDF.js paints inside transparency groups or as Type 3
+  glyphs keeps its original look and does not get the emphasis.
 - EPUB rendering is intentionally minimal (no pagination, no custom book CSS
   beyond the sanitized chapter markup).
 - Firefox floor is 140 because `data_collection_permissions` is only

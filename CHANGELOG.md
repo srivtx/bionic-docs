@@ -2,6 +2,17 @@
 
 All notable changes to Bionic Docs.
 
+## [Unreleased]
+
+### Changed
+
+- **PDF pages keep their original layout.** Each page is drawn as the original,
+  with its images, diagrams, colors and positions, and the bionic emphasis is
+  applied to the text placed over it at its original spot. Pages are drawn
+  lazily as they scroll into view. The contents list still shows each page's
+  first line. Text uses the browser's own fonts, fitted to the original line
+  widths.
+
 ## [0.1.0] — 2026-09-19
 
 First working release.
